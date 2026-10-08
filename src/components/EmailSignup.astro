@@ -1,0 +1,59 @@
+---
+// Name, phone, email signup. Until a provider is confirmed, site.json has an
+// empty signup.action and the form shows "Signup coming soon" on submit.
+// Setting signup.action to a provider's form URL turns it on.
+import site from '../data/site.json';
+
+interface Props { id?: string; compact?: boolean }
+const { id = 'signup', compact = false } = Astro.props;
+const action = site.signup.action;
+---
+
+<form class:list={['signup', { 'signup--compact': compact }]} method="post" action={action || undefined} data-signup data-enabled={action ? 'true' : 'false'} aria-labelledby={`${id}-h`}>
+  <h2 id={`${id}-h`} class="signup__title">Be first to hear about new shows</h2>
+  <p class="muted signup__sub">Get show announcements and on-sale dates from the box office.</p>
+  <div class="signup__fields">
+    <div class="field">
+      <label for={`${id}-name`}>Name</label>
+      <input class="input" id={`${id}-name`} name="name" autocomplete="name" required />
+    </div>
+    <div class="field">
+      <label for={`${id}-phone`}>Phone <span class="muted">(optional)</span></label>
+      <input class="input" id={`${id}-phone`} name="phone" type="tel" autocomplete="tel" />
+    </div>
+    <div class="field">
+      <label for={`${id}-email`}>Email</label>
+      <input class="input" id={`${id}-email`} name="email" type="email" autocomplete="email" required />
+    </div>
+    <button class="btn signup__btn" type="submit">Sign me up</button>
+  </div>
+  <p class="signup__status" role="status" aria-live="polite" data-signup-status></p>
+</form>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('[data-signup]').forEach((form) => {
+    if (form.dataset.enabled === 'true') return;
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const status = form.querySelector<HTMLElement>('[data-signup-status]');
+      if (status) status.textContent = 'Signup coming soon. For now, call the box office at 619-988-LIVE (5483).';
+    });
+  });
+</script>
+
+<style>
+  .signup {
+    padding: clamp(24px, 4vw, 40px);
+    background:
+      radial-gradient(ellipse at 100% 0%, rgba(225, 29, 42, 0.16), transparent 55%),
+      var(--surface);
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--neon);
+    border-radius: var(--radius-lg);
+  }
+  .signup__title { font-size: var(--fs-h3); margin-bottom: 6px; }
+  .signup__fields { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); align-items: end; }
+  .signup__btn { width: 100%; }
+  .signup__status { margin: 16px 0 0; color: var(--gold); font-weight: 600; min-height: 1.6em; }
+  .signup__status:empty { min-height: 0; margin: 0; }
+</style>
