@@ -4,6 +4,10 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Nightly rebuild at 08:00 UTC (midnight or 1am in San Diego), so past
+  # performances drop off and shows with no dates leave the nav on their own.
+  schedule:
+    - cron: '0 8 * * *'
 
 permissions:
   contents: read

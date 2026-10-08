@@ -26,8 +26,11 @@ interface Props {
 
 const { title, description = site.tagline, accent, ogImage, structuredData = [], bodyClass } = Astro.props;
 const fullTitle = title ? `${title} | ${site.name}` : `${site.name} | Dinner Theater in Santee, San Diego`;
-const liveUrl = new URL(Astro.url.pathname.replace(import.meta.env.BASE_URL.replace(/\/$/, ''), '') || '/', site.url).href;
-const shareImage = new URL(ogImage ?? url('og/default.png'), isLive ? site.url : Astro.site).href;
+// When live, canonical and share URLs point at the real domain, without the POC base path.
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const onLiveDomain = (path: string) => new URL(path.startsWith(base + '/') ? path.slice(base.length) : path, site.url).href;
+const liveUrl = onLiveDomain(Astro.url.pathname);
+const shareImage = onLiveDomain(ogImage ?? url('og/default.png'));
 ---
 
 <!doctype html>
