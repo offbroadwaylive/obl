@@ -1,0 +1,40 @@
+---
+import Base from '../layouts/Base.astro';
+import PageIntro from '../components/PageIntro.astro';
+import MenuCard from '../components/MenuCard.astro';
+import menus from '../data/menus.json';
+import { currentShows, dateRange, upcoming } from '../lib/shows';
+import { showUrl } from '../lib/url';
+
+const withMenus = currentShows().filter((s) => s.menu);
+---
+
+<Base title="Dinner Menus" description={`Dinner menus for current shows at Off Broadway Live. ${menus.credit}.`}>
+  <PageIntro kicker="Dinner, drinks & dessert" title="Dinner Menus" lede={menus.credit} />
+
+  <section class="section container">
+    {
+      withMenus.length ? (
+        <div class="menus">
+          {withMenus.map((s) => (
+            <div class="menus__item" style={`--accent:${s.accent}`}>
+              <p class="menus__show">
+                <a href={showUrl(s.slug)}>{s.title}</a>
+                <span class="muted"> · {dateRange(upcoming(s))}</span>
+              </p>
+              <MenuCard id={s.menu!} title={s.title} headingLevel="h2" showCredit={false} />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p class="muted">Menus for upcoming shows will be posted soon.</p>
+      )
+    }
+  </section>
+</Base>
+
+<style>
+  .menus { display: grid; gap: 40px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); align-items: start; }
+  .menus__show { font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; text-align: center; }
+  .menus__show a { color: var(--accent); }
+</style>

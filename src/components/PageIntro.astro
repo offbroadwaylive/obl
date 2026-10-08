@@ -1,0 +1,28 @@
+---
+// The same title block at the top of every content page.
+interface Props {
+  kicker?: string;
+  title: string;
+  lede?: string;
+}
+const { kicker, title, lede } = Astro.props;
+---
+
+<section class="page-intro">
+  <div class="container">
+    {kicker && <p class="kicker">{kicker}</p>}
+    <h1>{title}</h1>
+    {lede && <p class="lede">{lede}</p>}
+    <slot />
+  </div>
+</section>
+
+<style>
+  .page-intro {
+    padding-block: clamp(36px, 5vw, 64px) clamp(28px, 4vw, 48px);
+    border-bottom: 1px solid var(--line);
+    background: radial-gradient(ellipse at 85% 0%, rgba(225, 29, 42, 0.14), transparent 55%);
+  }
+  .page-intro h1 { margin: 4px 0 12px; }
+  .page-intro .lede { margin: 0; color: var(--muted); }
+</style>

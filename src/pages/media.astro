@@ -1,0 +1,12 @@
+---
+import Base from '../layouts/Base.astro';
+import PageIntro from '../components/PageIntro.astro';
+import Gallery from '../components/Gallery.astro';
+---
+
+<Base title="Media" description="Photos from the stage at Off Broadway Live, San Diego's live band dinner theater in Santee.">
+  <PageIntro kicker="Photos" title="From our stage" lede="Tap any photo to see it full screen. Use the arrow keys or swipe to move between photos." />
+  <section class="section container">
+    <Gallery />
+  </section>
+</Base>

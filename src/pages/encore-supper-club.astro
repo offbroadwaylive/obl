@@ -1,0 +1,75 @@
+---
+import Base from '../layouts/Base.astro';
+import PageIntro from '../components/PageIntro.astro';
+import ShowCard from '../components/ShowCard.astro';
+import PriceTable from '../components/PriceTable.astro';
+import SeatMap from '../components/SeatMap.astro';
+import Ribbon from '../components/Ribbon.astro';
+import site from '../data/site.json';
+import { currentShows, priceSets } from '../lib/shows';
+
+const encoreShows = currentShows().filter((s) => s.series === 'encore');
+const set = priceSets['encore-standard'];
+const [friSat, sunday, tables] = site.encore.rules;
+---
+
+<Base title="ENCORE Supper Club" description={`${site.encore.intro} ${site.encore.pullLine}`}>
+  <PageIntro kicker="Live Band Dinner Show" title="ENCORE Supper Club" lede={site.encore.intro}>
+    <p class="pull">“{site.encore.pullLine}”</p>
+  </PageIntro>
+
+  <section class="section container" aria-labelledby="enc-shows-h">
+    <div class="section-title"><h2 id="enc-shows-h">Current ENCORE shows</h2></div>
+    {
+      encoreShows.length ? (
+        <div class="grid">
+          {encoreShows.map((s) => (
+            <ShowCard show={s} />
+          ))}
+        </div>
+      ) : (
+        <p class="muted">The next ENCORE Supper Club shows will be announced soon.</p>
+      )
+    }
+  </section>
+
+  <section class="section container reveal" aria-labelledby="formats-h">
+    <Ribbon id="formats-h">Two ways to see the show</Ribbon>
+    <div class="formats">
+      <div class="panel format">
+        <p class="label format__days">Fridays &amp; Saturdays</p>
+        <h3>Dinner Show</h3>
+        <p>{friSat}</p>
+      </div>
+      <div class="panel format">
+        <p class="label format__days">Sundays</p>
+        <h3>Sweet &amp; Salty Snack Board Show</h3>
+        <p>{sunday}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section container" id="pricing" aria-labelledby="enc-price-h">
+    <div class="section-title"><h2 id="enc-price-h">Standard pricing &amp; seating</h2></div>
+    <div class="pricing-grid">
+      <PriceTable set={set} formats={['dinner', 'snack-board']} interactive title="ENCORE Supper Club prices" />
+      <SeatMap />
+    </div>
+    <p class="seat-line">{site.encore.seatLine}</p>
+    <p class="small muted policy">{tables} Some shows are priced differently; see each show's page.</p>
+    <p class="policy-line">{site.encore.policy}</p>
+  </section>
+</Base>
+
+<style>
+  .pull { margin: 16px 0 0; font-family: var(--font-serif); font-style: italic; font-size: clamp(1.2rem, 1rem + 1vw, 1.7rem); color: var(--gold); }
+  .formats { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+  .format { border-top: 3px solid var(--gold); }
+  .format__days { color: var(--gold); margin: 0 0 4px; }
+  .format p:last-child { margin: 0; color: var(--muted); }
+  .pricing-grid { display: grid; gap: 24px; align-items: start; }
+  @media (min-width: 900px) { .pricing-grid { grid-template-columns: 5fr 6fr; } }
+  .seat-line { margin-top: 20px; text-align: center; font-family: var(--font-serif); font-style: italic; font-size: 1.35rem; color: var(--gold); }
+  .policy { text-align: center; }
+  .policy-line { text-align: center; font-weight: 600; padding: 14px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+</style>

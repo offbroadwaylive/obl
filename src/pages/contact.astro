@@ -1,0 +1,95 @@
+---
+import Base from '../layouts/Base.astro';
+import PageIntro from '../components/PageIntro.astro';
+import Img from '../components/Img.astro';
+import EmailSignup from '../components/EmailSignup.astro';
+import site from '../data/site.json';
+import { directionsUrl, mapEmbedUrl, mapsSearchUrl } from '../lib/site';
+import { localBusiness } from '../lib/structured';
+---
+
+<Base title="Contact & About Us" description={`Find Off Broadway Live at ${site.address.street}, ${site.address.city}. Call ${site.phone.display} or email ${site.email}.`} structuredData={[localBusiness()]}>
+  <PageIntro kicker="Find us" title="Contact" lede="Call the box office, send us an email, or come see us in Santee. Parking is free." />
+
+  <section class="section container contact">
+    <div class="contact__info">
+      <div class="panel contact__card">
+        <h2 class="label">Visit</h2>
+        <address>
+          <a href={mapsSearchUrl} target="_blank" rel="noopener">{site.name}<br />{site.address.street}<br />{site.address.city}, {site.address.region} {site.address.postalCode}</a>
+        </address>
+        <a class="btn btn--ghost btn--small" href={directionsUrl} target="_blank" rel="noopener">Get directions</a>
+        <p class="small muted">{site.parking}</p>
+      </div>
+      <div class="panel contact__card">
+        <h2 class="label">Box office</h2>
+        <p><a class="contact__big" href={`tel:${site.phone.dial}`}>{site.phone.display}</a></p>
+        <p><a href={`mailto:${site.email}`}>{site.email}</a></p>
+      </div>
+    </div>
+
+    <div class="map" data-map>
+      <button class="map__load" type="button" data-map-load data-src={mapEmbedUrl}>
+        <span class="map__pin" aria-hidden="true">📍</span>
+        <span class="label">Show map</span>
+        <span class="small muted">Loads Google Maps</span>
+      </button>
+    </div>
+  </section>
+
+  <section class="section container about reveal" aria-labelledby="about-h">
+    <div class="about__text">
+      <h2 id="about-h">About Us</h2>
+      {site.about.map((p) => <p>{p}</p>)}
+    </div>
+    <div class="about__photo">
+      <Img src="venue/end-of-show.jpg" alt="Off Broadway Live venue photo" label="Venue photo coming soon" widths={[600, 1200]} sizes="(min-width: 900px) 480px, 100vw" />
+    </div>
+  </section>
+
+  <section class="section container reveal">
+    <EmailSignup id="contact-signup" />
+  </section>
+</Base>
+
+<script>
+  // The map is the one allowed third-party request, and loads only on click.
+  document.querySelector<HTMLButtonElement>('[data-map-load]')?.addEventListener('click', (e) => {
+    const btn = e.currentTarget as HTMLButtonElement;
+    const frame = document.createElement('iframe');
+    frame.src = btn.dataset.src ?? '';
+    frame.title = 'Map showing Off Broadway Live in Santee';
+    frame.loading = 'lazy';
+    frame.referrerPolicy = 'no-referrer-when-downgrade';
+    btn.replaceWith(frame);
+  });
+</script>
+
+<style>
+  .contact { display: grid; gap: 24px; align-items: stretch; }
+  @media (min-width: 900px) { .contact { grid-template-columns: 2fr 3fr; } }
+  .contact__info { display: grid; gap: 20px; }
+  .contact__card h2 { color: var(--gold); font-size: 1rem; margin-bottom: 10px; }
+  .contact__card address { font-style: normal; font-size: 1.15rem; margin-bottom: 14px; }
+  .contact__card p:last-child { margin-bottom: 0; }
+  .contact__card .small { margin-top: 14px; }
+  .contact__big { font-family: var(--font-serif); font-size: 1.6rem; }
+  .map { min-height: 320px; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--line); background: var(--surface); }
+  .map :global(iframe) { width: 100%; height: 100%; min-height: 320px; border: 0; display: block; }
+  .map__load {
+    width: 100%; height: 100%; min-height: 320px;
+    display: grid; place-content: center; justify-items: center; gap: 6px;
+    background:
+      repeating-linear-gradient(0deg, transparent 0 39px, rgba(230, 180, 34, 0.06) 39px 40px),
+      repeating-linear-gradient(90deg, transparent 0 39px, rgba(230, 180, 34, 0.06) 39px 40px),
+      var(--surface);
+    border: 0; color: var(--text); cursor: pointer; font: inherit;
+  }
+  .map__load:hover .label { color: var(--gold); }
+  .map__pin { font-size: 2.2rem; }
+  .about { display: grid; gap: 32px; align-items: start; }
+  @media (min-width: 900px) { .about { grid-template-columns: 3fr 2fr; } }
+  .about__text { max-width: 68ch; }
+  .about__photo { aspect-ratio: 4 / 3; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--line); }
+  .about__photo :global(img) { width: 100%; height: 100%; object-fit: cover; }
+</style>
