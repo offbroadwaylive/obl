@@ -11,6 +11,8 @@
 # the build works before, during and after this import.
 #
 # On an error the script keeps going and lists every failure at the end.
+#
+# TODO(open item 9): these are Wix copies; swap in original full-resolution logo and poster files (same names).
 
 set -u
 cd "$(dirname "$0")/.."

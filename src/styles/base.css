@@ -239,15 +239,6 @@ a:hover { color: var(--text); }
   color: var(--muted); font-size: 0.8rem;
 }
 
-/* TODO marker for open items surfaced on the page */
-.todo-note {
-  display: inline-block;
-  border-left: 3px solid var(--gold);
-  padding: 2px 10px;
-  color: var(--muted);
-  font-size: var(--fs-small);
-}
-
 /* Forms */
 .field { display: grid; gap: 6px; }
 .field label { font-weight: 600; font-size: 0.95rem; }

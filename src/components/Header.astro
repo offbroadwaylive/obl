@@ -9,6 +9,7 @@ const ticketsHref = next ? showUrl(next.show.slug) : url('calendar/');
 const here = Astro.url.pathname;
 const isHere = (href: string) => here === href || (href !== url() && here.startsWith(href));
 
+// TODO(open item 11): pages under the Wix "More" menu were not readable and are not built; add links here once confirmed.
 const links = [
   { href: url('encore-supper-club/'), label: 'ENCORE Supper Club' },
   { href: url('calendar/'), label: 'Calendar' },
