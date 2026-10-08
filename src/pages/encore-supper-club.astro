@@ -53,7 +53,7 @@ const [friSat, sunday, tables] = site.encore.rules;
     <div class="section-title"><h2 id="enc-price-h">Standard pricing &amp; seating</h2></div>
     <div class="pricing-grid">
       <PriceTable set={set} formats={['dinner', 'snack-board']} interactive title="ENCORE Supper Club prices" />
-      <SeatMap />
+      <SeatMap set={set} />
     </div>
     <p class="seat-line">{site.encore.seatLine}</p>
     <p class="small muted policy">{tables} Some shows are priced differently; see each show's page.</p>

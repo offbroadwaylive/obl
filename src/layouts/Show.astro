@@ -109,7 +109,7 @@ const description = `${show.title} at ${site.name}, Santee. ${show.kicker}${next
     <div class="section-title"><h2 id="pricing-h">Prices &amp; seating</h2></div>
     <div class:list={['pricing-grid', { 'pricing-grid--map': set.seatMap }]}>
       <PriceTable set={set} formats={formats} interactive={set.seatMap} />
-      {set.seatMap && <SeatMap />}
+      {set.seatMap && <SeatMap set={set} />}
     </div>
     {isEncore && <p class="seat-line">{site.encore.seatLine}</p>}
   </section>
