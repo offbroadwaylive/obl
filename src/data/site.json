@@ -1,0 +1,57 @@
+{
+  "SITE_IS_LIVE": false,
+  "name": "Off Broadway Live",
+  "url": "https://offbroadwaylive.com",
+  "tagline": "Come See Why San Diego Audiences Are Raving About Off Broadway Live!",
+  "award": "Voted \"BEST LIVE THEATER GROUP\" for 2025 - Union-Tribune Readers Poll",
+  "address": {
+    "street": "9490 Cuyamaca Street",
+    "city": "Santee",
+    "region": "CA",
+    "postalCode": "92071"
+  },
+  "phone": { "display": "619-988-LIVE (5483)", "dial": "+16199885483" },
+  "email": "info@offbroadwaylive.com",
+  "map": {
+    "lat": null,
+    "lng": null,
+    "note": "TODO: map coordinates are not on the current site. The map and directions link use the street address until coordinates are confirmed."
+  },
+  "social": [],
+  "socialNote": "TODO(open item 8): no social links appear on the current site, so the social row is omitted. Add { \"name\": \"Facebook\", \"url\": \"...\" } entries to show it.",
+  "banner": {
+    "text": "Christmas Dessert Show Tickets On Sale Now!",
+    "link": "shows/a-big-band-christmas/",
+    "start": null,
+    "end": "2026-12-13"
+  },
+  "signup": {
+    "action": "",
+    "note": "TODO(open item 5): where signups go today is not confirmed. While action is empty the form shows \"Signup coming soon\". Set action to the provider's form URL to turn it on."
+  },
+  "doorsSummary": [
+    "ENCORE Supper Club: Fridays & Saturdays doors @ 6:00pm; Sundays are a Snack Board Show @ 3:00pm.",
+    "Every time listed on this site is a doors time."
+  ],
+  "doorsNote": "TODO(open item 7): confirm whether each listed time is doors or curtain. Every time is labelled Doors, as the current site does.",
+  "policy": "All ticket purchases are final and nonrefundable.",
+  "parking": "Our parking availability is FREE, abundant and has very close proximity to the theater.",
+  "encore": {
+    "intro": "Our Live Band Dinner Show, ENCORE Supper Club, is a high powered show that you can not find anywhere else, and we have it at Off Broadway Live!",
+    "pullLine": "Dinner, Drinks, Dessert and a Live Band Show Unlike Any Other!",
+    "rules": [
+      "Fridays and Saturdays doors open 6:00pm.",
+      "Sunday Sweet & Salty Snack Board Shows doors open 3:00pm and are priced $15 per person less than the Dinner Show.",
+      "Bx2-Bx9 tables include 4 tickets with double sized tables."
+    ],
+    "policy": "All ticket purchases are final and nonrefundable to this 21+ age dinner event.",
+    "seatLine": "There's not a bad seat in the house!"
+  },
+  "about": [
+    "Live Dinner Theater with cabaret seating (tables and chairs) adds a comfortable intimacy where you can enjoy an evening out with three of your friends at a table while experiencing the finest in musical entertainment.",
+    "Beginning our 15th Season, Off Broadway Live brings some of San Diego's finest singers and actors together on stage.",
+    "Our Live Band Dinner Show, ENCORE Supper Club, is a high powered show that you can not find anywhere else, and we have it at Off Broadway Live! \"Dinner, Drinks, Dessert and a Live Band Show Unlike Any Other!\"",
+    "DECADES: Flashback, A Musical Revue Dinner Show, features music from four years spread over four decades and a terrific \"Slider & Salad\" Dinner & Dessert.",
+    "Chicken Fried Gospel Dinner Show or Sunday Breakfast Brunch Show - Biscuits & Gravy and all the Egg & Bacon fixin's is back with new music, new performers & musicians."
+  ]
+}

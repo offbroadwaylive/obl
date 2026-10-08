@@ -1,0 +1,84 @@
+[
+  {
+    "slug": "lionel-and-the-commodores",
+    "title": "Lionel & The Commodores",
+    "series": "encore",
+    "kicker": "Encore Supper Club",
+    "blurb": "From the \"Brick House\" funk of the Commodores to his unmatched solo career, this is a celebration of a music icon. Get ready for a night full of soulful ballads and chart-topping party anthems of the one and only Lionel Richie.",
+    "poster": "shows/lionel-poster.png",
+    "posterAlt": "Lionel & The Commodores show poster",
+    "hero": "shows/lionel-wide.jpg",
+    "heroAlt": "Lionel & The Commodores show art",
+    "accent": "#c9742e",
+    "pricing": "encore-standard",
+    "menu": "lionel",
+    "ageRule": "21+",
+    "notes": [],
+    "performances": [
+      { "start": "2026-10-02T18:00", "id": 849897, "format": "dinner", "status": "on-sale" },
+      { "start": "2026-10-03T18:00", "id": 849898, "format": "dinner", "status": "on-sale" },
+      { "start": "2026-10-10T18:00", "id": 849899, "format": "dinner", "status": "on-sale" },
+      { "start": "2026-10-11T15:00", "id": 849900, "format": "snack-board", "status": "on-sale" },
+      { "start": "2026-10-16T18:00", "id": 849901, "format": "dinner", "status": "on-sale" },
+      { "start": "2026-10-17T18:00", "id": 849902, "format": "dinner", "status": "on-sale" },
+      { "start": "2026-10-18T15:00", "id": 859089, "format": "snack-board", "status": "on-sale" },
+      { "start": "2026-10-23T18:00", "id": 849903, "format": "dinner", "status": "on-sale" },
+      { "start": "2026-10-24T18:00", "id": 849904, "format": "dinner", "status": "on-sale" }
+    ]
+  },
+  {
+    "slug": "best-of-2026",
+    "title": "Best of 2026",
+    "series": "encore",
+    "kicker": "Encore Supper Club",
+    "blurb": "The BEST of all Encore Supper Clubs from 2026!",
+    "poster": "shows/bestof26-poster.png",
+    "posterAlt": "Best of 2026 show poster",
+    "hero": "shows/bestof26-wide.jpg",
+    "heroAlt": "Best of 2026 show art",
+    "accent": "#d9822b",
+    "pricing": "encore-best-of",
+    "menu": "best-of-2026",
+    "ageRule": "21+",
+    "notes": [
+      "Note: This show is priced $10 higher than our regular ENCORE Supper Club shows, but, it's worth it!"
+    ],
+    "performances": [
+      { "start": "2026-11-06T18:00", "id": 848434, "format": "dinner", "status": "on-sale" },
+      { "start": "2026-11-07T18:00", "id": 848435, "format": "dinner", "status": "on-sale" },
+      { "start": "2026-11-08T15:00", "id": 848436, "format": "snack-board", "status": "on-sale" },
+      { "start": "2026-11-13T18:00", "id": 848437, "format": "dinner", "status": "on-sale" },
+      { "start": "2026-11-14T18:00", "id": 848438, "format": "dinner", "status": "on-sale" },
+      { "start": "2026-11-15T15:00", "id": 848439, "format": "snack-board", "status": "on-sale" },
+      { "start": "2026-11-20T18:00", "id": 848440, "format": "dinner", "status": "on-sale" },
+      { "start": "2026-11-21T18:00", "id": 848441, "format": "dinner", "status": "on-sale" }
+    ]
+  },
+  {
+    "slug": "a-big-band-christmas",
+    "title": "A Big Band Christmas",
+    "series": "holiday",
+    "kicker": "Christmas Dessert Show",
+    "blurb": "Your First Wine, Beer & Champagne is on us, additional available for purchase at our bar. Then, Decadent Holiday Dessert is Served with Complimentary Soft Drinks or Coffee. Then, Onto The Show!",
+    "poster": null,
+    "posterNote": "TODO: no square Christmas poster yet. Steve to supply one, or crop from shows/christmas-wide.png. A placeholder shows until then.",
+    "posterAlt": "A Big Band Christmas show poster",
+    "hero": "shows/christmas-wide.png",
+    "heroAlt": "A Big Band Christmas show art",
+    "accent": "#3a9861",
+    "pricing": "christmas-dessert",
+    "menu": null,
+    "ageRule": "over-10",
+    "notes": [
+      "This show will be presented without an intermission.",
+      "Due to the intimacy of our cabaret style theater, everyone over the age of 10 is welcome."
+    ],
+    "performances": [
+      { "start": "2026-12-10T18:00", "id": 927602, "format": "dessert", "status": "on-sale" },
+      { "start": "2026-12-11T18:00", "id": 927603, "format": "dessert", "status": "on-sale" },
+      { "start": "2026-12-12T14:00", "id": 927604, "format": "dessert", "status": "on-sale" },
+      { "start": "2026-12-12T18:00", "id": 927613, "format": "dessert", "status": "on-sale" },
+      { "start": "2026-12-13T14:00", "id": 927607, "format": "dessert", "status": "on-sale" }
+    ]
+  }
+]

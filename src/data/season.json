@@ -1,0 +1,17 @@
+{
+  "year": 2027,
+  "onSale": "2026-11-01",
+  "headline": "All 2027 Show Tickets On Sale November 1st",
+  "subline": "Season Tickets saves you money and guarantees your seats to the shows you want to see!",
+  "heading": "Choose From 4 Levels",
+  "footnote": "Plus applicable taxes and fees. Call the box office for details.",
+  "footnoteNote": "TODO(open item 2): confirm what the asterisk on the season prices refers to. The footnote above is a placeholder.",
+  "showsNote": "TODO(open item 10): the 2027 season show list is not published yet, so the page shows packages only.",
+  "packages": [
+    { "name": "Bronze",   "metal": "bronze",   "shows": "4",      "line": "Your choice of FOUR Shows in our 2027 Season",  "from": 339 },
+    { "name": "Silver",   "metal": "silver",   "shows": "5 or 6", "line": "Your choice of FIVE Shows in our 2027 Season",  "from": 423 },
+    { "name": "Gold",     "metal": "gold",     "shows": "7",      "line": "Your choice of SEVEN Shows in our 2027 Season", "from": 588 },
+    { "name": "Platinum", "metal": "platinum", "shows": "8 or 9", "line": "Your choice of EIGHT Shows in our 2027 Season", "from": null,
+      "fromNote": "TODO(open item 1): Platinum 2027 from price, and whether it is 8 shows or 8 or 9. Shows \"Call for pricing\" until Steve confirms." }
+  ]
+}
