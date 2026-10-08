@@ -1,0 +1,60 @@
+---
+import menus from '../data/menus.json';
+
+interface Props {
+  id: string;
+  title?: string;
+  headingLevel?: 'h2' | 'h3';
+  showCredit?: boolean;
+}
+
+const { id, title = 'Dinner menu', headingLevel = 'h3', showCredit = true } = Astro.props;
+const menu = (menus.menus as Record<string, { courses: { course: string; dish: string; description: string }[]; snackBoard?: string }>)[id];
+if (!menu) throw new Error(`menus.json has no menu "${id}"`);
+const H = headingLevel;
+---
+
+<article class="paper menu-card" id={`menu-${id}`}>
+  <H class="menu-card__title">{title}</H>
+  {showCredit && <p class="menu-card__credit">{menus.credit}</p>}
+  <dl class="menu-card__courses">
+    {
+      menu.courses.map((c) => (
+        <div class="menu-card__course">
+          <dt>
+            <span class="menu-card__label">{c.course}</span>
+            <span class="menu-card__dish">{c.dish}</span>
+          </dt>
+          <dd>{c.description}</dd>
+        </div>
+      ))
+    }
+    {
+      menu.snackBoard && (
+        <div class="menu-card__course menu-card__course--snack">
+          <dt>
+            <span class="menu-card__label">Sunday Snack Board</span>
+            <span class="menu-card__dish">{menu.snackBoard}</span>
+          </dt>
+        </div>
+      )
+    }
+  </dl>
+</article>
+
+<style>
+  .menu-card { text-align: center; }
+  .menu-card__title { font-size: 1.8rem; margin-bottom: 4px; }
+  .menu-card__credit { font-family: var(--font-serif); font-style: italic; color: var(--paper-muted); margin-bottom: 20px; }
+  .menu-card__courses { margin: 0; display: grid; gap: 20px; }
+  .menu-card__course { padding-top: 18px; border-top: 1px solid rgba(26, 21, 18, 0.15); }
+  .menu-card__course:first-child { border-top: 0; padding-top: 0; }
+  .menu-card__label {
+    display: block;
+    font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.12em;
+    font-size: 0.85rem; color: #7a1018;
+  }
+  .menu-card__dish { display: block; font-family: var(--font-serif); font-size: 1.3rem; line-height: 1.3; margin-top: 4px; }
+  .menu-card dd { margin: 6px auto 0; max-width: 46ch; color: var(--paper-muted); }
+  .menu-card__course--snack { border-top: 2px dotted var(--gold); }
+</style>

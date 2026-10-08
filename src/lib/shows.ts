@@ -217,3 +217,11 @@ export function ageLabel(rule: string): string {
   if (rule === 'over-10') return 'Ages over 10 welcome';
   return rule;
 }
+
+/** "Oct 10 – Oct 24" (or a single date). */
+export function dateRange(perfs: Performance[]): string {
+  if (perfs.length === 0) return '';
+  const first = monthDay(perfs[0]);
+  const last = monthDay(perfs[perfs.length - 1]);
+  return first === last ? first : `${first} – ${last}`;
+}

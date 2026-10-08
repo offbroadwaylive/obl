@@ -1,0 +1,219 @@
+---
+// One layout for every show page. A show changes only its --accent color.
+import Base from './Base.astro';
+import Img from '../components/Img.astro';
+import DateList from '../components/DateList.astro';
+import PriceTable from '../components/PriceTable.astro';
+import SeatMap from '../components/SeatMap.astro';
+import MenuCard from '../components/MenuCard.astro';
+import ShowCard from '../components/ShowCard.astro';
+import Ribbon from '../components/Ribbon.astro';
+import StickyTicketBar from '../components/StickyTicketBar.astro';
+import site from '../data/site.json';
+import {
+  type Show,
+  FORMAT_LABEL,
+  ageLabel,
+  currentShows,
+  doorsTime,
+  formatsOf,
+  longDate,
+  priceSetFor,
+  upcoming,
+  weekdayLong,
+} from '../lib/shows';
+import { url } from '../lib/url';
+import { findImage } from '../lib/images';
+import { showEvents } from '../lib/structured';
+import { getImage } from 'astro:assets';
+
+interface Props {
+  show: Show;
+}
+
+const { show } = Astro.props;
+const dates = upcoming(show);
+const next = dates[0];
+const set = priceSetFor(show);
+const formats = formatsOf(show);
+const others = currentShows().filter((s) => s.slug !== show.slug);
+const isEncore = show.series === 'encore';
+
+// "Fri & Sat Dinner Show: doors 6:00pm" style summary from the actual dates.
+const doorsLines = [
+  ...new Map(
+    dates.map((p) => [`${p.format}|${doorsTime(p)}`, { format: p.format, time: doorsTime(p), days: new Set<string>() }]),
+  ).values(),
+];
+for (const p of dates) doorsLines.find((d) => d.format === p.format && d.time === doorsTime(p))?.days.add(weekdayLong(p) + 's');
+
+const WEEK = ['Mondays', 'Tuesdays', 'Wednesdays', 'Thursdays', 'Fridays', 'Saturdays', 'Sundays'];
+const listFmt = new Intl.ListFormat('en', { type: 'conjunction' });
+
+const heroMeta = findImage(show.hero);
+const ogImage = heroMeta ? (await getImage({ src: heroMeta, width: 1200, height: 630, fit: 'cover', format: 'jpg' })).src : undefined;
+const description = `${show.title} at ${site.name}, Santee. ${show.kicker}${next ? `, next show ${longDate(next)}` : ''}.`;
+---
+
+<Base title={show.title} description={description} accent={show.accent} ogImage={ogImage} structuredData={showEvents(show)} bodyClass="has-sticky-bar">
+  <section class="show-hero">
+    <div class="container show-hero__grid">
+      <div class="show-hero__text">
+        <p class="kicker">{show.kicker}</p>
+        <h1 class="show-hero__title">{show.title}</h1>
+        {
+          next ? (
+            <>
+              <p class="show-hero__next">
+                <span class="label">Next show</span>
+                {longDate(next)} · Doors {doorsTime(next)}
+              </p>
+              <div class="show-hero__actions">
+                <a class="btn" href="#dates">Get Tickets</a>
+                <a class="btn btn--ghost" href="#pricing">Prices &amp; seating</a>
+              </div>
+            </>
+          ) : (
+            <>
+              <p class="show-hero__next">This show has closed. Thank you to everyone who joined us!</p>
+              <div class="show-hero__actions">
+                <a class="btn" href={url('calendar/')}>See what's playing</a>
+              </div>
+            </>
+          )
+        }
+        <p class="show-hero__tags">
+          <span class="tag tag--accent">{ageLabel(show.ageRule)}</span>
+          {formats.map((f) => <span class="tag">{FORMAT_LABEL[f]}</span>)}
+        </p>
+      </div>
+      <div class="show-hero__art">
+        <Img src={show.hero} alt={show.heroAlt} label="Show art coming soon" note={show.title} loading="eager" sizes="(min-width: 900px) 620px, 100vw" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section container show-about reveal" aria-labelledby="about-h">
+    <h2 id="about-h" class="sr-only">About the show</h2>
+    <p class="lede show-about__blurb">{show.blurb}</p>
+    {show.notes.map((n) => <p class="show-about__note">{n}</p>)}
+  </section>
+
+  <section class="section container" id="dates" aria-labelledby="dates-h">
+    <div class="section-title"><h2 id="dates-h">Dates &amp; tickets</h2></div>
+    <DateList items={dates.map((perf) => ({ show, perf }))} emptyText="All performances of this show have passed." />
+    <p class="small muted dates-note">Tickets are sold through our Arts People box office and open in a new tab. Every time listed is when doors open.</p>
+  </section>
+
+  <section class="section container" id="pricing" aria-labelledby="pricing-h">
+    <div class="section-title"><h2 id="pricing-h">Prices &amp; seating</h2></div>
+    <div class:list={['pricing-grid', { 'pricing-grid--map': set.seatMap }]}>
+      <PriceTable set={set} formats={formats} interactive={set.seatMap} />
+      {set.seatMap && <SeatMap />}
+    </div>
+    {isEncore && <p class="seat-line">{site.encore.seatLine}</p>}
+  </section>
+
+  {
+    show.menu && (
+      <section class="section container" id="menu" aria-labelledby="menu-h">
+        <div class="section-title">
+          <h2 id="menu-h">On the menu</h2>
+        </div>
+        <div class="menu-wrap">
+          <MenuCard id={show.menu} title={`${show.title} menu`} />
+        </div>
+        <p class="small muted menu-more">
+          <a href={url(`menus/#menu-${show.menu}`)}>All dinner menus</a>
+        </p>
+      </section>
+    )
+  }
+
+  <section class="section container" aria-labelledby="know-h">
+    <div class="section-title"><h2 id="know-h">Good to know</h2></div>
+    <div class="grid know-grid">
+      <div class="panel">
+        <h3 class="label">Doors</h3>
+        {
+          doorsLines.length ? (
+            <ul class="know-list">
+              {doorsLines.map((d) => (
+                <li>
+                  {listFmt.format([...d.days].sort((a, b) => WEEK.indexOf(a) - WEEK.indexOf(b)))}, {FORMAT_LABEL[d.format]}: doors {d.time}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p class="muted">No upcoming dates.</p>
+          )
+        }
+      </div>
+      <div class="panel">
+        <h3 class="label">Ages</h3>
+        <p>{ageLabel(show.ageRule)}</p>
+        {isEncore && <p class="small muted">{site.encore.policy}</p>}
+        {!isEncore && <p class="small muted">{site.policy}</p>}
+      </div>
+      <div class="panel">
+        <h3 class="label">Getting here</h3>
+        <p>{site.address.street}, {site.address.city}</p>
+        <p class="small muted">{site.parking}</p>
+        <a href={url('contact/')}>Map &amp; directions</a>
+      </div>
+    </div>
+  </section>
+
+  {
+    others.length > 0 && (
+      <section class="section container" aria-labelledby="others-h">
+        <Ribbon id="others-h">Also playing</Ribbon>
+        <div class="grid">
+          {others.map((s) => (
+            <ShowCard show={s} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <StickyTicketBar slot="after" show={show} />
+</Base>
+
+<style>
+  .show-hero {
+    position: relative;
+    padding-block: clamp(32px, 5vw, 64px);
+    background:
+      radial-gradient(ellipse at 80% 40%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 60%),
+      radial-gradient(ellipse at 10% 100%, rgba(225, 29, 42, 0.12), transparent 55%);
+    border-bottom: 1px solid var(--line);
+  }
+  .show-hero__grid { display: grid; gap: 32px; align-items: center; grid-template-columns: 1fr; }
+  @media (min-width: 900px) { .show-hero__grid { grid-template-columns: 5fr 6fr; } }
+  .show-hero__title { margin: 4px 0 16px; }
+  .show-hero__next { font-size: 1.15rem; margin-bottom: 20px; }
+  .show-hero__next .label { display: block; color: var(--muted); font-size: 0.85rem; }
+  .show-hero__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
+  .show-hero__tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; }
+  .show-hero__art {
+    aspect-ratio: 16 / 9;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--line);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 40%, transparent), 0 20px 60px rgba(0, 0, 0, 0.6);
+  }
+  .show-hero__art :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .show-about { max-width: calc(820px + 2 * var(--gutter)); }
+  .show-about__blurb { font-family: var(--font-serif); font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.55rem); line-height: 1.5; max-width: none; }
+  .show-about__note { padding-left: 14px; border-left: 3px solid var(--accent); }
+  .dates-note { margin-top: 16px; }
+  .pricing-grid { display: grid; gap: 24px; align-items: start; }
+  @media (min-width: 900px) { .pricing-grid--map { grid-template-columns: 5fr 6fr; } }
+  .seat-line { margin-top: 20px; text-align: center; font-family: var(--font-serif); font-style: italic; font-size: 1.35rem; color: var(--gold); }
+  .menu-wrap { max-width: 640px; margin-inline: auto; }
+  .menu-more { text-align: center; margin-top: 16px; }
+  .know-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); }
+  .know-grid h3 { color: var(--accent); margin-bottom: 10px; }
+  .know-list { margin: 0; padding-left: 18px; }
+</style>

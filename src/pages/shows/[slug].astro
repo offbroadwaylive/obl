@@ -1,0 +1,12 @@
+---
+import Show from '../../layouts/Show.astro';
+import { allShows } from '../../lib/shows';
+
+export function getStaticPaths() {
+  return allShows.map((show) => ({ params: { slug: show.slug }, props: { show } }));
+}
+
+const { show } = Astro.props;
+---
+
+<Show show={show} />

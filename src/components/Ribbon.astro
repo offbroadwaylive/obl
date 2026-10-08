@@ -1,0 +1,13 @@
+---
+// CSS-only banner heading with notched ends. Gold by default; accent optional.
+interface Props {
+  as?: 'h1' | 'h2' | 'h3' | 'p';
+  accent?: boolean;
+  id?: string;
+}
+const { as: Tag = 'h2', accent = false, id } = Astro.props;
+---
+
+<div class="ribbon-wrap">
+  <Tag class:list={['ribbon', { 'ribbon--accent': accent }]} id={id}><slot /></Tag>
+</div>

@@ -1,0 +1,79 @@
+---
+// One price set from pricing.json on a paper card. Tier rows carry data-tier
+// so the seat map can highlight the matching seats.
+import { type PriceSet, perSeatAdjustment, tierPrice, FORMAT_LABEL, type Format } from '../lib/shows';
+
+interface Props {
+  set: PriceSet;
+  /** Formats in play for this show; a second price column appears for adjusted formats. */
+  formats?: Format[];
+  interactive?: boolean;
+  title?: string;
+}
+
+const { set, formats = ['dinner'], interactive = false, title = 'Ticket prices' } = Astro.props;
+const base: Format = formats.find((f) => perSeatAdjustment(set, f) === 0) ?? formats[0] ?? 'dinner';
+const adjusted = formats.filter((f) => perSeatAdjustment(set, f) !== 0);
+const COLUMN: Record<Format, string> = { dinner: 'Fri & Sat Dinner Show', 'snack-board': 'Sun Snack Board', dessert: 'Dessert Show' };
+const tierIcon: Record<string, string> = { main: '●', bx1: '◆', bx: '■', booth: '▲' };
+---
+
+<div class="paper price-card">
+  <h3 class="price-card__title">{title}</h3>
+  <table class="price-table">
+    <caption class="sr-only">{title}: price by seating tier{adjusted.length ? ' and show format' : ''}</caption>
+    <thead>
+      <tr>
+        <th scope="col">Seating</th>
+        <th scope="col">{adjusted.length ? COLUMN[base] : 'Price'}</th>
+        {adjusted.map((f) => <th scope="col">{COLUMN[f] ?? FORMAT_LABEL[f]}</th>)}
+      </tr>
+    </thead>
+    <tbody>
+      {
+        set.tiers.map((t) => (
+          <tr data-tier={t.key} tabindex={interactive ? 0 : undefined} aria-label={interactive ? `${t.name}: highlight on seating chart` : undefined}>
+            <th scope="row">
+              <span class="price-table__icon" aria-hidden="true">{tierIcon[t.key] ?? '•'}</span>
+              {t.name}
+              <span class="price-table__unit">{t.unit}</span>
+            </th>
+            <td class="price-table__price">${tierPrice(set, t, base)}</td>
+            {adjusted.map((f) => (
+              <td class="price-table__price">${tierPrice(set, t, f)}</td>
+            ))}
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+  <p class="price-card__fee">{set.feeNote}</p>
+  {set.notes.map((n) => <p class="price-card__note">{n}</p>)}
+</div>
+
+<style>
+  .price-card__title { font-size: 1.6rem; margin-bottom: 16px; }
+  .price-table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  .price-table th, .price-table td { text-align: left; padding: 12px 8px; border-bottom: 1px solid rgba(26, 21, 18, 0.15); vertical-align: middle; }
+  .price-table thead th {
+    font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.06em;
+    font-weight: 400; font-size: 0.85rem; color: var(--paper-muted);
+    border-bottom: 2px solid var(--gold);
+  }
+  .price-table tbody th { font-weight: 600; }
+  .price-table__icon { display: inline-block; width: 1.2em; color: #7a1018; }
+  .price-table__unit { display: block; font-weight: 400; font-size: 0.85rem; color: var(--paper-muted); padding-left: 1.2em; }
+  .price-table__price { font-family: var(--font-serif); font-size: 1.45rem; white-space: nowrap; }
+  .price-table tr[data-tier][tabindex] { cursor: pointer; transition: background-color 0.15s; }
+  .price-table tr[data-tier][tabindex]:hover,
+  .price-table tr[data-tier].is-active { background: rgba(230, 180, 34, 0.28); }
+  .price-table tr[data-tier].is-active th { box-shadow: inset 4px 0 0 #7a1018; }
+  .price-table tr[data-tier]:focus-visible { outline: 3px solid #7a1018; outline-offset: -3px; }
+  .price-card__fee { margin: 16px 0 4px; font-weight: 600; }
+  .price-card__note { margin: 4px 0 0; color: var(--paper-muted); font-size: 0.95rem; }
+  @media (max-width: 420px) {
+    .price-table th, .price-table td { padding: 10px 4px; }
+    .price-table__price { font-size: 1.2rem; }
+    .price-table thead th { font-size: 0.75rem; }
+  }
+</style>
