@@ -1,0 +1,182 @@
+---
+import Base from '../layouts/Base.astro';
+import PageIntro from '../components/PageIntro.astro';
+import DateList from '../components/DateList.astro';
+import { allUpcoming, currentShows, doorsTime, longDate, perfDay, ticketUrl, buildNow, laDay, type Dated } from '../lib/shows';
+
+const items = allUpcoming();
+const shows = currentShows();
+const today = laDay(buildNow());
+
+// Month grids from the first to the last month with a performance.
+type Cell = { day: string; n: number; perfs: Dated[] } | null;
+const byDay = new Map<string, Dated[]>();
+for (const it of items) byDay.set(perfDay(it.perf), [...(byDay.get(perfDay(it.perf)) ?? []), it]);
+
+const months: { key: string; label: string; weeks: Cell[][] }[] = [];
+if (items.length) {
+  const [fy, fm] = perfDay(items[0].perf).split('-').map(Number);
+  const [ly, lm] = perfDay(items[items.length - 1].perf).split('-').map(Number);
+  for (let y = fy, m = fm; y < ly || (y === ly && m <= lm); m === 12 ? ((m = 1), y++) : m++) {
+    const first = new Date(Date.UTC(y, m - 1, 1));
+    const days = new Date(Date.UTC(y, m, 0)).getUTCDate();
+    const cells: Cell[] = Array(first.getUTCDay()).fill(null);
+    for (let d = 1; d <= days; d++) {
+      const day = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+      cells.push({ day, n: d, perfs: byDay.get(day) ?? [] });
+    }
+    while (cells.length % 7) cells.push(null);
+    const weeks = Array.from({ length: cells.length / 7 }, (_, i) => cells.slice(i * 7, i * 7 + 7));
+    const label = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(first);
+    months.push({ key: `${y}-${m}`, label, weeks });
+  }
+}
+const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const shortTime = (t: string) => t.replace(':00', '');
+---
+
+<Base title="Calendar" description="Every upcoming performance at Off Broadway Live in one place, with tickets for each date.">
+  <PageIntro kicker="Every date, one place" title="Show Calendar" lede="Pick a show to filter, then tap any date for tickets." />
+
+  <section class="section container" data-cal>
+    <div class="filters" role="group" aria-label="Filter by show" data-filters hidden>
+      <button type="button" class="filter" aria-pressed="true" data-filter="all">All shows</button>
+      {
+        shows.map((s) => (
+          <button type="button" class="filter" aria-pressed="false" data-filter={s.slug} style={`--accent:${s.accent}`}>
+            <span class="filter__dot" aria-hidden="true" />
+            {s.title}
+          </button>
+        ))
+      }
+    </div>
+    <p class="sr-only" aria-live="polite" data-filter-status></p>
+
+    {
+      months.map((mo) => (
+        <div class="month" data-month>
+          <h2 class="month__title">{mo.label}</h2>
+          <table class="month__grid">
+            <caption class="sr-only">{mo.label} performances</caption>
+            <thead>
+              <tr>
+                {WEEKDAYS.map((d) => (
+                  <th scope="col">
+                    <abbr title={d}>{d}</abbr>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {mo.weeks.map((w) => (
+                <tr>
+                  {w.map((c) =>
+                    c ? (
+                      <td class:list={['day', { 'day--past': c.day < today, 'day--has': c.perfs.length }]}>
+                        <span class="day__n">{c.n}</span>
+                        {c.perfs.map(({ show, perf }) => (
+                          <a
+                            class:list={['chip', { 'chip--sold': perf.status === 'sold-out' }]}
+                            href={perf.status === 'sold-out' ? undefined : ticketUrl(perf.id)}
+                            target="_blank"
+                            rel="noopener"
+                            data-day={perfDay(perf)}
+                            data-show={show.slug}
+                            style={`--accent:${show.accent}`}
+                            title={`${show.title}, doors ${doorsTime(perf)}`}
+                          >
+                            <span class="chip__time">{shortTime(doorsTime(perf))}</span>
+                            <span class="chip__title">{show.title}</span>
+                            <span class="sr-only">
+                              , {longDate(perf)}, doors {doorsTime(perf)}
+                              {perf.status === 'sold-out' ? ', sold out' : ', get tickets (opens Arts People in a new tab)'}
+                            </span>
+                          </a>
+                        ))}
+                      </td>
+                    ) : (
+                      <td class="day day--empty" />
+                    ),
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ))
+    }
+
+    <div class="section-title list-title"><h2>All dates</h2></div>
+    <DateList items={items} showTitles emptyText="No performances are on sale right now. Check back soon!" />
+  </section>
+</Base>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-cal]');
+  const bar = root?.querySelector<HTMLElement>('[data-filters]');
+  if (root && bar) {
+    bar.hidden = false;
+    const status = root.querySelector<HTMLElement>('[data-filter-status]')!;
+    const buttons = [...bar.querySelectorAll<HTMLButtonElement>('[data-filter]')];
+    const apply = (slug: string) => {
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.filter === slug)));
+      let shown = 0;
+      root.querySelectorAll<HTMLElement>('[data-show]').forEach((el) => {
+        const on = slug === 'all' || el.dataset.show === slug;
+        el.hidden = !on;
+        if (on && el.matches('li')) shown++;
+      });
+      const label = buttons.find((b) => b.dataset.filter === slug)?.textContent?.trim();
+      status.textContent = `Showing ${shown} ${shown === 1 ? 'date' : 'dates'} for ${label}.`;
+    };
+    buttons.forEach((b) => b.addEventListener('click', () => apply(b.dataset.filter!)));
+  }
+</script>
+
+<style>
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
+  .filter {
+    display: inline-flex; align-items: center; gap: 8px;
+    min-height: var(--tap); padding: 6px 16px;
+    font: inherit; font-weight: 600; color: var(--text);
+    background: var(--surface); border: 1px solid var(--line); border-radius: 999px; cursor: pointer;
+  }
+  .filter:hover { border-color: var(--gold); }
+  .filter[aria-pressed='true'] { background: var(--gold); color: var(--paper-ink); border-color: var(--gold); }
+  .filter__dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 2px var(--bg); }
+
+  .month { margin-bottom: 40px; }
+  .month__title { font-size: var(--fs-h3); }
+  .month__grid { width: 100%; table-layout: fixed; border-collapse: separate; border-spacing: 4px; }
+  .month__grid th { font-family: var(--font-display); font-weight: 400; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.8rem; color: var(--muted); padding: 4px; }
+  .month__grid abbr { text-decoration: none; }
+  .day {
+    vertical-align: top; height: 92px; padding: 6px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  }
+  .day--empty { background: transparent; border-color: transparent; }
+  .day--past { opacity: 0.4; }
+  .day--has { border-color: var(--gold-dim); }
+  .day__n { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 4px; }
+  .chip {
+    display: block; margin-top: 4px; padding: 4px 6px;
+    border-left: 3px solid var(--accent); border-radius: 3px;
+    background: var(--surface-2); color: var(--text); text-decoration: none;
+    font-size: 0.78rem; line-height: 1.25;
+    overflow: hidden;
+  }
+  .chip:hover { background: color-mix(in srgb, var(--accent) 30%, var(--surface-2)); color: var(--text); }
+  .chip__time { font-weight: 600; color: var(--accent); margin-right: 4px; }
+  .chip__title { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .chip--sold { opacity: 0.5; text-decoration: line-through; }
+  .chip[hidden] { display: none; }
+  .list-title { margin-top: 24px; }
+
+  @media (max-width: 720px) {
+    .month__grid { border-spacing: 2px; }
+    .day { height: 60px; padding: 3px; }
+    .day__n { font-size: 0.75rem; margin-bottom: 2px; }
+    .chip { padding: 2px 3px; border-left-width: 2px; min-height: 22px; font-size: 0.7rem; }
+    .chip__title { display: none; }
+  }
+</style>
