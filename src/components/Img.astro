@@ -1,0 +1,59 @@
+---
+// Shows an image from src/assets/images, resized and converted to WebP.
+// If the file has not been imported yet, shows a labelled placeholder so the
+// gap is obvious in the demo.
+import { Image } from 'astro:assets';
+import { findImage } from '../lib/images';
+
+interface Props {
+  src: string | null | undefined;
+  alt: string;
+  /** Placeholder heading, e.g. "Poster coming soon". */
+  label?: string;
+  /** Placeholder small print. */
+  note?: string;
+  widths?: number[];
+  sizes?: string;
+  loading?: 'lazy' | 'eager';
+  class?: string;
+}
+
+const {
+  src,
+  alt,
+  label = 'Image coming soon',
+  note,
+  widths = [800, 1600],
+  sizes = '(min-width: 1120px) 1120px, 100vw',
+  loading = 'lazy',
+  class: className,
+} = Astro.props;
+
+const meta = findImage(src);
+const usable = meta ? widths.filter((w) => w <= meta.width) : [];
+if (meta && usable.length === 0) usable.push(meta.width);
+---
+
+{
+  meta ? (
+    <Image
+      src={meta}
+      alt={alt}
+      widths={usable}
+      sizes={sizes}
+      format="webp"
+      quality={80}
+      loading={loading}
+      decoding="async"
+      fetchpriority={loading === 'eager' ? 'high' : undefined}
+      class={className}
+    />
+  ) : (
+    <div class:list={['placeholder', className]} role="img" aria-label={alt}>
+      <span>
+        {label}
+        {note && <small>{note}</small>}
+      </span>
+    </div>
+  )
+}

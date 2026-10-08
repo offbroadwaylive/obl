@@ -1,0 +1,68 @@
+---
+import site from '../data/site.json';
+import { url } from '../lib/url';
+import { mapsSearchUrl, fullAddress } from '../lib/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__grid">
+    <div>
+      <p class="site-footer__name">Off Broadway <span class="live-glow">Live</span></p>
+      <p class="site-footer__award">{site.award}</p>
+    </div>
+
+    <div>
+      <h2 class="label site-footer__h">Visit</h2>
+      <address>
+        <a href={mapsSearchUrl} target="_blank" rel="noopener">{site.address.street}<br />{site.address.city}, {site.address.region} {site.address.postalCode}</a>
+      </address>
+      <p class="small muted">{site.parking}</p>
+    </div>
+
+    <div>
+      <h2 class="label site-footer__h">Box Office</h2>
+      <p><a href={`tel:${site.phone.dial}`}>{site.phone.display}</a><br /><a href={`mailto:${site.email}`}>{site.email}</a></p>
+    </div>
+
+    <div>
+      <h2 class="label site-footer__h">Doors</h2>
+      {site.doorsSummary.map((line) => <p class="small">{line}</p>)}
+    </div>
+  </div>
+
+  <div class="container site-footer__base">
+    <p class="small muted">{site.policy}</p>
+    <p class="small muted">
+      &copy; {year} {site.name} · <a href={url('faqs/')}>FAQs</a> · <a href={url('contact/')}>Contact</a> · <a href={url('calendar/')}>Calendar</a>
+    </p>
+    <span class="sr-only">{fullAddress}</span>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: 48px;
+    border-top: 1px solid var(--line);
+    background: linear-gradient(180deg, var(--bg), #060607);
+    padding-top: 48px;
+  }
+  .site-footer__grid {
+    display: grid;
+    gap: 32px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  }
+  .site-footer__name { font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.1em; font-size: 1.5rem; margin-bottom: 8px; }
+  .site-footer__name .live-glow { font-family: var(--font-serif); font-style: italic; text-transform: none; letter-spacing: 0; font-weight: 700; }
+  .site-footer__award { color: var(--gold); font-size: 0.95rem; }
+  .site-footer__h { color: var(--muted); margin: 0 0 10px; font-size: 0.85rem; }
+  .site-footer address { font-style: normal; margin-bottom: 8px; }
+  .site-footer a { display: inline-block; padding-block: 4px; }
+  .site-footer__base {
+    display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px;
+    margin-top: 32px; padding-block: 20px 32px;
+    border-top: 1px solid var(--line);
+  }
+  .site-footer__base p { margin: 0; }
+</style>

@@ -1,0 +1,50 @@
+---
+// The existing neon logo, unchanged. Until it is imported, the name is set in
+// type with the same red glow on "Live".
+import { Image } from 'astro:assets';
+import { findImage } from '../lib/images';
+import site from '../data/site.json';
+
+interface Props { class?: string }
+const { class: className } = Astro.props;
+const logo = findImage('logo/obl-logo.png');
+---
+
+{
+  logo ? (
+    <Image src={logo} alt={site.name} widths={[160, 320]} sizes="160px" format="webp" loading="eager" class:list={['logo-img', 'flicker', className]} />
+  ) : (
+    <span class:list={['wordmark', 'flicker', className]} aria-label={site.name}>
+      <span class="wordmark__top" aria-hidden="true">Off Broadway</span>
+      <span class="wordmark__live live-glow" aria-hidden="true">Live</span>
+    </span>
+  )
+}
+
+<style>
+  .logo-img { width: 160px; height: auto; }
+  .wordmark { display: inline-flex; flex-direction: column; align-items: center; line-height: 0.9; }
+  .wordmark__top {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+  .wordmark__live {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 700;
+    font-size: 1.9rem;
+    margin-top: -2px;
+  }
+  .flicker { animation: flicker 1.6s ease-out 0.2s 1 both; }
+  @keyframes flicker {
+    0% { opacity: 0.2; }
+    8% { opacity: 1; }
+    12% { opacity: 0.3; }
+    20% { opacity: 1; }
+    26% { opacity: 0.55; }
+    34%, 100% { opacity: 1; }
+  }
+</style>
