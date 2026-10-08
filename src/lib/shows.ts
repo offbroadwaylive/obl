@@ -181,10 +181,15 @@ export function tierPrice(set: PriceSet, tier: Tier, format: Format): number {
   return tier.price + perSeatAdjustment(set, format) * tier.seats;
 }
 
-/** Lowest per-seat price for a performance, used as "from $X". */
+/**
+ * "From $X" for a performance: the cheapest single-seat ticket. Tables are
+ * sold whole, so they only count if no single seats are offered.
+ */
 export function priceFrom(show: Show, perf: Performance): number {
   const set = priceSetFor(show);
-  return Math.min(...set.tiers.map((t) => tierPrice(set, t, perf.format) / t.seats));
+  const singles = set.tiers.filter((t) => t.seats === 1);
+  const pool = singles.length ? singles : set.tiers;
+  return Math.ceil(Math.min(...pool.map((t) => tierPrice(set, t, perf.format) / t.seats)));
 }
 
 /** Formats a show uses across its upcoming dates, in a stable order. */

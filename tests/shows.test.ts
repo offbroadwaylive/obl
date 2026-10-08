@@ -6,6 +6,7 @@ import {
   pacificToDate,
   pastShows,
   priceFrom,
+  priceSets,
   priceSetFor,
   showBySlug,
   tierPrice,
@@ -116,5 +117,14 @@ describe('pricing', () => {
   it('price-from is the lowest per-seat price', () => {
     expect(priceFrom(bestOf, bestOf.performances[0])).toBe(109);
     expect(priceFrom(christmas, christmas.performances[0])).toBe(94);
+  });
+
+  it('price-from follows the single-seat price, not a cheaper-per-seat table', () => {
+    const set = structuredClone(priceSetFor(bestOf));
+    set.tiers[0].price = 111; // main floor now dearer per seat than a $438 table for 4
+    const show = { ...bestOf, pricing: 'test' };
+    (priceSets as Record<string, unknown>).test = set;
+    expect(priceFrom(show, bestOf.performances[0])).toBe(111);
+    delete (priceSets as Record<string, unknown>).test;
   });
 });
