@@ -1,0 +1,43 @@
+---
+// One strip under the nav holding the award line, edged with chasing gold bulbs.
+import site from '../data/site.json';
+---
+
+<div class="marquee">
+  <p class="container marquee__text">{site.award}</p>
+</div>
+
+<style>
+  .marquee {
+    --bulb: radial-gradient(circle, var(--gold) 0 2px, rgba(230, 180, 34, 0.35) 2.5px, transparent 4px);
+    position: relative;
+    background: linear-gradient(180deg, #120d06, #0d0b09);
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .marquee::before, .marquee::after {
+    content: '';
+    position: absolute; left: 0; right: 0; height: 8px;
+    background-image: var(--bulb);
+    background-size: 14px 8px;
+    background-repeat: repeat-x;
+    animation: chase 2.8s linear infinite;
+  }
+  .marquee::before { top: 0; }
+  .marquee::after { bottom: 0; animation-direction: reverse; }
+  .marquee__text {
+    margin: 0 auto;
+    text-align: center;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: clamp(0.85rem, 0.75rem + 0.5vw, 1.05rem);
+    line-height: 1.35;
+    color: var(--gold);
+    text-shadow: 0 0 10px rgba(230, 180, 34, 0.35);
+  }
+  @keyframes chase { to { background-position: 14px 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee::before, .marquee::after { animation: none; }
+  }
+</style>

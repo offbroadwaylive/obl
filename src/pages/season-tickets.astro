@@ -1,0 +1,87 @@
+---
+import Base from '../layouts/Base.astro';
+import PageIntro from '../components/PageIntro.astro';
+import Ribbon from '../components/Ribbon.astro';
+import season from '../data/season.json';
+import faqs from '../data/faqs.json';
+import site from '../data/site.json';
+import { markdown } from '../lib/markdown';
+
+const benefits = faqs.items.find((f) => f.q.startsWith('Do you offer Season Tickets'));
+---
+
+<Base title={`${season.year} Season Tickets`} description={`${season.headline}. ${season.subline}`}>
+  <PageIntro kicker={`Season ${season.year}`} title={season.headline} lede={season.subline} />
+
+  <section class="section container" aria-labelledby="levels-h">
+    <Ribbon id="levels-h">{season.heading}</Ribbon>
+    <ul class="packages">
+      {
+        season.packages.map((p) => (
+          <li class="card card--lift package" data-metal={p.metal}>
+            <h3 class="package__name">{p.name}</h3>
+            <p class="package__shows">
+              <span class="package__count">{p.shows}</span> shows
+            </p>
+            <p class="package__line">{p.line}</p>
+            <p class="package__price">
+              {typeof p.from === 'number' ? (
+                <>
+                  <span class="package__from">from</span> ${p.from}
+                  <span aria-hidden="true">*</span>
+                </>
+              ) : (
+                <span class="package__call">Call for pricing</span>
+              )}
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="small muted footnote">* {season.footnote}</p>
+  </section>
+
+  <section class="section container reveal" aria-labelledby="benefits-h">
+    <div class="benefits panel">
+      <div>
+        <h2 id="benefits-h">Why season tickets?</h2>
+        {benefits && <div set:html={markdown(benefits.a)} />}
+      </div>
+      <div class="benefits__cta">
+        <p class="label">Call the box office</p>
+        <a class="btn" href={`tel:${site.phone.dial}`}>{site.phone.display}</a>
+        <p class="small muted">Season tickets are sold by phone.</p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .packages {
+    list-style: none; margin: 0; padding: 0;
+    display: grid; gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+  }
+  .package {
+    --metal: linear-gradient(90deg, #8c5a2b, #d79a5e, #8c5a2b);
+    position: relative; display: flex; flex-direction: column; text-align: center;
+    padding: 32px 20px 24px;
+  }
+  .package::before { content: ''; position: absolute; inset: 0 0 auto; height: 8px; background: var(--metal); }
+  .package[data-metal='silver'] { --metal: linear-gradient(90deg, #7d8189, #e4e6ea, #7d8189); }
+  .package[data-metal='gold'] { --metal: linear-gradient(90deg, #a07a12, #f3d26b, #a07a12); }
+  .package[data-metal='platinum'] { --metal: linear-gradient(90deg, #9aa3ad, #f4f6f8, #b9c0c8, #9aa3ad); }
+  .package__name { font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.1em; font-size: 1.6rem; margin-bottom: 4px; }
+  .package__shows { color: var(--muted); margin-bottom: 12px; }
+  .package__count { font-family: var(--font-serif); font-size: 1.4rem; color: var(--text); }
+  .package__line { flex: 1; }
+  .package__price { margin: 8px 0 0; font-family: var(--font-serif); font-size: 2.4rem; color: var(--gold); line-height: 1.1; }
+  .package__from { display: block; font-family: var(--font-sans); font-size: 0.85rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+  .package__call { font-size: 1.5rem; }
+  .footnote { margin-top: 16px; text-align: center; }
+  .benefits { display: grid; gap: 24px; align-items: center; }
+  @media (min-width: 800px) { .benefits { grid-template-columns: 2fr 1fr; } }
+  .benefits h2 { font-size: var(--fs-h3); }
+  .benefits__cta { display: grid; gap: 10px; justify-items: start; }
+  .benefits__cta p { margin: 0; }
+</style>

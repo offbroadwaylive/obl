@@ -1,0 +1,66 @@
+---
+// Counts down to a performance's doors time, then reads "Doors are open".
+import { type Performance, pacificToDate } from '../lib/shows';
+
+interface Props {
+  perf: Performance;
+}
+const { perf } = Astro.props;
+const target = pacificToDate(perf.start).toISOString();
+---
+
+<div class="countdown" data-countdown data-target={target}>
+  <p class="label countdown__label">Doors open in</p>
+  <div class="countdown__units" role="timer" aria-label="Time until doors open">
+    <span class="countdown__unit"><b data-u="d">--</b><small>Days</small></span>
+    <span class="countdown__unit"><b data-u="h">--</b><small>Hrs</small></span>
+    <span class="countdown__unit"><b data-u="m">--</b><small>Min</small></span>
+    <span class="countdown__unit"><b data-u="s">--</b><small>Sec</small></span>
+  </div>
+  <p class="countdown__open live-glow" hidden>Doors are open!</p>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-countdown]').forEach((el) => {
+    const target = Date.parse(el.dataset.target ?? '');
+    const units = el.querySelector<HTMLElement>('.countdown__units')!;
+    const label = el.querySelector<HTMLElement>('.countdown__label')!;
+    const open = el.querySelector<HTMLElement>('.countdown__open')!;
+    const set = (u: string, v: number) => {
+      const b = el.querySelector(`[data-u="${u}"]`);
+      if (b) b.textContent = String(v).padStart(2, '0');
+    };
+    const tick = () => {
+      const left = target - Date.now();
+      if (!(left > 0)) {
+        units.hidden = true;
+        label.hidden = true;
+        open.hidden = false;
+        return false;
+      }
+      const s = Math.floor(left / 1000);
+      set('d', Math.floor(s / 86400));
+      set('h', Math.floor((s % 86400) / 3600));
+      set('m', Math.floor((s % 3600) / 60));
+      set('s', s % 60);
+      return true;
+    };
+    if (tick()) {
+      const timer = setInterval(() => tick() || clearInterval(timer), 1000);
+    }
+  });
+</script>
+
+<style>
+  .countdown__label { color: var(--muted); font-size: 0.85rem; margin: 0 0 8px; }
+  .countdown__units { display: flex; gap: 8px; }
+  .countdown__unit {
+    display: grid; justify-items: center; min-width: 64px; padding: 8px 6px;
+    background: rgba(10, 10, 11, 0.7); border: 1px solid var(--line); border-top: 2px solid var(--accent);
+    border-radius: var(--radius);
+  }
+  .countdown__unit b { font-family: var(--font-display); font-weight: 400; font-size: 1.9rem; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .countdown__unit small { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+  .countdown__open { font-family: var(--font-serif); font-style: italic; font-size: 1.8rem; margin: 0; }
+  @media (max-width: 380px) { .countdown__unit { min-width: 56px; } .countdown__unit b { font-size: 1.6rem; } }
+</style>

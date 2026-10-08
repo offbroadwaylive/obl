@@ -1,0 +1,22 @@
+{
+  "credit": "Prepared & Presented by Chef Carson Neil",
+  "menus": {
+    "lionel": {
+      "show": "lionel-and-the-commodores",
+      "courses": [
+        { "course": "Salad", "dish": "Blueberry Orchard Salad", "description": "Mixed greens with blueberries, mozzarella, and crunchy croutons with vinaigrette dressing." },
+        { "course": "Entree", "dish": "Seasoned Chipotle Honey Chicken Breast", "description": "Creamy Gouda Mashed Potatoes, Asparagus and a dinner roll." },
+        { "course": "Dessert", "dish": "Cheesecake with Raspberry Sauce", "description": "Rich silky cheesecake finished with a vibrant raspberry drizzle." }
+      ],
+      "snackBoard": "Mini Slice of Cheesecake, Savory Crunch Mix & Fresh Seasonal Fruit"
+    },
+    "best-of-2026": {
+      "show": "best-of-2026",
+      "courses": [
+        { "course": "Entree", "dish": "Oven-Roasted Turkey Breast", "description": "Tender roasted turkey served with creamy mashed potatoes smothered in savory turkey gravy, a side of sweet-tangy cranberry relish, and a dinner roll." },
+        { "course": "Dessert", "dish": "Pumpkin Pie with Fresh Whipped Cream", "description": "A slice of soft rich pumpkin pie with a generous topping of heavy whipped cream." }
+      ],
+      "snackBoard": "Turkey Slider with Cranberry Delight Salad & Pumpkin Pie"
+    }
+  }
+}

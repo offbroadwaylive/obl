@@ -1,0 +1,218 @@
+---
+import Logo from './Logo.astro';
+import { currentShows, nextPerformance } from '../lib/shows';
+import { url, showUrl } from '../lib/url';
+
+const shows = currentShows();
+const next = nextPerformance();
+const ticketsHref = next ? showUrl(next.show.slug) : url('calendar/');
+const here = Astro.url.pathname;
+const isHere = (href: string) => here === href || (href !== url() && here.startsWith(href));
+
+// TODO(open item 11): pages under the Wix "More" menu were not readable and are not built; add links here once confirmed.
+const links = [
+  { href: url('encore-supper-club/'), label: 'ENCORE Supper Club' },
+  { href: url('calendar/'), label: 'Calendar' },
+  { href: url('season-tickets/'), label: 'Season Tickets' },
+  { href: url('menus/'), label: 'Menus' },
+  { href: url('media/'), label: 'Media' },
+  { href: url('faqs/'), label: 'FAQs' },
+  { href: url('contact/'), label: 'Contact' },
+];
+const showsActive = here.startsWith(url('shows/'));
+---
+
+<header class="site-header" data-header>
+  <div class="container site-header__bar">
+    <a class="site-header__logo" href={url()} aria-label="Off Broadway Live home">
+      <Logo />
+    </a>
+
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-btn>
+      <span class="menu-btn__bars" aria-hidden="true"></span>
+      <span class="label">Menu</span>
+    </button>
+
+    <nav id="site-nav" class="site-nav" aria-label="Main" data-nav>
+      <ul class="site-nav__list">
+        <li class="site-nav__item site-nav__item--shows">
+          <details class="dropdown" data-dropdown>
+            <summary class:list={['site-nav__link', { 'is-active': showsActive }]}>Shows</summary>
+            <ul class="dropdown__menu">
+              {
+                shows.map((s) => (
+                  <li>
+                    <a href={showUrl(s.slug)} aria-current={isHere(showUrl(s.slug)) ? 'page' : undefined} style={`--accent:${s.accent}`}>
+                      <span class="dropdown__kicker">{s.kicker}</span>
+                      {s.title}
+                    </a>
+                  </li>
+                ))
+              }
+              {shows.length === 0 && <li class="dropdown__empty">New shows coming soon</li>}
+            </ul>
+          </details>
+        </li>
+        {
+          links.map((l) => (
+            <li class="site-nav__item">
+              <a class:list={['site-nav__link', { 'is-active': isHere(l.href) }]} href={l.href} aria-current={isHere(l.href) ? 'page' : undefined}>
+                {l.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <a class="btn btn--small site-header__tickets" href={ticketsHref}>Get Tickets</a>
+  </div>
+</header>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  const btn = header?.querySelector<HTMLButtonElement>('[data-menu-btn]');
+  const dropdown = header?.querySelector<HTMLDetailsElement>('[data-dropdown]');
+
+  btn?.addEventListener('click', () => {
+    const open = btn.getAttribute('aria-expanded') !== 'true';
+    btn.setAttribute('aria-expanded', String(open));
+    header?.classList.toggle('is-open', open);
+  });
+
+  // Close the Shows dropdown on outside click or Escape.
+  document.addEventListener('click', (e) => {
+    if (dropdown?.open && !dropdown.contains(e.target as Node)) dropdown.open = false;
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    if (dropdown?.open) {
+      dropdown.open = false;
+      dropdown.querySelector('summary')?.focus();
+    } else if (header?.classList.contains('is-open')) {
+      header.classList.remove('is-open');
+      btn?.setAttribute('aria-expanded', 'false');
+      btn?.focus();
+    }
+  });
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(10, 10, 11, 0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .site-header__bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-height: 72px;
+  }
+  .site-header__logo { display: flex; align-items: center; min-height: var(--tap); text-decoration: none; flex-shrink: 0; }
+  .site-header__tickets { margin-left: auto; flex-shrink: 0; }
+
+  .site-nav__list { list-style: none; margin: 0; padding: 0; display: flex; align-items: center; gap: 2px; }
+  .site-nav__link {
+    display: flex; align-items: center;
+    min-height: var(--tap);
+    padding: 0 10px;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 0.95rem;
+    color: var(--text);
+    text-decoration: none;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+  }
+  .site-nav__link:hover { color: var(--gold); }
+  .site-nav__link.is-active { border-bottom-color: var(--neon); }
+
+  summary.site-nav__link { list-style: none; }
+  summary.site-nav__link::-webkit-details-marker { display: none; }
+  summary.site-nav__link::after {
+    content: ''; width: 7px; height: 7px; margin-left: 8px; margin-top: -4px;
+    border-right: 2px solid currentColor; border-bottom: 2px solid currentColor;
+    transform: rotate(45deg); transition: transform 0.2s;
+  }
+  .dropdown[open] summary.site-nav__link::after { transform: rotate(225deg); margin-top: 4px; }
+
+  .dropdown { position: relative; }
+  .dropdown__menu {
+    list-style: none; margin: 0; padding: 8px;
+    position: absolute; top: calc(100% + 8px); left: 0;
+    min-width: 280px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--gold);
+    border-radius: 0 0 var(--radius) var(--radius);
+    box-shadow: var(--shadow);
+  }
+  .dropdown__menu a {
+    display: block;
+    padding: 10px 12px;
+    border-left: 3px solid var(--accent);
+    border-radius: 2px;
+    color: var(--text);
+    text-decoration: none;
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    line-height: 1.25;
+  }
+  .dropdown__menu a + a, .dropdown__menu li + li { margin-top: 4px; }
+  .dropdown__menu a:hover, .dropdown__menu a[aria-current='page'] { background: var(--surface-2); }
+  .dropdown__kicker {
+    display: block;
+    font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.08em;
+    font-size: 0.75rem; color: var(--muted);
+  }
+  .dropdown__empty { padding: 10px 12px; color: var(--muted); }
+
+  .menu-btn { display: none; }
+
+  @media (max-width: 1099px) and (min-width: 900px) {
+    .site-nav__link { padding: 0 7px; font-size: 0.88rem; letter-spacing: 0.04em; }
+  }
+
+  @media (max-width: 899px) {
+    .site-header__bar { flex-wrap: wrap; gap: 8px 12px; }
+    .menu-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      order: 3;
+      min-height: var(--tap); min-width: var(--tap);
+      padding: 0 12px;
+      background: transparent; color: var(--text);
+      border: 1px solid var(--line); border-radius: var(--radius);
+      cursor: pointer;
+    }
+    .menu-btn__bars, .menu-btn__bars::before, .menu-btn__bars::after {
+      display: block; width: 18px; height: 2px; background: currentColor; position: relative;
+      transition: transform 0.2s;
+    }
+    .menu-btn__bars::before, .menu-btn__bars::after { content: ''; position: absolute; left: 0; }
+    .menu-btn__bars::before { top: -6px; }
+    .menu-btn__bars::after { top: 6px; }
+    .is-open .menu-btn__bars { background: transparent; }
+    .is-open .menu-btn__bars::before { transform: translateY(6px) rotate(45deg); }
+    .is-open .menu-btn__bars::after { transform: translateY(-6px) rotate(-45deg); }
+
+    .site-header__tickets { order: 2; }
+    .site-nav { order: 4; flex-basis: 100%; }
+    :global(.js) .site-nav { display: none; }
+    :global(.js) .is-open .site-nav { display: block; padding-bottom: 16px; max-height: calc(100vh - 80px); overflow-y: auto; }
+    .site-nav__list { flex-direction: column; align-items: stretch; gap: 0; }
+    .site-nav__item { border-top: 1px solid var(--line); }
+    .site-nav__link { font-size: 1.1rem; padding: 0 4px; border-bottom: 0; }
+    .site-nav__link.is-active { color: var(--neon-text); }
+    .dropdown__menu { position: static; min-width: 0; box-shadow: none; border: 0; padding: 0 0 8px; background: transparent; }
+  }
+
+  @media (max-width: 380px) {
+    .menu-btn .label { display: none; }
+  }
+</style>

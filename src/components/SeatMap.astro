@@ -1,0 +1,219 @@
+---
+// The seating chart rebuilt as inline SVG. Informational only: seats are
+// chosen at Arts People. Hovering, focusing or tapping a price tier (in the
+// legend or the price table beside it) highlights its seats; tapping a table
+// highlights its tier. Each tier has its own shape, so color is never the
+// only signal.
+import type { PriceSet } from '../lib/shows';
+
+interface Props {
+  set: PriceSet;
+}
+const { set } = Astro.props;
+
+type Table = { id: string; label: string; tier: 'main' | 'bx1' | 'bx' | 'booth'; x: number; y: number };
+
+const cols = ['A', 'B', 'C', 'D', 'E'];
+const colX = [70, 165, 260, 355, 450];
+const tables: Table[] = [
+  // Main floor: three rows of five 4-seat tables, row 1 nearest the stage.
+  ...[1, 2, 3].flatMap((row, r) =>
+    cols.map((c, i) => ({ id: `${row}${c}`, label: `Table ${row}${c}`, tier: 'main' as const, x: colX[i], y: 140 + r * 85 })),
+  ),
+  // Right side, front to back. There is no Bx4; the booth takes that position.
+  { id: 'Bx1', label: 'Box table Bx1', tier: 'bx1', x: 555, y: 130 },
+  { id: 'Bx2', label: 'Box table Bx2', tier: 'bx', x: 555, y: 215 },
+  { id: 'Bx3', label: 'Box table Bx3', tier: 'bx', x: 555, y: 300 },
+  { id: 'Booth', label: 'Elevated Booth (position 4)', tier: 'booth', x: 555, y: 410 },
+  // Across the back, left to right.
+  ...['Bx9', 'Bx8', 'Bx7', 'Bx6', 'Bx5'].map((id, i) => ({ id, label: `Box table ${id}`, tier: 'bx' as const, x: colX[i], y: 410 })),
+];
+
+const tiers = set.tiers.map((t) => ({ ...t, count: tables.filter((x) => x.tier === t.key).length }));
+const tierName = Object.fromEntries(set.tiers.map((t) => [t.key, t.name]));
+const SHAPE: Record<string, string> = { main: 'round tables', bx1: 'diamond', bx: 'long tables', booth: 'raised booth' };
+---
+
+<figure class="seatmap" data-seatmap>
+  <div class="seatmap__legend" role="group" aria-label="Highlight a price tier on the seating chart">
+    {
+      tiers.map((t) => (
+        <button type="button" class="seatmap__key" data-tier={t.key} aria-pressed="false">
+          <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true" class={`seatmap__icon seatmap__icon--${t.key}`}>
+            {t.key === 'main' && <circle cx="10" cy="10" r="7" />}
+            {t.key === 'bx1' && <rect x="4" y="4" width="12" height="12" transform="rotate(45 10 10)" />}
+            {t.key === 'bx' && <rect x="1" y="5" width="18" height="10" rx="2" />}
+            {t.key === 'booth' && <polygon points="10,2 18,17 2,17" />}
+          </svg>
+          {t.name}
+        </button>
+      ))
+    }
+  </div>
+
+  <svg class="seatmap__svg" viewBox="0 0 620 470" role="img" aria-labelledby="seatmap-title seatmap-desc">
+    <title id="seatmap-title">Seating chart</title>
+    <desc id="seatmap-desc">
+      Stage across the top. Main floor: three rows of five round tables, 1A to 3E. Right side from front to back: Bx1 table for 2, Bx2, Bx3, then the
+      Elevated Booth. Across the back from left to right: Bx9, Bx8, Bx7, Bx6, Bx5.
+    </desc>
+    <defs>
+      <linearGradient id="stage-grad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#3a0d10" />
+        <stop offset="1" stop-color="#1a0607" />
+      </linearGradient>
+    </defs>
+
+    <rect class="seatmap__stage" x="20" y="14" width="480" height="58" rx="6" fill="url(#stage-grad)" />
+    <text class="seatmap__stage-label" x="260" y="51" text-anchor="middle">STAGE</text>
+    <path class="seatmap__lights" d="M40 14 H480" />
+
+    {
+      tables.map((t) => (
+        <g class={`seat seat--${t.tier}`} data-tier={t.tier} data-table={t.id} tabindex="0" role="button" aria-label={`${t.label}: ${tierName[t.tier]}`}>
+          {t.tier === 'main' && (
+            <>
+              <circle class="seat__chair" cx={t.x} cy={t.y - 30} r="6" />
+              <circle class="seat__chair" cx={t.x} cy={t.y + 30} r="6" />
+              <circle class="seat__chair" cx={t.x - 30} cy={t.y} r="6" />
+              <circle class="seat__chair" cx={t.x + 30} cy={t.y} r="6" />
+              <circle class="seat__table" cx={t.x} cy={t.y} r="21" />
+            </>
+          )}
+          {t.tier === 'bx1' && (
+            <>
+              <circle class="seat__chair" cx={t.x - 28} cy={t.y} r="6" />
+              <circle class="seat__chair" cx={t.x + 28} cy={t.y} r="6" />
+              <rect class="seat__table" x={t.x - 15} y={t.y - 15} width="30" height="30" transform={`rotate(45 ${t.x} ${t.y})`} />
+            </>
+          )}
+          {t.tier === 'bx' && (
+            <>
+              <circle class="seat__chair" cx={t.x - 15} cy={t.y - 26} r="6" />
+              <circle class="seat__chair" cx={t.x + 15} cy={t.y - 26} r="6" />
+              <circle class="seat__chair" cx={t.x - 15} cy={t.y + 26} r="6" />
+              <circle class="seat__chair" cx={t.x + 15} cy={t.y + 26} r="6" />
+              <rect class="seat__table" x={t.x - 34} y={t.y - 16} width="68" height="32" rx="4" />
+            </>
+          )}
+          {t.tier === 'booth' && (
+            <>
+              <rect class="seat__riser" x={t.x - 46} y={t.y - 44} width="92" height="84" rx="8" />
+              <circle class="seat__chair" cx={t.x - 16} cy={t.y - 30} r="6" />
+              <circle class="seat__chair" cx={t.x + 16} cy={t.y - 30} r="6" />
+              <circle class="seat__chair" cx={t.x - 16} cy={t.y + 28} r="6" />
+              <circle class="seat__chair" cx={t.x + 16} cy={t.y + 28} r="6" />
+              <rect class="seat__table" x={t.x - 32} y={t.y - 17} width="64" height="34" rx="4" />
+              <polygon class="seat__mark" points={`${t.x},${t.y - 40} ${t.x + 6},${t.y - 32} ${t.x - 6},${t.y - 32}`} />
+            </>
+          )}
+          <text class="seat__label" x={t.x} y={t.y + 4} text-anchor="middle">
+            {t.tier === 'booth' ? 'Booth' : t.id}
+          </text>
+        </g>
+      ))
+    }
+  </svg>
+
+  <figcaption class="seatmap__readout" aria-live="polite" data-readout>
+    Tap a price or a table to see where those seats are. Seats are chosen when you book at Arts People.
+  </figcaption>
+
+  <template data-tier-info>
+    {tiers.map((t) => <span data-key={t.key}>{`${t.name}: ${t.count} ${t.count === 1 ? 'table' : 'tables'} (${SHAPE[t.key]}), ${t.unit}, $${t.price}.`}</span>)}
+  </template>
+</figure>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-seatmap]').forEach((map) => {
+    // The price table beside the map shares the same data-tier triggers.
+    const scope = map.parentElement ?? map;
+    const triggers = [...scope.querySelectorAll<HTMLElement>('[data-tier]')];
+    const readout = map.querySelector<HTMLElement>('[data-readout]')!;
+    const defaultText = readout.textContent ?? '';
+    const info = new Map(
+      [...(map.querySelector<HTMLTemplateElement>('[data-tier-info]')?.content.querySelectorAll<HTMLElement>('[data-key]') ?? [])].map((el) => [
+        el.dataset.key!,
+        el.textContent ?? '',
+      ]),
+    );
+    let pinned: string | null = null;
+
+    const paint = (tier: string | null) => {
+      if (tier) map.dataset.active = tier;
+      else delete map.dataset.active;
+      triggers.forEach((el) => {
+        const on = el.dataset.tier === tier;
+        el.classList.toggle('is-active', on);
+        if (el.matches('button')) el.setAttribute('aria-pressed', String(on && pinned === tier));
+      });
+    };
+    const pin = (tier: string) => {
+      pinned = pinned === tier ? null : tier;
+      paint(pinned);
+      readout.textContent = pinned ? (info.get(pinned) ?? '') : defaultText;
+    };
+
+    triggers.forEach((el) => {
+      const tier = el.dataset.tier!;
+      el.addEventListener('pointerenter', (e) => (e as PointerEvent).pointerType === 'mouse' && paint(tier));
+      el.addEventListener('pointerleave', () => paint(pinned));
+      el.addEventListener('focus', () => paint(tier));
+      el.addEventListener('blur', () => paint(pinned));
+      el.addEventListener('click', () => pin(tier));
+      el.addEventListener('keydown', (e) => {
+        if (el.matches('button')) return;
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          pin(tier);
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  .seatmap {
+    margin: 0;
+    padding: clamp(16px, 3vw, 24px);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+  }
+  .seatmap__legend { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+  .seatmap__key {
+    display: inline-flex; align-items: center; gap: 8px;
+    min-height: var(--tap); padding: 6px 12px;
+    font: inherit; font-size: 0.9rem; font-weight: 600; color: var(--text);
+    background: var(--surface-2); border: 1px solid var(--line); border-radius: 999px; cursor: pointer;
+  }
+  .seatmap__key:hover, .seatmap__key.is-active { border-color: var(--gold); }
+  .seatmap__key[aria-pressed='true'] { background: var(--gold); color: var(--paper-ink); }
+  .seatmap__icon { fill: none; stroke: var(--gold); stroke-width: 2; }
+  .seatmap__key[aria-pressed='true'] .seatmap__icon { stroke: var(--paper-ink); }
+
+  .seatmap__svg { width: 100%; height: auto; overflow: visible; }
+  .seatmap__stage { stroke: var(--neon); stroke-width: 1.5; }
+  .seatmap__stage-label { fill: var(--text); font-family: var(--font-display); font-size: 20px; letter-spacing: 6px; }
+  .seatmap__lights { stroke: var(--gold); stroke-width: 3; stroke-dasharray: 1 13; stroke-linecap: round; }
+
+  .seat { cursor: pointer; outline: none; transition: opacity 0.2s; }
+  .seat__table { fill: var(--surface-2); stroke: var(--muted); stroke-width: 1.5; transition: fill 0.2s, stroke 0.2s; }
+  .seat__chair { fill: var(--line); stroke: var(--muted); stroke-width: 1; transition: fill 0.2s; }
+  .seat__riser { fill: rgba(230, 180, 34, 0.06); stroke: var(--line); stroke-width: 1.5; stroke-dasharray: 5 4; }
+  .seat__mark { fill: var(--muted); }
+  .seat__label { fill: var(--text); font-family: var(--font-sans); font-size: 12px; font-weight: 600; pointer-events: none; }
+  .seat--bx1 .seat__label { font-size: 10px; }
+
+  .seat:hover .seat__table, .seat:focus-visible .seat__table { stroke: var(--gold); stroke-width: 2.5; }
+  .seat:focus-visible .seat__table { stroke-width: 4; }
+
+  [data-active] .seat { opacity: 0.28; }
+  [data-active] .seat.is-active { opacity: 1; }
+  .seat.is-active .seat__table { fill: var(--gold); stroke: var(--text); stroke-width: 2.5; }
+  .seat.is-active .seat__chair { fill: var(--gold); stroke: var(--gold); }
+  .seat.is-active .seat__label { fill: var(--paper-ink); }
+  .seat.is-active .seat__mark { fill: var(--paper-ink); }
+
+  .seatmap__readout { margin-top: 12px; color: var(--muted); font-size: 0.95rem; min-height: 3em; }
+</style>

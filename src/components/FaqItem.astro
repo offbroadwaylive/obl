@@ -1,0 +1,32 @@
+---
+import { markdown } from '../lib/markdown';
+interface Props { q: string; a: string; open?: boolean }
+const { q, a, open = false } = Astro.props;
+---
+
+<details class="faq" open={open}>
+  <summary class="faq__q">{q}</summary>
+  <div class="faq__a" set:html={markdown(a)} />
+</details>
+
+<style>
+  .faq { border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+  .faq + .faq { margin-top: 10px; }
+  .faq__q {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    min-height: var(--tap); padding: 14px 18px;
+    font-family: var(--font-serif); font-size: 1.2rem; line-height: 1.3;
+    cursor: pointer; list-style: none;
+  }
+  .faq__q::-webkit-details-marker { display: none; }
+  .faq__q::after {
+    content: '+'; flex-shrink: 0; display: grid; place-items: center;
+    width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--gold-dim);
+    color: var(--gold); font-family: var(--font-sans); font-size: 1.2rem; transition: transform 0.2s;
+  }
+  .faq[open] > .faq__q::after { transform: rotate(45deg); }
+  .faq[open] { border-color: var(--gold-dim); }
+  .faq__q:hover { color: var(--gold); }
+  .faq__a { padding: 0 18px 8px; color: var(--text); max-width: 70ch; }
+  .faq__a :global(h4) { font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.9rem; color: var(--gold); margin: 1.2em 0 0.4em; }
+</style>

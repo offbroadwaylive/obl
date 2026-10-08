@@ -1,0 +1,128 @@
+---
+// Each performance is a row: weekday, date, doors time, format, price-from and
+// a ticket button. Rows carry data-day so the browser can drop past dates
+// between nightly builds.
+import {
+  type Show,
+  type Performance,
+  FORMAT_LABEL,
+  doorsTime,
+  monthDay,
+  weekdayShort,
+  longDate,
+  perfDay,
+  priceFrom,
+  ticketUrl,
+} from '../lib/shows';
+import { icsUrl, showUrl } from '../lib/url';
+
+interface Props {
+  /** One show's dates, or mixed shows (then each row names its show). */
+  items: { show: Show; perf: Performance }[];
+  showTitles?: boolean;
+  calendarLinks?: boolean;
+  emptyText?: string;
+}
+
+const { items, showTitles = false, calendarLinks = true, emptyText = 'No upcoming dates. Check back soon!' } = Astro.props;
+---
+
+<div class="datelist">
+  <ol class="datelist__rows" data-perf-list hidden={items.length === 0}>
+    {
+      items.map(({ show, perf }) => {
+        const status = perf.status ?? 'on-sale';
+        const sold = status === 'sold-out';
+        return (
+          <li class:list={['date-row', { 'is-sold': sold }]} data-day={perfDay(perf)} data-show={show.slug} style={showTitles ? `--accent:${show.accent}` : undefined}>
+            <div class="date-row__when">
+              <span class="date-row__dow">{weekdayShort(perf)}</span>
+              <span class="date-row__date">{monthDay(perf)}</span>
+            </div>
+            <div class="date-row__info">
+              {showTitles && (
+                <a class="date-row__show" href={showUrl(show.slug)}>
+                  {show.title}
+                </a>
+              )}
+              <span class="date-row__meta">
+                <span>Doors {doorsTime(perf)}</span>
+                <span class="tag tag--accent">{FORMAT_LABEL[perf.format]}</span>
+                {status === 'low' && <span class="tag tag--low">Few seats left</span>}
+                {sold && <span class="tag tag--sold">Sold out</span>}
+              </span>
+              <span class="date-row__price">
+                from <strong>${priceFrom(show, perf)}</strong> per seat
+              </span>
+            </div>
+            <div class="date-row__actions">
+              {sold ? (
+                <span class="btn btn--small" aria-disabled="true">
+                  Sold Out
+                </span>
+              ) : (
+                <a class="btn btn--small" href={ticketUrl(perf.id)} target="_blank" rel="noopener">
+                  Get Tickets<span class="sr-only"> for {show.title}, {longDate(perf)}, doors {doorsTime(perf)} (opens Arts People in a new tab)</span>
+                </a>
+              )}
+              {calendarLinks && (
+                <a class="date-row__cal" href={icsUrl(perf.id)} download>
+                  <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M7 2h2v2h6V2h2v2h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3V2Zm12 8H5v9h14v-9ZM5 8h14V6H5v2Zm6 3h2v2h2v2h-2v2h-2v-2H9v-2h2v-2Z"/></svg>
+                  <span>Add to calendar</span>
+                  <span class="sr-only">: {show.title}, {longDate(perf)}</span>
+                </a>
+              )}
+            </div>
+          </li>
+        );
+      })
+    }
+  </ol>
+  <p class="datelist__empty muted" data-perf-empty hidden={items.length > 0}>{emptyText}</p>
+</div>
+
+<style>
+  .datelist__rows { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .date-row {
+    display: grid;
+    grid-template-columns: 76px 1fr auto;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 16px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--accent);
+    border-radius: var(--radius);
+    transition: background-color 0.2s;
+  }
+  .date-row:hover { background: var(--surface-2); }
+  .date-row__when { display: flex; flex-direction: column; align-items: center; line-height: 1.1; text-align: center; }
+  .date-row__dow { font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); font-size: 0.95rem; }
+  .date-row__date { font-family: var(--font-serif); font-size: 1.35rem; white-space: nowrap; }
+  .date-row__info { display: grid; gap: 4px; min-width: 0; }
+  .date-row__show { font-family: var(--font-serif); font-size: 1.15rem; color: var(--text); text-decoration: none; }
+  .date-row__show:hover { color: var(--gold); text-decoration: underline; }
+  .date-row__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; font-weight: 600; }
+  .date-row__price { color: var(--muted); font-size: 0.95rem; }
+  .date-row__price strong { color: var(--gold); font-family: var(--font-serif); font-size: 1.15rem; font-weight: 400; }
+  .date-row__actions { display: flex; align-items: center; gap: 8px; }
+  .date-row__cal {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    min-height: var(--tap); min-width: var(--tap); padding: 0 8px;
+    color: var(--muted); font-size: 0.85rem; text-decoration: none;
+    border: 1px solid var(--line); border-radius: var(--radius);
+  }
+  .date-row__cal:hover { color: var(--gold); border-color: var(--gold); }
+  .date-row__cal span:not(.sr-only) { display: none; }
+
+  .date-row.is-sold { opacity: 0.6; border-left-color: var(--line); }
+  .date-row.is-sold .date-row__dow, .date-row.is-sold .date-row__price strong { color: var(--muted); }
+  .date-row.is-sold .date-row__date { text-decoration: line-through; text-decoration-thickness: 1px; }
+
+  @media (max-width: 560px) {
+    .date-row { grid-template-columns: 64px 1fr; gap: 10px 12px; padding: 12px; }
+    .date-row__actions { grid-column: 1 / -1; }
+    .date-row__actions .btn { flex: 1; }
+    .date-row__date { font-size: 1.2rem; }
+  }
+</style>

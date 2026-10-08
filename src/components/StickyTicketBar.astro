@@ -1,0 +1,59 @@
+---
+// On show pages under 720px: a bottom bar with the next date and a ticket button.
+import { type Show, upcoming, weekdayShort, monthDay, doorsTime, perfDay, ticketUrl } from '../lib/shows';
+
+interface Props { show: Show }
+const { show } = Astro.props;
+// Every upcoming on-sale date is rendered; the browser shows the first one
+// that has not passed, so the bar stays right between nightly builds.
+const dates = upcoming(show).filter((p) => p.status !== 'sold-out');
+---
+
+{
+  dates.length > 0 && (
+    <div class="sticky-bar" data-sticky-bar style={`--accent:${show.accent}`}>
+      {dates.map((p, i) => (
+        <div class="sticky-bar__inner" data-day={perfDay(p)} hidden={i > 0}>
+          <p class="sticky-bar__when">
+            <span class="label">Next show</span>
+            {`${weekdayShort(p)} ${monthDay(p)} · Doors ${doorsTime(p)}`}
+          </p>
+          <a class="btn btn--small" href={ticketUrl(p.id)} target="_blank" rel="noopener">
+            Get Tickets<span class="sr-only"> for {show.title} (opens Arts People in a new tab)</span>
+          </a>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+<script>
+  // Reveal the first date that has not passed (Los Angeles time).
+  const bar = document.querySelector<HTMLElement>('[data-sticky-bar]');
+  if (bar) {
+    const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Los_Angeles', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
+    const first = [...bar.querySelectorAll<HTMLElement>('[data-day]')].find((el) => (el.dataset.day ?? '') >= today);
+    if (first) first.hidden = false;
+    else bar.remove();
+  }
+</script>
+
+<style>
+  .sticky-bar { display: none; }
+  @media (max-width: 719px) {
+    .sticky-bar {
+      display: block;
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+      padding: 10px var(--gutter) calc(10px + env(safe-area-inset-bottom));
+      background: rgba(16, 16, 19, 0.96);
+      backdrop-filter: blur(8px);
+      border-top: 2px solid var(--accent);
+      box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.5);
+    }
+    .sticky-bar__inner { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .sticky-bar__inner[hidden] { display: none; }
+    .sticky-bar__when { margin: 0; font-weight: 600; font-size: 0.95rem; line-height: 1.3; }
+    .sticky-bar__when .label { display: block; color: var(--muted); font-size: 0.75rem; }
+    :global(body.has-sticky-bar) { padding-bottom: 76px; }
+  }
+</style>

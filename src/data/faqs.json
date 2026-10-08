@@ -1,0 +1,44 @@
+{
+  "lead": "Call the Box Office @ 619-988-LIVE (5483) anytime for personalized service and details.",
+  "ageLine": "Due to the intimacy of our theater we do not admit children under the age of 10 for DECADES & THEATRICAL Shows. ENCORE Supper Club & Specialty Shows are 21+ Shows.",
+  "categories": ["Tickets", "Shows & times", "At the theater", "Auditions"],
+  "items": [
+    {
+      "category": "Tickets",
+      "q": "Do you have a Box Office?",
+      "a": "You may purchase tickets at our Online Box Office at any time. If you need to speak to someone, feel free to call [619-988-5483](tel:+16199885483) and someone will be available to answer your questions or assist with a purchase. You may also email us at anytime from the [Contact](contact/) page."
+    },
+    {
+      "category": "Shows & times",
+      "q": "What days and times are your performances?",
+      "a": "**ENCORE Supper Club:** Fridays & Saturdays doors @ 6:00pm; Sundays are a Snack Board Show @ 3:00pm.\n\n#### Other shows\n\n**DECADES: Flashback, GRACELAND: Memphis Nights, Chicken Fried Gospel and Theatrical shows:** Dinner Shows Friday & Saturday doors @ 6:00pm; Lunch Show Sunday doors @ 1:00pm.",
+      "note": "Merges the live site's questions 2 and 3, which repeat each other. TODO(open item 4): DECADES, GRACELAND and Chicken Fried Gospel are not on sale now; kept under an \"Other shows\" sub-heading until Steve confirms."
+    },
+    {
+      "category": "Tickets",
+      "q": "Do you offer Season Tickets and what are the advantages?",
+      "a": "Season Ticket holders receive a discount on tickets purchased, notification of advanced ticket sales for Speciality, Holiday and shows that typically sell out and special events such as our annual \"Thank You\" dinner. Call the Box Office for your Season Tickets."
+    },
+    {
+      "category": "Tickets",
+      "q": "Do you offer gift certificates?",
+      "a": "Yes! However, because we sell out many of our shows weeks in advance, we encourage you to purchase a specific show, guaranteeing your gift card recipient has a date and seats reserved for them. Call the Box Office for more information. [619-988-5483](tel:+16199885483)."
+    },
+    {
+      "category": "At the theater",
+      "q": "Do you have a bar?",
+      "a": "Yes! We offer Wine, Beer & Champagne."
+    },
+    {
+      "category": "At the theater",
+      "q": "What is your parking availability?",
+      "a": "Our parking availability is FREE, abundant and has very close proximity to the theater."
+    },
+    {
+      "category": "Auditions",
+      "q": "Do you offer auditions for upcoming shows?",
+      "a": "Our repertory troupe of 11 singers/actors is set for 2025.",
+      "note": "TODO(open item 3): the year is stale (2025). Text kept as on the live site until Steve updates it."
+    }
+  ]
+}

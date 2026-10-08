@@ -1,0 +1,168 @@
+---
+// Responsive photo grid. With lightbox on, each photo opens a full-screen
+// viewer with arrows, swipe, Escape to close and captions when present.
+import { Image, getImage } from 'astro:assets';
+import gallery from '../data/gallery.json';
+import { findImage } from '../lib/images';
+import { url } from '../lib/url';
+
+interface Props {
+  limit?: number;
+  lightbox?: boolean;
+}
+const { limit, lightbox = true } = Astro.props;
+
+const photos = await Promise.all(
+  gallery.photos.slice(0, limit).map(async (p, i) => {
+    const meta = findImage(p.file);
+    const large = meta && lightbox ? (await getImage({ src: meta, width: Math.min(1600, meta.width), format: 'webp', quality: 82 })).src : undefined;
+    return { ...p, n: i + 1, meta, large };
+  }),
+);
+---
+
+<div class:list={['gallery', { 'gallery--teaser': !lightbox }]} data-gallery>
+  <ul class="gallery__grid">
+    {
+      photos.map((p) => (
+        <li class="gallery__item">
+          {p.meta ? (
+            lightbox ? (
+              <a class="gallery__link" href={p.large} data-lightbox-item data-caption={p.caption} data-alt={p.alt}>
+                <Image src={p.meta} alt={p.alt} widths={[400, 800]} sizes="(min-width: 1120px) 280px, (min-width: 720px) 33vw, 50vw" format="webp" loading="lazy" />
+                <span class="sr-only">Open photo {p.n} full screen</span>
+              </a>
+            ) : (
+              <a class="gallery__link" href={url('media/')}>
+                <Image src={p.meta} alt={p.alt} widths={[400, 800]} sizes="(min-width: 1120px) 280px, (min-width: 720px) 33vw, 50vw" format="webp" loading="lazy" />
+              </a>
+            )
+          ) : (
+            <div class="placeholder" role="img" aria-label={`Photo ${p.n} coming soon`}>
+              <span>
+                Photo {String(p.n).padStart(2, '0')}
+                <small>Coming soon</small>
+              </span>
+            </div>
+          )}
+          {p.caption && <span class="gallery__caption">{p.caption}</span>}
+        </li>
+      ))
+    }
+  </ul>
+
+  {
+    lightbox && (
+      <dialog class="lightbox" aria-label="Photo viewer" data-lightbox>
+        <figure class="lightbox__figure">
+          <img class="lightbox__img" alt="" data-lightbox-img />
+          <figcaption class="lightbox__caption" data-lightbox-caption />
+        </figure>
+        <p class="lightbox__count" aria-live="polite" data-lightbox-count />
+        <button class="lightbox__btn lightbox__close" type="button" aria-label="Close" data-lightbox-close>
+          ✕
+        </button>
+        <button class="lightbox__btn lightbox__prev" type="button" aria-label="Previous photo" data-lightbox-prev>
+          ‹
+        </button>
+        <button class="lightbox__btn lightbox__next" type="button" aria-label="Next photo" data-lightbox-next>
+          ›
+        </button>
+      </dialog>
+    )
+  }
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-gallery]').forEach((root) => {
+    const dialog = root.querySelector<HTMLDialogElement>('[data-lightbox]');
+    if (!dialog) return;
+    const items = [...root.querySelectorAll<HTMLAnchorElement>('[data-lightbox-item]')];
+    const img = dialog.querySelector<HTMLImageElement>('[data-lightbox-img]')!;
+    const caption = dialog.querySelector<HTMLElement>('[data-lightbox-caption]')!;
+    const count = dialog.querySelector<HTMLElement>('[data-lightbox-count]')!;
+    let index = 0;
+    let opener: HTMLElement | null = null;
+
+    const show = (i: number) => {
+      index = (i + items.length) % items.length;
+      const a = items[index];
+      img.src = a.href;
+      img.alt = a.dataset.alt ?? '';
+      caption.textContent = a.dataset.caption ?? '';
+      caption.hidden = !a.dataset.caption;
+      count.textContent = `${index + 1} of ${items.length}`;
+    };
+
+    items.forEach((a, i) =>
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        opener = a;
+        show(i);
+        dialog.showModal();
+      }),
+    );
+    dialog.querySelector('[data-lightbox-prev]')?.addEventListener('click', () => show(index - 1));
+    dialog.querySelector('[data-lightbox-next]')?.addEventListener('click', () => show(index + 1));
+    dialog.querySelector('[data-lightbox-close]')?.addEventListener('click', () => dialog.close());
+    dialog.addEventListener('close', () => opener?.focus());
+    dialog.addEventListener('click', (e) => {
+      if (e.target === dialog) dialog.close();
+    });
+    dialog.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') show(index - 1);
+      if (e.key === 'ArrowRight') show(index + 1);
+    });
+
+    // Swipe left/right.
+    let startX: number | null = null;
+    dialog.addEventListener('pointerdown', (e) => (startX = e.clientX));
+    dialog.addEventListener('pointerup', (e) => {
+      if (startX === null) return;
+      const dx = e.clientX - startX;
+      startX = null;
+      if (Math.abs(dx) > 50) show(index + (dx < 0 ? 1 : -1));
+    });
+  });
+</script>
+
+<style>
+  .gallery__grid {
+    list-style: none; margin: 0; padding: 0;
+    display: grid; gap: 10px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (min-width: 720px) { .gallery__grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 1000px) { .gallery:not(.gallery--teaser) .gallery__grid { grid-template-columns: repeat(4, 1fr); } }
+  .gallery__item { position: relative; aspect-ratio: 4 / 3; border-radius: var(--radius); overflow: hidden; background: var(--surface); }
+  .gallery__link { display: block; height: 100%; }
+  .gallery__item :global(img) { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease, filter 0.4s; }
+  .gallery__link:hover :global(img), .gallery__link:focus-visible :global(img) { transform: scale(1.04); filter: brightness(1.1); }
+  .gallery__link:focus-visible { outline-offset: -3px; }
+  .gallery__item .placeholder { min-height: 0; }
+  .gallery__caption {
+    position: absolute; left: 0; right: 0; bottom: 0; padding: 18px 10px 8px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8)); font-size: 0.85rem; pointer-events: none;
+  }
+
+  .lightbox {
+    width: 100vw; height: 100vh; max-width: none; max-height: none; margin: 0; padding: 0;
+    border: 0; background: rgba(5, 5, 6, 0.96); color: var(--text);
+  }
+  .lightbox::backdrop { background: rgba(0, 0, 0, 0.8); }
+  .lightbox[open] { display: grid; place-items: center; }
+  .lightbox__figure { margin: 0; display: grid; justify-items: center; gap: 12px; max-width: 92vw; touch-action: pan-y; }
+  .lightbox__img { max-width: 92vw; max-height: 80vh; width: auto; height: auto; object-fit: contain; border-radius: var(--radius); user-select: none; }
+  .lightbox__caption { color: var(--muted); text-align: center; }
+  .lightbox__count { position: absolute; top: 16px; left: 20px; margin: 0; color: var(--muted); font-size: 0.9rem; }
+  .lightbox__btn {
+    position: absolute; display: grid; place-items: center;
+    width: 52px; height: 52px; border-radius: 50%;
+    background: rgba(22, 22, 26, 0.85); color: var(--text);
+    border: 1px solid var(--line); font-size: 1.8rem; line-height: 1; cursor: pointer;
+  }
+  .lightbox__btn:hover { border-color: var(--gold); color: var(--gold); }
+  .lightbox__close { top: 12px; right: 12px; font-size: 1.2rem; }
+  .lightbox__prev { left: 12px; top: 50%; transform: translateY(-50%); }
+  .lightbox__next { right: 12px; top: 50%; transform: translateY(-50%); }
+</style>

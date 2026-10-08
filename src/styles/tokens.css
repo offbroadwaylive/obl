@@ -1,0 +1,46 @@
+/* Design tokens: the theater marquee at night. Change a color here and it
+   changes on every page. Show pages override --accent from shows.json.
+   @font-face rules live in src/lib/fonts.ts so their URLs carry the base path. */
+
+:root {
+  /* Color */
+  --bg: #0a0a0b;
+  --surface: #16161a;
+  --surface-2: #1f1f25;
+  --line: #2e2e36;
+  --text: #f4efe6;
+  --muted: #a8a29a;
+  --neon: #e11d2a;        /* brand red: glow, rules, highlights */
+  --neon-fill: #c8141f;   /* button fill: 5.1:1 with --text */
+  --neon-text: #f25a63;   /* red text on dark: 5.5:1 on --surface */
+  --gold: #e6b422;
+  --gold-dim: #8a6c14;
+  --paper: #f5ebdd;
+  --paper-ink: #1a1512;
+  --paper-muted: #5b4f45;
+  --accent: var(--gold);
+
+  /* Type */
+  --font-display: 'Anton', 'Impact', 'Arial Narrow Bold', sans-serif;
+  --font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --fs-body: 1.0625rem;   /* 17px */
+  --lh-body: 1.6;
+  --fs-small: 0.875rem;
+  --fs-h1: clamp(2.25rem, 1.4rem + 4vw, 4.25rem);
+  --fs-h2: clamp(1.75rem, 1.3rem + 2vw, 2.75rem);
+  --fs-h3: clamp(1.25rem, 1.1rem + 0.8vw, 1.6rem);
+
+  /* Space and shape */
+  --max: 1120px;
+  --gutter: 16px;
+  --radius: 6px;
+  --radius-lg: 12px;
+  --tap: 44px;
+  --glow: 0 0 12px rgba(225, 29, 42, 0.8);
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+}
+
+@media (min-width: 720px) {
+  :root { --gutter: 24px; }
+}

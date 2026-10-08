@@ -1,0 +1,46 @@
+---
+// The scheduled site banner from site.json. Shown only between its start and
+// end dates (inclusive, Los Angeles time): checked at build, and again in the
+// browser so it disappears on time even before the nightly rebuild.
+import site from '../data/site.json';
+import { buildNow, laDay } from '../lib/shows';
+import { url } from '../lib/url';
+
+const banner = site.banner as { text: string; link: string | null; start: string | null; end: string | null } | null;
+const today = laDay(buildNow());
+const active = !!banner?.text && (!banner.start || today >= banner.start) && (!banner.end || today <= banner.end);
+---
+
+{
+  active && banner && (
+    <div class="site-banner" data-banner data-start={banner.start ?? ''} data-end={banner.end ?? ''}>
+      <div class="container site-banner__inner">
+        <span class="site-banner__star" aria-hidden="true">★</span>
+        {banner.link ? <a href={url(banner.link)}>{banner.text}</a> : <span>{banner.text}</span>}
+        <span class="site-banner__star" aria-hidden="true">★</span>
+      </div>
+    </div>
+  )
+}
+
+<style>
+  .site-banner {
+    background: var(--neon-fill);
+    color: var(--text);
+    text-align: center;
+    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.3), 0 0 24px rgba(225, 29, 42, 0.35);
+  }
+  .site-banner__inner {
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    min-height: var(--tap);
+    padding-block: 6px;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 1rem;
+    line-height: 1.3;
+  }
+  .site-banner a { color: var(--text); text-decoration: underline; text-decoration-thickness: 1px; }
+  .site-banner a:hover { color: var(--paper); text-decoration-thickness: 2px; }
+  .site-banner__star { color: var(--gold); }
+</style>

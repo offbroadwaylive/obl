@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+import ShowCard from '../components/ShowCard.astro';
+import Ribbon from '../components/Ribbon.astro';
+import { currentShows } from '../lib/shows';
+import { url } from '../lib/url';
+
+const shows = currentShows();
+---
+
+<Base title="Page not found" description="This page has closed. See what's playing now at Off Broadway Live.">
+  <section class="section container notfound">
+    <p class="kicker">404</p>
+    <h1>This show has closed</h1>
+    <p class="lede">The page you were looking for has taken its final bow. Here's what's playing now.</p>
+    <p class="notfound__actions">
+      <a class="btn" href={url()}>Home</a>
+      <a class="btn btn--ghost" href={url('calendar/')}>Calendar</a>
+    </p>
+  </section>
+  {
+    shows.length > 0 && (
+      <section class="section container">
+        <Ribbon>Now playing</Ribbon>
+        <div class="grid">
+          {shows.map((s) => (
+            <ShowCard show={s} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+</Base>
+
+<style>
+  .notfound { text-align: center; }
+  .notfound .lede { margin-inline: auto; color: var(--muted); }
+  .notfound__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+</style>
