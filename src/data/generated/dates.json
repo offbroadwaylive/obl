@@ -1,1 +1,122 @@
-[]
+[
+  {
+    "id": 927602,
+    "show": "a-big-band-christmas",
+    "start": "2026-12-10T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 927603,
+    "show": "a-big-band-christmas",
+    "start": "2026-12-11T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 927604,
+    "show": "a-big-band-christmas",
+    "start": "2026-12-12T14:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 927613,
+    "show": "a-big-band-christmas",
+    "start": "2026-12-12T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 927607,
+    "show": "a-big-band-christmas",
+    "start": "2026-12-13T14:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 848434,
+    "show": "best-of-2026",
+    "start": "2026-11-06T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 848435,
+    "show": "best-of-2026",
+    "start": "2026-11-07T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 848436,
+    "show": "best-of-2026",
+    "start": "2026-11-08T15:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 848437,
+    "show": "best-of-2026",
+    "start": "2026-11-13T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 848438,
+    "show": "best-of-2026",
+    "start": "2026-11-14T18:00",
+    "status": "sold-out"
+  },
+  {
+    "id": 848439,
+    "show": "best-of-2026",
+    "start": "2026-11-15T15:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 848440,
+    "show": "best-of-2026",
+    "start": "2026-11-20T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 848441,
+    "show": "best-of-2026",
+    "start": "2026-11-21T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 849899,
+    "show": "lionel-and-the-commodores",
+    "start": "2026-10-10T18:00",
+    "status": "sold-out"
+  },
+  {
+    "id": 849900,
+    "show": "lionel-and-the-commodores",
+    "start": "2026-10-11T15:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 849901,
+    "show": "lionel-and-the-commodores",
+    "start": "2026-10-16T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 849902,
+    "show": "lionel-and-the-commodores",
+    "start": "2026-10-17T18:00",
+    "status": "sold-out"
+  },
+  {
+    "id": 859089,
+    "show": "lionel-and-the-commodores",
+    "start": "2026-10-18T15:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 849903,
+    "show": "lionel-and-the-commodores",
+    "start": "2026-10-23T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 849904,
+    "show": "lionel-and-the-commodores",
+    "start": "2026-10-24T18:00",
+    "status": "on-sale"
+  }
+]
