@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
+import showsJson from '../src/data/shows.json';
 import {
-  allShows,
+  type Show,
   currentShows,
   nextPerformance,
   isSoldOut,
@@ -10,13 +11,16 @@ import {
   priceFrom,
   priceSets,
   priceSetFor,
-  showBySlug,
   tierPrice,
   ticketUrl,
   upcoming,
 } from '../src/lib/shows';
 
 const on = (day: string) => pacificToDate(`${day}T12:00`);
+// Tests use the repo's shows.json only, never the sheet's published data
+// (src/data/generated), which changes every time Steve publishes.
+const allShows = showsJson as Show[];
+const showBySlug = (slug: string) => allShows.find((s) => s.slug === slug);
 const lionel = showBySlug('lionel-and-the-commodores')!;
 const bestOf = showBySlug('best-of-2026')!;
 const christmas = showBySlug('a-big-band-christmas')!;

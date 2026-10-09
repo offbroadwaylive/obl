@@ -204,6 +204,7 @@ export function render(value) {
 export function describeChanges(shows, before, after) {
   const out = [];
   const title = new Map(shows.map((s) => [s.slug, s.title]));
+  const handWritten = new Set(shows.filter((s) => s.menu).map((s) => s.slug));
   const when = (start) => {
     const d = new Date(`${start}:00Z`);
     return `${d.toLocaleString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' })} ${start.slice(11)}`;
@@ -231,6 +232,9 @@ export function describeChanges(shows, before, after) {
     const a = before.menus[slug];
     const b = after.menus[slug];
     if (JSON.stringify(a) === JSON.stringify(b)) continue;
+    // A blank row (null) and no row look the same on the site unless the
+    // show has a hand-written menu to fall back to.
+    if (!a && !b && !handWritten.has(slug)) continue;
     if (!a || !b) {
       out.push(`${name} menu ${b ? 'added' : a === undefined ? 'cleared' : 'removed'}`);
       continue;

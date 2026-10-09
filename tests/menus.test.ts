@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { fromSheet, menuFor } from '../src/lib/menus';
-import { showBySlug } from '../src/lib/shows';
+import showsJson from '../src/data/shows.json';
+import seed from './fixtures/sheet/seed-menus.json';
+import { fromSheet, menuFor as menuForLive, type SheetMenu } from '../src/lib/menus';
+import type { Show } from '../src/lib/shows';
+
+// A fixed copy of the sheet's menus, so Steve's edits never break the tests.
+const menuFor = (show: Show) => menuForLive(show, seed as Record<string, SheetMenu>);
+const showBySlug = (slug: string) => (showsJson as Show[]).find((s) => s.slug === slug);
 
 describe('menuFor', () => {
   it('reads the seeded sheet menu with no visible change', () => {
@@ -16,6 +22,14 @@ describe('menuFor', () => {
 
   it('has no menu for A Big Band Christmas', () => {
     expect(menuFor(showBySlug('a-big-band-christmas')!)).toBeNull();
+  });
+
+  it('falls back to the hand-written menu when the sheet has no row for a show', () => {
+    expect(menuForLive(showBySlug('lionel-and-the-commodores')!, {})!.courses[0].dish).toBe('Blueberry Orchard Salad');
+  });
+
+  it('treats a blank sheet row (null) as no menu, even with a hand-written one', () => {
+    expect(menuForLive(showBySlug('lionel-and-the-commodores')!, { 'lionel-and-the-commodores': null })).toBeNull();
   });
 
   it('treats a sheet entry with nothing in it as no menu', () => {

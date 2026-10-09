@@ -6,7 +6,9 @@ const shows = JSON.parse(readFileSync('src/data/shows.json', 'utf8'));
 const fixture = (name: string) => readFileSync(`tests/fixtures/sheet/${name}.json`, 'utf8');
 const TODAY = '2026-10-07';
 const run = (name: string) => validate(parsePayload(fixture(name)).payload, shows, TODAY);
-const committed = (file: string) => readFileSync(`src/data/generated/${file}`, 'utf8');
+// The menus as first seeded, matching the clean fixture. Never the live
+// src/data/generated files, which change with every sheet publish.
+const seedMenus = () => readFileSync('tests/fixtures/sheet/seed-menus.json', 'utf8');
 
 describe('parsePayload', () => {
   it('treats an empty payload as "nothing to apply"', () => {
@@ -34,8 +36,8 @@ describe('validate: clean sheet', () => {
     expect(result.errors).toEqual([]);
   });
 
-  it('reproduces the committed menus byte for byte', () => {
-    expect(render(result.menus)).toBe(committed('menus.json'));
+  it('reproduces the seeded menus byte for byte', () => {
+    expect(render(result.menus)).toBe(seedMenus());
   });
 
   it('ignores past dates and keeps one row per upcoming performance', () => {
@@ -52,7 +54,7 @@ describe('validate: clean sheet', () => {
   });
 
   it('describes no content changes when the sheet matches the site', () => {
-    expect(describeChanges(shows, { menus: JSON.parse(committed('menus.json')), dates: [] }, result)).toEqual([]);
+    expect(describeChanges(shows, { menus: JSON.parse(seedMenus()), dates: [] }, result)).toEqual([]);
   });
 });
 
@@ -150,12 +152,22 @@ describe('validate: details', () => {
 });
 
 describe('describeChanges and commitMessage', () => {
+  it('ignores a show with no menu either way (blank row or no row)', () => {
+    expect(describeChanges(shows, { menus: { 'a-big-band-christmas': null }, dates: [] }, { menus: {}, dates: [] })).toEqual([]);
+  });
+
+  it('reports a blank row for a show whose hand-written menu would otherwise show', () => {
+    expect(describeChanges(shows, { menus: {}, dates: [] }, { menus: { 'lionel-and-the-commodores': null }, dates: [] })).toEqual([
+      'Lionel & The Commodores menu cleared',
+    ]);
+  });
+
   it('lists status and menu changes', () => {
     const p = JSON.parse(fixture('clean'));
     p.dates.find((d: { Date: string }) => d.Date === '2026-10-17 18:00').Status = 'Sold Out';
     p.menus[1]['Entree Description'] = 'New words';
     const after = validate(p, shows, TODAY);
-    const before = { menus: JSON.parse(committed('menus.json')), dates: [] };
+    const before = { menus: JSON.parse(seedMenus()), dates: [] };
     const changes = describeChanges(shows, before, after);
     expect(changes).toEqual(['Lionel & The Commodores Oct 17 18:00 On Sale -> Sold Out', 'Best of 2026 entree description']);
     expect(commitMessage(changes).split('\n')[0]).toBe(
