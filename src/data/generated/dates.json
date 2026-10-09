@@ -87,13 +87,13 @@
     "id": 849900,
     "show": "lionel-and-the-commodores",
     "start": "2026-10-11T15:00",
-    "status": "on-sale"
+    "status": "low"
   },
   {
     "id": 849901,
     "show": "lionel-and-the-commodores",
     "start": "2026-10-16T18:00",
-    "status": "on-sale"
+    "status": "low"
   },
   {
     "id": 849902,
@@ -105,18 +105,18 @@
     "id": 859089,
     "show": "lionel-and-the-commodores",
     "start": "2026-10-18T15:00",
-    "status": "on-sale"
+    "status": "low"
   },
   {
     "id": 849903,
     "show": "lionel-and-the-commodores",
     "start": "2026-10-23T18:00",
-    "status": "on-sale"
+    "status": "low"
   },
   {
     "id": 849904,
     "show": "lionel-and-the-commodores",
     "start": "2026-10-24T18:00",
-    "status": "on-sale"
+    "status": "low"
   }
 ]
