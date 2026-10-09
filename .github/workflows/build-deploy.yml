@@ -1,0 +1,48 @@
+name: Build and deploy
+
+# Reusable: called by deploy.yml (push, manual run, nightly) and by
+# publish-sheet.yml (after a sheet publish commits new data). A push made with
+# the built-in GITHUB_TOKEN does not start other workflows, so the publish run
+# deploys through this file itself.
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        description: Commit to build. Empty means the commit that started the run.
+        type: string
+        required: false
+        default: ''
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Unit tests (dates, prices, sheet validator)
+        run: npm test
+      - uses: withastro/action@v6
+        with:
+          node-version: 22
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

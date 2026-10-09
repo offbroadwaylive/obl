@@ -8,7 +8,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "test": "vitest run",
-    "check:todo": "node scripts/list-todos.mjs"
+    "check:todo": "node scripts/list-todos.mjs",
+    "apply-sheet": "node scripts/apply-sheet.mjs"
   },
   "dependencies": {
     "astro": "^5.18.2"

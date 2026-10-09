@@ -5,7 +5,6 @@ import Countdown from '../components/Countdown.astro';
 import ShowCard from '../components/ShowCard.astro';
 import DateList from '../components/DateList.astro';
 import Gallery from '../components/Gallery.astro';
-import EmailSignup from '../components/EmailSignup.astro';
 import Ribbon from '../components/Ribbon.astro';
 import site from '../data/site.json';
 import season from '../data/season.json';
@@ -128,9 +127,6 @@ const fromPrices = season.packages.map((p) => p.from).filter((n): n is number =>
     </div>
   </section>
 
-  <section class="section container reveal">
-    <EmailSignup id="home-signup" />
-  </section>
 </Base>
 
 <style>

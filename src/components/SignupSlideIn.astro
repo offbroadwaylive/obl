@@ -1,0 +1,146 @@
+---
+// One-time signup slide-in, mounted once in Base.astro. Appears after 8
+// seconds or 40% scroll, whichever comes first, unless this browser has
+// dismissed it or submitted any signup form. Never on Contact, which has the
+// full form. Non-modal: it never takes focus, traps focus or dims the page.
+import SignupForm from './SignupForm.astro';
+import { url } from '../lib/url';
+
+const onContact = Astro.url.pathname.startsWith(url('contact/'));
+---
+
+{
+  !onContact && (
+    <aside class="slidein" role="complementary" aria-label="Join our email list" data-slidein hidden>
+      <button class="slidein__close" type="button" aria-label="Close" data-slidein-close>
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+        </svg>
+      </button>
+      <SignupForm source="slide-in" variant="card" id="slidein-signup" />
+    </aside>
+  )
+}
+
+<script>
+  import { DISMISSED_EVENT, isSignupDismissed, markSignupDismissed } from '../lib/signup-state';
+
+  const panel = document.querySelector<HTMLElement>('[data-slidein]');
+  const DELAY_MS = 8000;
+  const SCROLL_SHARE = 0.4;
+
+  if (panel && isSignupDismissed()) panel.remove();
+  else if (panel) {
+    let shown = false;
+    let timer = 0;
+
+    // Keep clear of the sticky header and, on phones, the sticky ticket bar.
+    const fit = () => {
+      const header = document.querySelector<HTMLElement>('[data-header]')?.offsetHeight ?? 0;
+      const bar = document.querySelector<HTMLElement>('[data-sticky-bar]')?.offsetHeight ?? 0;
+      panel.style.setProperty('--header-h', `${header}px`);
+      panel.style.setProperty('--bar-h', `${bar}px`);
+    };
+
+    const scrolled = () => {
+      const max = document.documentElement.scrollHeight - innerHeight;
+      return max > 0 && scrollY / max >= SCROLL_SHARE;
+    };
+
+    // Tuck away while another signup form (the footer's) is on screen, so the
+    // two never overlap; it comes back when that form scrolls off.
+    const others = [...document.querySelectorAll<HTMLElement>('[data-signup]')].filter((f) => !panel.contains(f));
+    const inView = new Set<Element>();
+    const tuck = () => panel.classList.toggle('is-tucked', inView.size > 0);
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => (e.isIntersecting ? inView.add(e.target) : inView.delete(e.target)));
+      tuck();
+    });
+    others.forEach((f) => io.observe(f));
+
+    const show = () => {
+      if (shown || !panel.isConnected) return;
+      shown = true;
+      clearTimeout(timer);
+      removeEventListener('scroll', onScroll);
+      fit();
+      panel.hidden = false;
+      requestAnimationFrame(() => requestAnimationFrame(() => panel.classList.add('is-in')));
+    };
+
+    const close = () => {
+      removeEventListener('scroll', onScroll);
+      clearTimeout(timer);
+      document.removeEventListener('keydown', onKey);
+      panel.remove();
+    };
+
+    const onScroll = () => scrolled() && show();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && shown && panel.isConnected) markSignupDismissed('slide-in-close');
+    };
+
+    timer = window.setTimeout(show, DELAY_MS);
+    addEventListener('scroll', onScroll, { passive: true });
+    addEventListener('resize', fit);
+    document.addEventListener('keydown', onKey);
+    panel.querySelector('[data-slidein-close]')?.addEventListener('click', () => markSignupDismissed('slide-in-close'));
+
+    // Closing it, or signing up with any other form, removes it for good.
+    // After signing up inside the slide-in, it stays to show the thank-you
+    // until closed.
+    document.addEventListener(DISMISSED_EVENT, (e) => {
+      const source = (e as CustomEvent<{ source: string }>).detail?.source;
+      if (source !== 'slide-in') close();
+    });
+  }
+</script>
+
+<style>
+  .slidein {
+    --edge: 16px;
+    position: fixed;
+    z-index: 45;
+    right: var(--edge);
+    bottom: var(--edge);
+    width: 360px;
+    max-width: calc(100vw - 2 * var(--edge));
+    max-height: calc(100dvh - var(--header-h, 72px) - 2 * var(--edge));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 20px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--neon);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.65), 0 0 24px rgba(225, 29, 42, 0.18);
+    transform: translateY(calc(100% + 2 * var(--edge)));
+    transition: transform 250ms ease-out;
+  }
+  .slidein.is-in { transform: none; }
+  .slidein.is-in.is-tucked { transform: translateY(calc(100% + 2 * var(--edge))); visibility: hidden; transition: transform 250ms ease-in, visibility 0s 250ms; }
+  .slidein[hidden] { display: none; }
+  .slidein__close {
+    position: absolute; top: 8px; right: 8px; z-index: 1;
+    display: grid; place-items: center;
+    width: var(--tap); height: var(--tap);
+    background: transparent; color: var(--muted);
+    border: 0; border-radius: 50%; cursor: pointer;
+  }
+  .slidein__close:hover { color: var(--text); background: var(--surface-2); }
+
+  @media (max-width: 719px) {
+    .slidein {
+      left: var(--edge);
+      width: auto;
+      max-width: none;
+      bottom: calc(var(--edge) + var(--bar-h, 0px));
+      max-height: calc(100dvh - var(--header-h, 72px) - var(--bar-h, 0px) - 2 * var(--edge));
+      padding: 16px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .slidein { transition: none; }
+  }
+</style>

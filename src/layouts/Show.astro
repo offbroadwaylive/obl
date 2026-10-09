@@ -17,12 +17,14 @@ import {
   currentShows,
   doorsTime,
   formatsOf,
+  isSoldOut,
   longDate,
   priceSetFor,
   upcoming,
   weekdayLong,
 } from '../lib/shows';
 import { url } from '../lib/url';
+import { menuFor, menuAnchor } from '../lib/menus';
 import { findImage } from '../lib/images';
 import { showEvents } from '../lib/structured';
 import { getImage } from 'astro:assets';
@@ -38,6 +40,8 @@ const set = priceSetFor(show);
 const formats = formatsOf(show);
 const others = currentShows().filter((s) => s.slug !== show.slug);
 const isEncore = show.series === 'encore';
+const menu = menuFor(show);
+const soldOut = isSoldOut(show);
 
 // "Fri & Sat Dinner Show: doors 6:00pm" style summary from the actual dates.
 const doorsLines = [
@@ -64,12 +68,19 @@ const description = `${show.title} at ${site.name}, Santee. ${show.kicker}${next
         {
           next ? (
             <>
-              <p class="show-hero__next">
-                <span class="label">Next show</span>
-                {longDate(next)} · Doors {doorsTime(next)}
-              </p>
+              {soldOut ? (
+                <p class="show-hero__next">
+                  <span class="label">Sold out</span>
+                  Every performance of this show is sold out.
+                </p>
+              ) : (
+                <p class="show-hero__next">
+                  <span class="label">Next show</span>
+                  {longDate(next)} · Doors {doorsTime(next)}
+                </p>
+              )}
               <div class="show-hero__actions">
-                <a class="btn" href="#dates">Get Tickets</a>
+                {soldOut ? <a class="btn btn--ghost" href="#dates">See all dates</a> : <a class="btn" href="#dates">Get Tickets</a>}
                 <a class="btn btn--ghost" href="#pricing">Prices &amp; seating</a>
               </div>
             </>
@@ -88,6 +99,7 @@ const description = `${show.title} at ${site.name}, Santee. ${show.kicker}${next
         </p>
       </div>
       <div class="show-hero__art">
+        {soldOut && <p class="sold-ribbon">Sold Out</p>}
         <Img src={show.hero} alt={show.heroAlt} label="Show art coming soon" note={show.title} loading="eager" sizes="(min-width: 900px) 620px, 100vw" />
       </div>
     </div>
@@ -115,16 +127,16 @@ const description = `${show.title} at ${site.name}, Santee. ${show.kicker}${next
   </section>
 
   {
-    show.menu && (
+    menu && (
       <section class="section container" id="menu" aria-labelledby="menu-h">
         <div class="section-title">
           <h2 id="menu-h">On the menu</h2>
         </div>
         <div class="menu-wrap">
-          <MenuCard id={show.menu} title={`${show.title} menu`} />
+          <MenuCard menu={menu} anchor="show-menu" title={`${show.title} menu`} />
         </div>
         <p class="small muted menu-more">
-          <a href={url(`menus/#menu-${show.menu}`)}>All dinner menus</a>
+          <a href={url(`menus/#${menuAnchor(show)}`)}>All dinner menus</a>
         </p>
       </section>
     )
@@ -197,6 +209,7 @@ const description = `${show.title} at ${site.name}, Santee. ${show.kicker}${next
   .show-hero__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
   .show-hero__tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; }
   .show-hero__art {
+    position: relative;
     aspect-ratio: 16 / 9;
     border-radius: var(--radius-lg);
     overflow: hidden;

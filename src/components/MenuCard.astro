@@ -1,22 +1,22 @@
 ---
-import menus from '../data/menus.json';
+import { menuCredit, type Menu } from '../lib/menus';
 
 interface Props {
-  id: string;
+  menu: Menu;
+  /** Element id, so other pages can link straight to this menu. */
+  anchor: string;
   title?: string;
   headingLevel?: 'h2' | 'h3';
   showCredit?: boolean;
 }
 
-const { id, title = 'Dinner menu', headingLevel = 'h3', showCredit = true } = Astro.props;
-const menu = (menus.menus as Record<string, { courses: { course: string; dish: string; description: string }[]; snackBoard?: string }>)[id];
-if (!menu) throw new Error(`menus.json has no menu "${id}"`);
+const { menu, anchor, title = 'Dinner menu', headingLevel = 'h3', showCredit = true } = Astro.props;
 const H = headingLevel;
 ---
 
-<article class="paper menu-card" id={`menu-${id}`}>
+<article class="paper menu-card" id={anchor}>
   <H class="menu-card__title">{title}</H>
-  {showCredit && <p class="menu-card__credit">{menus.credit}</p>}
+  {showCredit && <p class="menu-card__credit">{menuCredit}</p>}
   <dl class="menu-card__courses">
     {
       menu.courses.map((c) => (
@@ -25,7 +25,7 @@ const H = headingLevel;
             <span class="menu-card__label">{c.course}</span>
             <span class="menu-card__dish">{c.dish}</span>
           </dt>
-          <dd>{c.description}</dd>
+          {c.description && <dd>{c.description}</dd>}
         </div>
       ))
     }

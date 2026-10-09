@@ -2,27 +2,30 @@
 import Base from '../layouts/Base.astro';
 import PageIntro from '../components/PageIntro.astro';
 import MenuCard from '../components/MenuCard.astro';
-import menus from '../data/menus.json';
+import { menuFor, menuAnchor, menuCredit } from '../lib/menus';
 import { currentShows, dateRange, upcoming } from '../lib/shows';
 import { showUrl } from '../lib/url';
 
-const withMenus = currentShows().filter((s) => s.menu);
+const withMenus = currentShows().flatMap((show) => {
+  const menu = menuFor(show);
+  return menu ? [{ show, menu }] : [];
+});
 ---
 
-<Base title="Dinner Menus" description={`Dinner menus for current shows at Off Broadway Live. ${menus.credit}.`}>
-  <PageIntro kicker="Dinner, drinks & dessert" title="Dinner Menus" lede={menus.credit} />
+<Base title="Dinner Menus" description={`Dinner menus for current shows at Off Broadway Live. ${menuCredit}.`}>
+  <PageIntro kicker="Dinner, drinks & dessert" title="Dinner Menus" lede={menuCredit} />
 
   <section class="section container">
     {
       withMenus.length ? (
         <div class="menus">
-          {withMenus.map((s) => (
-            <div class="menus__item" style={`--accent:${s.accent}`}>
+          {withMenus.map(({ show, menu }) => (
+            <div class="menus__item" style={`--accent:${show.accent}`}>
               <p class="menus__show">
-                <a href={showUrl(s.slug)}>{s.title}</a>
-                <span class="muted"> · {dateRange(upcoming(s))}</span>
+                <a href={showUrl(show.slug)}>{show.title}</a>
+                <span class="muted"> · {dateRange(upcoming(show))}</span>
               </p>
-              <MenuCard id={s.menu!} title={s.title} headingLevel="h2" showCredit={false} />
+              <MenuCard menu={menu} anchor={menuAnchor(show)} title={show.title} headingLevel="h2" showCredit={false} />
             </div>
           ))}
         </div>

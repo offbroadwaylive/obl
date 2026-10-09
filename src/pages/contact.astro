@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import PageIntro from '../components/PageIntro.astro';
 import Img from '../components/Img.astro';
-import EmailSignup from '../components/EmailSignup.astro';
+import SignupForm from '../components/SignupForm.astro';
 import site from '../data/site.json';
 import { directionsUrl, mapEmbedUrl, mapsSearchUrl } from '../lib/site';
 import { localBusiness } from '../lib/structured';
@@ -48,7 +48,7 @@ import { localBusiness } from '../lib/structured';
   </section>
 
   <section class="section container reveal">
-    <EmailSignup id="contact-signup" />
+    <SignupForm source="contact" variant="full" id="contact-signup" />
   </section>
 </Base>
 

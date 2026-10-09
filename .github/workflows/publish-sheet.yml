@@ -1,0 +1,67 @@
+name: Publish sheet
+
+# Started by "Website > Publish now" in the OBL Website Content sheet
+# (google/publish.gs), or by hand from the Actions tab with no payload to just
+# rebuild and deploy. The payload is untrusted: it reaches the script only
+# through the SHEET_PAYLOAD environment variable and is never put into a
+# run: line.
+
+on:
+  workflow_dispatch:
+    inputs:
+      payload:
+        description: JSON sent by the sheet's Publish now button. Leave empty to rebuild and deploy without changing data.
+        type: string
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      sha: ${{ steps.commit.outputs.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Validate and apply the sheet
+        env:
+          SHEET_PAYLOAD: ${{ inputs.payload }}
+          COMMIT_MSG_FILE: ${{ runner.temp }}/commit-msg.txt
+        run: node scripts/apply-sheet.mjs
+
+      - name: Commit generated data
+        id: commit
+        run: |
+          if git diff --quiet -- src/data/generated; then
+            echo "No changes to commit."
+          else
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add src/data/generated
+            git commit -F "$RUNNER_TEMP/commit-msg.txt"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+  site:
+    needs: apply
+    uses: ./.github/workflows/build-deploy.yml
+    with:
+      ref: ${{ needs.apply.outputs.sha }}

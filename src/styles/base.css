@@ -199,6 +199,17 @@ a:hover { color: var(--text); }
 .paper a { color: #7a1018; }
 .paper .muted { color: var(--paper-muted); }
 
+/* "Sold Out" corner ribbon over a poster or show art (parent is position: relative) */
+.sold-ribbon {
+  position: absolute; top: 22px; right: -46px; z-index: 2;
+  width: 190px; margin: 0; padding: 6px 0;
+  transform: rotate(45deg);
+  background: var(--neon-fill); color: var(--text);
+  font-family: var(--font-display); font-size: 1rem; letter-spacing: 0.1em; text-transform: uppercase; text-align: center;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5), 0 0 16px rgba(225, 29, 42, 0.5);
+  pointer-events: none;
+}
+
 /* Chip tags */
 .tag {
   display: inline-flex; align-items: center;

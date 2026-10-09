@@ -8,7 +8,9 @@ The rebuilt offbroadwaylive.com: a static site that rebuilds itself from a few d
 
 ## For editors: how to change the site
 
-Everything that changes — shows, dates, prices, menus, FAQs, the banner — lives in the files in [`src/data`](src/data). You never edit a page directly.
+**Menus and sold-out dates are edited in a Google Sheet**, not here: see [Updating menus and sold-out dates](docs/updating-menus-and-sold-out-dates.md). How that sheet, the Publish now button and the email signup are set up is in [Sheet publishing and email signups](docs/sheet-publishing-and-signups.md).
+
+Everything else that changes — shows, dates, prices, FAQs, the banner — lives in the files in [`src/data`](src/data). You never edit a page directly.
 
 ### How to edit a file
 
@@ -35,7 +37,7 @@ Open `src/data/shows.json` and find the show. Each date is one line in its `perf
 | `start` | Date and **doors** time in San Diego time, as `YYYY-MM-DDTHH:MM` with a 24-hour clock. 6:00pm is `18:00`, 3:00pm is `15:00`, 2:00pm is `14:00`. |
 | `id` | The Arts People performance number: the digits after `performance=` in the Arts People link. |
 | `format` | `dinner`, `snack-board` or `dessert`. This sets the label and the price on that date. |
-| `status` | `on-sale`, `low` (shows "Few seats left") or `sold-out`. |
+| `status` | `on-sale`, `low` (shows "Few Tickets Remain") or `sold-out`. Once the content sheet is in use, its **Dates** tab sets this instead. |
 
 - **To add a date**, copy an existing line, paste it below, and change the date and id. Keep the dates in order.
 - **To remove a date**, delete its whole line. If it was the last line in the list, remove the comma from the end of the line above it.
@@ -44,7 +46,9 @@ You do not need to remove dates that have passed; they disappear on their own.
 
 ### Mark a date sold out (or nearly)
 
-In `src/data/shows.json`, change that date's `"status": "on-sale"` to `"status": "sold-out"`. The date greys out and its button is disabled. Use `"low"` to show a **Few seats left** tag instead. Change it back to `"on-sale"` if seats are released.
+Use the **Status** column on the **Dates** tab of the content sheet, then **Website → Publish now**. See [Updating menus and sold-out dates](docs/updating-menus-and-sold-out-dates.md).
+
+A status set in the sheet wins over the `status` in `src/data/shows.json`. The `status` field there is only used for a date with no row in the sheet.
 
 ### Change a price
 
@@ -80,7 +84,7 @@ To remove the banner, set `"text": ""`.
 1. Add the poster (square) and wide art to `src/assets/images/shows/` (see *Add photos* below).
 2. Open `src/data/shows.json`, copy a whole show — from its `{` to its matching `},` — and paste it as a new show.
 3. Change: `slug` (the page address, lowercase with dashes, e.g. `"neil-diamond"`), `title`, `kicker`, `blurb`, `poster`, `hero`, the alt text, `accent` (a color like `"#c9742e"`), `pricing`, `menu` (or `null`), `ageRule` (`"21+"` or `"over-10"`), `notes` and the `performances`.
-4. If the show has a dinner menu, add it to `src/data/menus.json` under the same name you put in `menu`.
+4. Add the show's row to the **Menus** tab and its dates to the **Dates** tab of the content sheet, then publish. (Without a sheet row, a menu in `src/data/menus.json` under the name in `menu` is used.)
 
 The show gets its own page, appears on the home page, in the **Shows** menu and on the calendar automatically.
 
@@ -102,7 +106,7 @@ Photos are resized and converted for the web automatically; upload the largest v
 | To change… | Edit |
 | --- | --- |
 | FAQs | `src/data/faqs.json` |
-| Dinner menus | `src/data/menus.json` |
+| Dinner menus | The **Menus** tab of the content sheet (chef credit: `src/data/menus.json`) |
 | Season ticket packages | `src/data/season.json` |
 | Address, phone, email, award line, About Us | `src/data/site.json` |
 
@@ -112,12 +116,13 @@ Open questions waiting on an answer are listed in [`TODO.md`](TODO.md).
 
 ## For developers
 
-Astro (static output, no UI framework), plain CSS with custom properties, vanilla JS in small inline modules. Built and deployed to GitHub Pages by `.github/workflows/deploy.yml` on every push to `main` and nightly at 08:00 UTC.
+Astro (static output, no UI framework), plain CSS with custom properties, vanilla JS in small inline modules. Built and deployed to GitHub Pages by `.github/workflows/build-deploy.yml`, a reusable workflow called by `deploy.yml` (every push to `main`, manual runs and nightly at 08:00 UTC) and by `publish-sheet.yml` (the content sheet's Publish now button). Unit tests run before every build.
 
 ```sh
 npm install
 npm run dev          # http://localhost:4321/offbroadwaylive/
-npm test             # unit tests for src/lib/shows.ts
+npm test             # unit tests: dates, prices, menus, sheet validator
+npm run apply-sheet -- payload.json   # apply a sheet payload locally (see docs/)
 npm run build        # outputs dist/
 npm run check:todo   # regenerates TODO.md from TODO markers
 ```
@@ -128,15 +133,23 @@ npm run check:todo   # regenerates TODO.md from TODO markers
 
 ```
 src/data/        shows, pricing, menus, faqs, season, gallery, site (all content)
-src/lib/         shows.ts (dates, prices, ticket URLs), url.ts (base path), structured.ts (schema.org)
+src/data/generated/  menus.json, dates.json: written only by scripts/apply-sheet.mjs from the sheet
+src/lib/         shows.ts (dates, prices, ticket URLs, sheet date overlay), menus.ts (sheet menus
+                 with fallback), url.ts (base path), structured.ts (schema.org)
 src/layouts/     Base.astro (header, marquee, banner, footer), Show.astro
 src/components/  Header, Footer, Marquee, Banner, ShowCard, DateList, PriceTable, SeatMap,
-                 MenuCard, Ribbon, Gallery, FaqItem, Countdown, StickyTicketBar, EmailSignup
+                 MenuCard, Ribbon, Gallery, FaqItem, Countdown, StickyTicketBar, SignupForm,
+                 SignupSlideIn
 src/pages/       index, shows/[slug], encore-supper-club, season-tickets, menus, media,
                  contact, faqs, calendar, 404, ics/[id].ics, and redirect stubs for old Wix paths
 src/styles/      tokens.css (colors, type, spacing), base.css (shared building blocks)
 public/fonts/    self-hosted Anton, Playfair Display, Inter (OFL)
+scripts/         apply-sheet.mjs (validates and applies a sheet payload), fetch-assets.sh, list-todos.mjs
+google/          reference copies of the Apps Scripts (never deployed from here) and the sheet CSVs
+docs/            pages for Steve (sheet editing) and Garry (sheet, token, signups)
 ```
+
+**Email signup.** The footer, Contact page and one-time slide-in all use `SignupForm.astro`, which posts to the Apps Script web app in `site.json` `signup.action`. See [Sheet publishing and email signups](docs/sheet-publishing-and-signups.md#email-signups) for the `mode` setting and the one live test still to do.
 
 **Images.** `scripts/fetch-assets.sh` is a one-time import of the logo, show art, venue photos and gallery from Wix. Run it from a machine that can reach `static.wixstatic.com`, then commit `src/assets/images`. Images live in `src/assets` rather than `public/` so Astro's image pipeline can resize them to 800/1600px WebP. Anything missing renders as a labelled placeholder.
 
@@ -148,7 +161,9 @@ public/fonts/    self-hosted Anton, Playfair Display, Inter (OFL)
 
 In the repository's **Settings → Pages**, set **Source** to **GitHub Actions**. The next push to `main` (or **Actions → Deploy to GitHub Pages → Run workflow**) publishes the site.
 
-GitHub pauses scheduled workflows in repositories with no activity for 60 days. If dates stop dropping off, re-enable the workflow on the **Actions** tab.
+GitHub pauses scheduled workflows in repositories with no activity for about 60 days. If past dates stop dropping off, open **Actions → Deploy to GitHub Pages** and click **Enable workflow**.
+
+If `main` gets branch protection, allow `github-actions[bot]` to push, or sheet publishes will fail at the commit step.
 
 ### Cutover to offbroadwaylive.com
 

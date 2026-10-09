@@ -26,8 +26,11 @@
     "end": "2026-12-13"
   },
   "signup": {
-    "action": "",
-    "note": "TODO(open item 5): where signups go today is not confirmed. While action is empty the form shows \"Signup coming soon\". Set action to the provider's form URL to turn it on."
+    "action": "https://script.google.com/macros/s/AKfycbxZbLkT2n0F0vdTkWrWGjMVd8NBokToa7JjoVXHGfZX-kueubhq5-yTigU2TyqYH17T/exec",
+    "phoneRequired": false,
+    "mode": "cors",
+    "note": "action is the OBL Mailing List Signups web app (google/signup.gs). Empty it to show \"Signup coming soon\" instead. mode \"cors\" reads the script's { ok: true } reply; switch to \"no-cors\" only if that reply is blocked (see docs/sheet-publishing-and-signups.md).",
+    "modeNote": "TODO: the reply mode could not be tested against the live script from the build environment. After deploying, sign up once from the footer and follow the Email signups steps in docs/sheet-publishing-and-signups.md."
   },
   "doorsSummary": [
     "ENCORE Supper Club: Fridays & Saturdays doors @ 6:00pm; Sundays are a Snack Board Show @ 3:00pm.",

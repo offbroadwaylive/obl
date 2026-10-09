@@ -6,6 +6,7 @@ on:
   workflow_dispatch:
   # Nightly rebuild at 08:00 UTC (midnight or 1am in San Diego), so past
   # performances drop off and shows with no dates leave the nav on their own.
+  # It reads only committed data; nothing polls the content sheet.
   schedule:
     - cron: '0 8 * * *'
 
@@ -19,20 +20,5 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: withastro/action@v6
-        with:
-          node-version: 22
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+  site:
+    uses: ./.github/workflows/build-deploy.yml

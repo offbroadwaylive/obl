@@ -26,7 +26,7 @@ for (const dir of dirs) {
         if (at === -1) return;
         const text = line
           .slice(at)
-          .replace(/["',}\s]+$/, '')
+          .replace(/["',}*/\s]+$/, '')
           .replace(/\\"/g, '"')
           .trim();
         const item = text.match(/open item (\d+)/)?.[1];
