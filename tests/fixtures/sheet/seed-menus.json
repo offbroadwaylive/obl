@@ -1,0 +1,29 @@
+{
+  "a-big-band-christmas": null,
+  "best-of-2026": {
+    "dessert": {
+      "description": "A slice of soft rich pumpkin pie with a generous topping of heavy whipped cream.",
+      "title": "Pumpkin Pie with Fresh Whipped Cream"
+    },
+    "entree": {
+      "description": "Tender roasted turkey served with creamy mashed potatoes smothered in savory turkey gravy, a side of sweet-tangy cranberry relish, and a dinner roll.",
+      "title": "Oven-Roasted Turkey Breast"
+    },
+    "snackBoard": "Turkey Slider with Cranberry Delight Salad & Pumpkin Pie"
+  },
+  "lionel-and-the-commodores": {
+    "dessert": {
+      "description": "Rich silky cheesecake finished with a vibrant raspberry drizzle.",
+      "title": "Cheesecake with Raspberry Sauce"
+    },
+    "entree": {
+      "description": "Creamy Gouda Mashed Potatoes, Asparagus and a dinner roll.",
+      "title": "Seasoned Chipotle Honey Chicken Breast"
+    },
+    "salad": {
+      "description": "Mixed greens with blueberries, mozzarella, and crunchy croutons with vinaigrette dressing.",
+      "title": "Blueberry Orchard Salad"
+    },
+    "snackBoard": "Mini Slice of Cheesecake, Savory Crunch Mix & Fresh Seasonal Fruit"
+  }
+}

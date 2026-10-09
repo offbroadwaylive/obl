@@ -16,7 +16,7 @@ export interface Menu {
 }
 
 type Dish = { title: string; description?: string };
-type SheetMenu = { salad?: Dish; entree?: Dish; dessert?: Dish; snackBoard?: string } | null;
+export type SheetMenu = { salad?: Dish; entree?: Dish; dessert?: Dish; snackBoard?: string } | null;
 
 const COURSES = [
   ['salad', 'Salad'],
@@ -41,8 +41,7 @@ export function fromSheet(entry: NonNullable<SheetMenu>): Menu | null {
  * The menu for a show, or null when it has none. A sheet entry wins; a sheet
  * row left blank is stored as null and means "no menu section".
  */
-export function menuFor(show: Show): Menu | null {
-  const sheet = sheetMenus as Record<string, SheetMenu>;
+export function menuFor(show: Show, sheet: Record<string, SheetMenu> = sheetMenus as Record<string, SheetMenu>): Menu | null {
   if (show.slug in sheet) {
     const entry = sheet[show.slug];
     return entry ? fromSheet(entry) : null;
