@@ -1,6 +1,6 @@
 ---
 import Img from './Img.astro';
-import { type Show, upcoming, dateRange, weekdayShort, monthDay, doorsTime } from '../lib/shows';
+import { type Show, isSoldOut, upcoming, dateRange, weekdayShort, monthDay, doorsTime } from '../lib/shows';
 import { showUrl } from '../lib/url';
 
 interface Props {
@@ -12,16 +12,18 @@ const { show, headingLevel = 'h3' } = Astro.props;
 const dates = upcoming(show);
 const next = dates[0];
 const H = headingLevel;
+const soldOut = isSoldOut(show);
 const href = showUrl(show.slug);
 ---
 
 <article class="card card--lift show-card" style={`--accent:${show.accent}`}>
   <a class="show-card__poster" href={href} tabindex="-1" aria-hidden="true">
+    {soldOut && <span class="sold-ribbon">Sold Out</span>}
     <Img src={show.poster} alt="" label="Poster coming soon" note={show.title} widths={[400, 800]} sizes="(min-width: 720px) 360px, 100vw" />
   </a>
   <div class="show-card__body">
     <p class="kicker">{show.kicker}</p>
-    <H class="show-card__title"><a href={href}>{show.title}</a></H>
+    <H class="show-card__title"><a href={href}>{show.title}</a>{soldOut && <span class="sr-only"> (sold out)</span>}</H>
     {dates.length > 0 && <p class="show-card__range">{dateRange(dates)}, {dates[dates.length - 1].start.slice(0, 4)} · {dates.length} {dates.length === 1 ? 'date' : 'dates'}</p>}
     {next && <p class="show-card__next muted small">Next: {weekdayShort(next)} {monthDay(next)}, doors {doorsTime(next)}</p>}
     <a class="btn show-card__btn" href={`${href}#dates`}>Get Tickets<span class="sr-only"> for {show.title}</span></a>
@@ -30,7 +32,7 @@ const href = showUrl(show.slug);
 
 <style>
   .show-card { display: flex; flex-direction: column; border-top: 3px solid var(--accent); }
-  .show-card__poster { display: block; aspect-ratio: 1; overflow: hidden; background: var(--surface-2); }
+  .show-card__poster { position: relative; display: block; aspect-ratio: 1; overflow: hidden; background: var(--surface-2); }
   .show-card__poster :global(img) { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
   .show-card:hover .show-card__poster :global(img) { transform: scale(1.03); }
   .show-card__poster :global(.placeholder) { border: 0; border-bottom: 2px dashed var(--gold); }

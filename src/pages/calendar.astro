@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import PageIntro from '../components/PageIntro.astro';
 import DateList from '../components/DateList.astro';
-import { allUpcoming, currentShows, doorsTime, longDate, perfDay, ticketUrl, buildNow, laDay, type Dated } from '../lib/shows';
+import { STATUS_LABEL, allUpcoming, currentShows, doorsTime, longDate, perfDay, ticketUrl, buildNow, laDay, type Dated } from '../lib/shows';
 
 const items = allUpcoming();
 const shows = currentShows();
@@ -86,10 +86,12 @@ const shortTime = (t: string) => t.replace(':00', '');
                             title={`${show.title}, doors ${doorsTime(perf)}`}
                           >
                             <span class="chip__time">{shortTime(doorsTime(perf))}</span>
+                            {perf.status === 'low' && <span class="chip__flag">{STATUS_LABEL.low}</span>}
+                            {perf.status === 'sold-out' && <span class="chip__flag">{STATUS_LABEL['sold-out']}</span>}
                             <span class="chip__title">{show.title}</span>
                             <span class="sr-only">
                               , {longDate(perf)}, doors {doorsTime(perf)}
-                              {perf.status === 'sold-out' ? ', sold out' : ', get tickets (opens Arts People in a new tab)'}
+                              {perf.status === 'sold-out' ? ', sold out' : perf.status === 'low' ? ', few tickets remain, get tickets (opens Arts People in a new tab)' : ', get tickets (opens Arts People in a new tab)'}
                             </span>
                           </a>
                         ))}
@@ -168,7 +170,9 @@ const shortTime = (t: string) => t.replace(':00', '');
   .chip:hover { background: color-mix(in srgb, var(--accent) 30%, var(--surface-2)); color: var(--text); }
   .chip__time { font-weight: 600; color: var(--accent); margin-right: 4px; }
   .chip__title { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .chip--sold { opacity: 0.5; text-decoration: line-through; }
+  .chip--sold { opacity: 0.55; }
+  .chip--sold .chip__title { text-decoration: line-through; }
+  .chip__flag { display: block; font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--gold); }
   .chip[hidden] { display: none; }
   .list-title { margin-top: 24px; }
 
@@ -177,6 +181,6 @@ const shortTime = (t: string) => t.replace(':00', '');
     .day { height: 60px; padding: 3px; }
     .day__n { font-size: 0.75rem; margin-bottom: 2px; }
     .chip { padding: 2px 3px; border-left-width: 2px; min-height: 22px; font-size: 0.7rem; }
-    .chip__title { display: none; }
+    .chip__title, .chip__flag { display: none; }
   }
 </style>

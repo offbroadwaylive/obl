@@ -3,6 +3,8 @@
 
 import showsData from '../data/shows.json';
 import pricingData from '../data/pricing.json';
+// Written by scripts/apply-sheet.mjs from the Dates tab of the content sheet.
+import sheetDates from '../data/generated/dates.json';
 
 export const TZ = 'America/Los_Angeles';
 
@@ -58,7 +60,30 @@ export interface Dated {
   perf: Performance;
 }
 
-export const allShows = showsData as Show[];
+/** One row of src/data/generated/dates.json. */
+export interface DateOverlay {
+  show: string;
+  start: string;
+  status: Status;
+  id?: number;
+}
+
+/**
+ * Applies the sheet's status and (when present) Arts People id to the
+ * performance with the same show and start. The sheet never adds a date.
+ */
+export function overlayDates(shows: Show[], rows: DateOverlay[]): Show[] {
+  const byKey = new Map(rows.map((r) => [`${r.show}|${r.start}`, r]));
+  return shows.map((show) => ({
+    ...show,
+    performances: show.performances.map((p) => {
+      const row = byKey.get(`${show.slug}|${p.start}`);
+      return row ? { ...p, status: row.status, ...(row.id ? { id: row.id } : {}) } : p;
+    }),
+  }));
+}
+
+export const allShows = overlayDates(showsData as Show[], sheetDates as DateOverlay[]);
 export const priceSets = pricingData as unknown as Record<string, PriceSet>;
 
 export const FORMAT_LABEL: Record<Format, string> = {
@@ -156,10 +181,22 @@ export function allUpcoming(shows: Show[] = allShows, now: Date = buildNow()): D
     .sort((a, b) => byStart(a.perf, b.perf));
 }
 
-/** The soonest upcoming performance across all shows. Sold-out dates still count. */
+/** The soonest upcoming performance that is not sold out, across all shows. */
 export function nextPerformance(shows: Show[] = allShows, now: Date = buildNow()): Dated | undefined {
-  return allUpcoming(shows, now)[0];
+  return allUpcoming(shows, now).find((d) => d.perf.status !== 'sold-out');
 }
+
+/** True when a show has upcoming dates and every one of them is sold out. */
+export function isSoldOut(show: Show, now: Date = buildNow()): boolean {
+  const dates = upcoming(show, now);
+  return dates.length > 0 && dates.every((p) => p.status === 'sold-out');
+}
+
+export const STATUS_LABEL: Record<Status, string> = {
+  'on-sale': 'On Sale',
+  low: 'Few Tickets Remain',
+  'sold-out': 'Sold Out',
+};
 
 export function showBySlug(slug: string): Show | undefined {
   return allShows.find((s) => s.slug === slug);

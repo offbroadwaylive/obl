@@ -3,6 +3,8 @@ import {
   allShows,
   currentShows,
   nextPerformance,
+  isSoldOut,
+  overlayDates,
   pacificToDate,
   pastShows,
   priceFrom,
@@ -93,6 +95,11 @@ describe('nextPerformance', () => {
     expect(next.perf.id).toBe(848434);
   });
 
+  it('skips sold-out performances', () => {
+    const shows = overlayDates(allShows, [{ show: 'lionel-and-the-commodores', start: '2026-10-10T18:00', status: 'sold-out' }]);
+    expect(nextPerformance(shows, on('2026-10-07'))!.perf.id).toBe(849900);
+  });
+
   it('is undefined when nothing is scheduled', () => {
     expect(nextPerformance(allShows, on('2027-01-01'))).toBeUndefined();
   });
@@ -126,5 +133,36 @@ describe('pricing', () => {
     (priceSets as Record<string, unknown>).test = set;
     expect(priceFrom(show, bestOf.performances[0])).toBe(111);
     delete (priceSets as Record<string, unknown>).test;
+  });
+});
+
+describe('overlayDates (sheet Dates tab)', () => {
+  const rows = [
+    { show: 'a-big-band-christmas', start: '2026-12-12T14:00', status: 'sold-out' as const, id: 999001 },
+    { show: 'a-big-band-christmas', start: '2026-12-12T18:00', status: 'low' as const },
+  ];
+  const shows = overlayDates(allShows, rows);
+  const xmas = shows.find((s) => s.slug === 'a-big-band-christmas')!;
+  const at = (start: string) => xmas.performances.find((p) => p.start === start)!;
+
+  it('gives both Dec 12 performances their own status and id', () => {
+    expect(at('2026-12-12T14:00')).toMatchObject({ status: 'sold-out', id: 999001 });
+    expect(at('2026-12-12T18:00')).toMatchObject({ status: 'low', id: 927613 });
+  });
+
+  it('keeps the repo id when the sheet has none, and leaves other dates alone', () => {
+    expect(at('2026-12-13T14:00')).toMatchObject({ id: 927607, status: 'on-sale' });
+  });
+
+  it('never adds a performance', () => {
+    const added = overlayDates(allShows, [{ show: 'best-of-2026', start: '2026-11-09T18:00', status: 'sold-out' }]);
+    expect(added.flatMap((s) => s.performances)).toHaveLength(22);
+  });
+
+  it('marks a show sold out only when every upcoming date is', () => {
+    const all = christmas.performances.map((p) => ({ show: christmas.slug, start: p.start, status: 'sold-out' as const }));
+    const soldOut = overlayDates(allShows, all).find((s) => s.slug === christmas.slug)!;
+    expect(isSoldOut(soldOut, on('2026-10-07'))).toBe(true);
+    expect(isSoldOut(xmas, on('2026-10-07'))).toBe(false);
   });
 });

@@ -6,6 +6,7 @@ import {
   type Show,
   type Performance,
   FORMAT_LABEL,
+  STATUS_LABEL,
   doorsTime,
   monthDay,
   weekdayShort,
@@ -48,8 +49,8 @@ const { items, showTitles = false, calendarLinks = true, emptyText = 'No upcomin
               <span class="date-row__meta">
                 <span>Doors {doorsTime(perf)}</span>
                 <span class="tag tag--accent">{FORMAT_LABEL[perf.format]}</span>
-                {status === 'low' && <span class="tag tag--low">Few seats left</span>}
-                {sold && <span class="tag tag--sold">Sold out</span>}
+                {status === 'low' && <span class="tag tag--low">{STATUS_LABEL.low}</span>}
+                {sold && <span class="tag tag--sold">{STATUS_LABEL['sold-out']}</span>}
               </span>
               <span class="date-row__price">
                 from <strong>${priceFrom(show, perf)}</strong> per seat

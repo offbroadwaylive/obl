@@ -1,6 +1,6 @@
 ---
 // On show pages under 720px: a bottom bar with the next date and a ticket button.
-import { type Show, upcoming, weekdayShort, monthDay, doorsTime, perfDay, ticketUrl } from '../lib/shows';
+import { type Show, STATUS_LABEL, upcoming, weekdayShort, monthDay, doorsTime, perfDay, ticketUrl } from '../lib/shows';
 
 interface Props { show: Show }
 const { show } = Astro.props;
@@ -17,6 +17,7 @@ const dates = upcoming(show).filter((p) => p.status !== 'sold-out');
           <p class="sticky-bar__when">
             <span class="label">Next show</span>
             {`${weekdayShort(p)} ${monthDay(p)} · Doors ${doorsTime(p)}`}
+            {p.status === 'low' && <span class="sticky-bar__low">{STATUS_LABEL.low}</span>}
           </p>
           <a class="btn btn--small" href={ticketUrl(p.id)} target="_blank" rel="noopener">
             Get Tickets<span class="sr-only"> for {show.title} (opens Arts People in a new tab)</span>
@@ -53,6 +54,7 @@ const dates = upcoming(show).filter((p) => p.status !== 'sold-out');
     .sticky-bar__inner { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
     .sticky-bar__inner[hidden] { display: none; }
     .sticky-bar__when { margin: 0; font-weight: 600; font-size: 0.95rem; line-height: 1.3; }
+    .sticky-bar__low { display: block; color: var(--gold); font-size: 0.8rem; }
     .sticky-bar__when .label { display: block; color: var(--muted); font-size: 0.75rem; }
     :global(body.has-sticky-bar) { padding-bottom: 76px; }
   }
