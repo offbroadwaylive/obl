@@ -50,7 +50,6 @@ const { items, showTitles = false, calendarLinks = true, emptyText = 'No upcomin
                 <span>Doors {doorsTime(perf)}</span>
                 <span class="tag tag--accent">{FORMAT_LABEL[perf.format]}</span>
                 {status === 'low' && <span class="tag tag--low">{STATUS_LABEL.low}</span>}
-                {sold && <span class="tag tag--sold">{STATUS_LABEL['sold-out']}</span>}
               </span>
               <span class="date-row__price">
                 from <strong>${priceFrom(show, perf)}</strong> per seat
@@ -58,9 +57,7 @@ const { items, showTitles = false, calendarLinks = true, emptyText = 'No upcomin
             </div>
             <div class="date-row__actions">
               {sold ? (
-                <span class="btn btn--small" aria-disabled="true">
-                  Sold Out
-                </span>
+                <span class="sold-tag">{STATUS_LABEL['sold-out']}<span class="sr-only">: {show.title}, {longDate(perf)}</span></span>
               ) : (
                 <a class="btn btn--small" href={ticketUrl(perf.id)} target="_blank" rel="noopener">
                   Get Tickets<span class="sr-only"> for {show.title}, {longDate(perf)}, doors {doorsTime(perf)} (opens Arts People in a new tab)</span>
@@ -116,14 +113,21 @@ const { items, showTitles = false, calendarLinks = true, emptyText = 'No upcomin
   .date-row__cal:hover { color: var(--gold); border-color: var(--gold); }
   .date-row__cal span:not(.sr-only) { display: none; }
 
-  .date-row.is-sold { opacity: 0.6; border-left-color: var(--line); }
+  .date-row.is-sold { border-left-color: var(--line); background: var(--bg); }
+  .date-row.is-sold .date-row__meta, .date-row.is-sold .date-row__date { color: var(--muted); }
+  .sold-tag {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-height: var(--tap); padding: 0 14px;
+    font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--muted); border: 1px dashed var(--muted); border-radius: var(--radius);
+  }
   .date-row.is-sold .date-row__dow, .date-row.is-sold .date-row__price strong { color: var(--muted); }
   .date-row.is-sold .date-row__date { text-decoration: line-through; text-decoration-thickness: 1px; }
 
   @media (max-width: 560px) {
     .date-row { grid-template-columns: 64px 1fr; gap: 10px 12px; padding: 12px; }
     .date-row__actions { grid-column: 1 / -1; }
-    .date-row__actions .btn { flex: 1; }
+    .date-row__actions .btn, .date-row__actions .sold-tag { flex: 1; }
     .date-row__date { font-size: 1.2rem; }
   }
 </style>

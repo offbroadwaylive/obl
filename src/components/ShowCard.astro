@@ -10,7 +10,7 @@ interface Props {
 
 const { show, headingLevel = 'h3' } = Astro.props;
 const dates = upcoming(show);
-const next = dates[0];
+const next = dates.find((p) => p.status !== 'sold-out');
 const H = headingLevel;
 const soldOut = isSoldOut(show);
 const href = showUrl(show.slug);
@@ -25,8 +25,14 @@ const href = showUrl(show.slug);
     <p class="kicker">{show.kicker}</p>
     <H class="show-card__title"><a href={href}>{show.title}</a>{soldOut && <span class="sr-only"> (sold out)</span>}</H>
     {dates.length > 0 && <p class="show-card__range">{dateRange(dates)}, {dates[dates.length - 1].start.slice(0, 4)} · {dates.length} {dates.length === 1 ? 'date' : 'dates'}</p>}
-    {next && <p class="show-card__next muted small">Next: {weekdayShort(next)} {monthDay(next)}, doors {doorsTime(next)}</p>}
-    <a class="btn show-card__btn" href={`${href}#dates`}>Get Tickets<span class="sr-only"> for {show.title}</span></a>
+    {next && !soldOut && <p class="show-card__next muted small">Next: {weekdayShort(next)} {monthDay(next)}, doors {doorsTime(next)}</p>}
+    {
+      soldOut ? (
+        <a class="btn btn--ghost show-card__btn" href={`${href}#dates`}>All dates sold out<span class="sr-only"> for {show.title}</span></a>
+      ) : (
+        <a class="btn show-card__btn" href={`${href}#dates`}>Get Tickets<span class="sr-only"> for {show.title}</span></a>
+      )
+    }
   </div>
 </article>
 

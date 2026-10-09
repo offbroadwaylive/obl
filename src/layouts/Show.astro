@@ -68,12 +68,19 @@ const description = `${show.title} at ${site.name}, Santee. ${show.kicker}${next
         {
           next ? (
             <>
-              <p class="show-hero__next">
-                <span class="label">Next show</span>
-                {longDate(next)} · Doors {doorsTime(next)}
-              </p>
+              {soldOut ? (
+                <p class="show-hero__next">
+                  <span class="label">Sold out</span>
+                  Every performance of this show is sold out.
+                </p>
+              ) : (
+                <p class="show-hero__next">
+                  <span class="label">Next show</span>
+                  {longDate(next)} · Doors {doorsTime(next)}
+                </p>
+              )}
               <div class="show-hero__actions">
-                <a class="btn" href="#dates">Get Tickets</a>
+                {soldOut ? <a class="btn btn--ghost" href="#dates">See all dates</a> : <a class="btn" href="#dates">Get Tickets</a>}
                 <a class="btn btn--ghost" href="#pricing">Prices &amp; seating</a>
               </div>
             </>

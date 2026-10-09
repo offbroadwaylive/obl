@@ -170,7 +170,8 @@ const shortTime = (t: string) => t.replace(':00', '');
   .chip:hover { background: color-mix(in srgb, var(--accent) 30%, var(--surface-2)); color: var(--text); }
   .chip__time { font-weight: 600; color: var(--accent); margin-right: 4px; }
   .chip__title { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .chip--sold { opacity: 0.55; }
+  .chip--sold { background: var(--bg); border-left-color: var(--line); color: var(--muted); }
+  .chip--sold .chip__time, .chip--sold .chip__flag { color: var(--muted); }
   .chip--sold .chip__title { text-decoration: line-through; }
   .chip__flag { display: block; font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--gold); }
   .chip[hidden] { display: none; }
