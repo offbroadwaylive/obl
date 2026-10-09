@@ -27,7 +27,8 @@ export const MENU_HEADERS = ['Show', ...COURSES.flatMap((c) => [c.title, c.descr
 /** "Performance ID" is optional: without it the ids in shows.json are used. */
 export const DATE_HEADERS = ['Show', 'Date', 'Status'];
 export const ID_HEADER = 'Performance ID';
-export const STATUS = { 'on sale': 'on-sale', 'few tickets remain': 'low', 'sold out': 'sold-out' };
+/** Sheet wording to site status. "Few Tickets Left" is accepted for "Few Tickets Remain". */
+export const STATUS = { 'on sale': 'on-sale', 'few tickets remain': 'low', 'few tickets left': 'low', 'sold out': 'sold-out' };
 export const STATUS_LABEL = { 'on-sale': 'On Sale', low: 'Few Tickets Remain', 'sold-out': 'Sold Out' };
 const MAX_TITLE = 80;
 const MAX_DESCRIPTION = 300;

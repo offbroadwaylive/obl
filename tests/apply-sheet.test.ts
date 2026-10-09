@@ -107,10 +107,12 @@ describe('validate: details', () => {
     const p = base();
     p.dates.find((d: { Date: string }) => d.Date === '2026-10-17 18:00').Status = '  sold OUT ';
     p.dates.find((d: { Date: string }) => d.Date === '2026-10-16 18:00').Status = 'Few Tickets Remain';
+    p.dates.find((d: { Date: string }) => d.Date === '2026-10-23 18:00').Status = 'Few Tickets Left';
     const { dates } = validate(p, shows, TODAY);
     const at = (s: string) => dates.find((d: { start: string }) => d.start === s).status;
     expect(at('2026-10-17T18:00')).toBe('sold-out');
     expect(at('2026-10-16T18:00')).toBe('low');
+    expect(at('2026-10-23T18:00')).toBe('low');
   });
 
   it('rejects an id that another performance already uses', () => {

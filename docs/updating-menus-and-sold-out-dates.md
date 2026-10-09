@@ -42,6 +42,7 @@ One row per performance. You can only change the **Status** column. Click a Stat
 
 - **Show**, **Date** and **Performance ID** are locked. Garry sets them up.
 - A Status cell can't be left blank. If one is, Publish now tells you which row to fix and sends nothing.
+- Type the status exactly as in the dropdown. "Few Tickets Left" also works and means the same as Few Tickets Remain. Anything else, and Publish now names the row and sends nothing.
 - Dates that have passed are ignored, and they disappear from the website by themselves overnight.
 
 ## When you click Publish now

@@ -13,7 +13,8 @@
 const REPO = 'dogmaticvox/offbroadwaylive';
 const WORKFLOW = 'publish-sheet.yml';
 const REF = 'main';
-const STATUSES = ['on sale', 'few tickets remain', 'sold out'];
+// "Few Tickets Left" is accepted as another way of writing "Few Tickets Remain".
+const STATUSES = ['on sale', 'few tickets remain', 'few tickets left', 'sold out'];
 
 function onOpen() {
   SpreadsheetApp.getUi()
@@ -108,7 +109,9 @@ function check(dates) {
     const where = 'Dates row ' + d._row + ': ';
     if (!d['Show']) out.push(where + 'Show is empty.');
     if (!/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/.test(d['Date'] || '')) out.push(where + 'Date is not a date and time.');
-    if (STATUSES.indexOf(String(d['Status'] || '').toLowerCase()) === -1) out.push(where + 'Status is not set.');
+    const status = String(d['Status'] || '').trim();
+    if (!status) out.push(where + 'Status is empty.');
+    else if (STATUSES.indexOf(status.toLowerCase()) === -1) out.push(where + 'Status "' + status + '" must be On Sale, Few Tickets Remain or Sold Out.');
     const id = d['Performance ID'] || '';
     if (id && !/^\d+$/.test(id)) out.push(where + 'Performance ID must be numbers only.');
     if (id && seen[id]) out.push(where + 'Performance ID ' + id + ' is also on row ' + seen[id] + '.');
