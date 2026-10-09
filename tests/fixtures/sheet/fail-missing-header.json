@@ -1,0 +1,172 @@
+{
+  "menus": [
+    {
+      "_row": 2,
+      "Show": "Lionel & The Commodores",
+      "Salad Title": "Blueberry Orchard Salad",
+      "Salad Description": "Mixed greens with blueberries, mozzarella, and crunchy croutons with vinaigrette dressing.",
+      "Entree Title": "Seasoned Chipotle Honey Chicken Breast",
+      "Entree Description": "Creamy Gouda Mashed Potatoes, Asparagus and a dinner roll.",
+      "Dessert Title": "Cheesecake with Raspberry Sauce",
+      "Dessert Description": "Rich silky cheesecake finished with a vibrant raspberry drizzle.",
+      "Snack Board Description": "Mini Slice of Cheesecake, Savory Crunch Mix & Fresh Seasonal Fruit"
+    },
+    {
+      "_row": 3,
+      "Show": "Best of 2026",
+      "Salad Title": "",
+      "Salad Description": "",
+      "Entree Title": "Oven-Roasted Turkey Breast",
+      "Entree Description": "Tender roasted turkey served with creamy mashed potatoes smothered in savory turkey gravy, a side of sweet-tangy cranberry relish, and a dinner roll.",
+      "Dessert Title": "Pumpkin Pie with Fresh Whipped Cream",
+      "Dessert Description": "A slice of soft rich pumpkin pie with a generous topping of heavy whipped cream.",
+      "Snack Board Description": "Turkey Slider with Cranberry Delight Salad & Pumpkin Pie"
+    },
+    {
+      "_row": 4,
+      "Show": "A Big Band Christmas",
+      "Salad Title": "",
+      "Salad Description": "",
+      "Entree Title": "",
+      "Entree Description": "",
+      "Dessert Title": "",
+      "Dessert Description": "",
+      "Snack Board Description": ""
+    }
+  ],
+  "dates": [
+    {
+      "_row": 2,
+      "Show": "Lionel & The Commodores",
+      "Date": "2026-10-02 18:00",
+      "Performance ID": "849897"
+    },
+    {
+      "_row": 3,
+      "Show": "Lionel & The Commodores",
+      "Date": "2026-10-03 18:00",
+      "Performance ID": "849898"
+    },
+    {
+      "_row": 4,
+      "Show": "Lionel & The Commodores",
+      "Date": "2026-10-10 18:00",
+      "Performance ID": "849899"
+    },
+    {
+      "_row": 5,
+      "Show": "Lionel & The Commodores",
+      "Date": "2026-10-11 15:00",
+      "Performance ID": "849900"
+    },
+    {
+      "_row": 6,
+      "Show": "Lionel & The Commodores",
+      "Date": "2026-10-16 18:00",
+      "Performance ID": "849901"
+    },
+    {
+      "_row": 7,
+      "Show": "Lionel & The Commodores",
+      "Date": "2026-10-17 18:00",
+      "Performance ID": "849902"
+    },
+    {
+      "_row": 8,
+      "Show": "Lionel & The Commodores",
+      "Date": "2026-10-18 15:00",
+      "Performance ID": "859089"
+    },
+    {
+      "_row": 9,
+      "Show": "Lionel & The Commodores",
+      "Date": "2026-10-23 18:00",
+      "Performance ID": "849903"
+    },
+    {
+      "_row": 10,
+      "Show": "Lionel & The Commodores",
+      "Date": "2026-10-24 18:00",
+      "Performance ID": "849904"
+    },
+    {
+      "_row": 11,
+      "Show": "Best of 2026",
+      "Date": "2026-11-06 18:00",
+      "Performance ID": "848434"
+    },
+    {
+      "_row": 12,
+      "Show": "Best of 2026",
+      "Date": "2026-11-07 18:00",
+      "Performance ID": "848435"
+    },
+    {
+      "_row": 13,
+      "Show": "Best of 2026",
+      "Date": "2026-11-08 15:00",
+      "Performance ID": "848436"
+    },
+    {
+      "_row": 14,
+      "Show": "Best of 2026",
+      "Date": "2026-11-13 18:00",
+      "Performance ID": "848437"
+    },
+    {
+      "_row": 15,
+      "Show": "Best of 2026",
+      "Date": "2026-11-14 18:00",
+      "Performance ID": "848438"
+    },
+    {
+      "_row": 16,
+      "Show": "Best of 2026",
+      "Date": "2026-11-15 15:00",
+      "Performance ID": "848439"
+    },
+    {
+      "_row": 17,
+      "Show": "Best of 2026",
+      "Date": "2026-11-20 18:00",
+      "Performance ID": "848440"
+    },
+    {
+      "_row": 18,
+      "Show": "Best of 2026",
+      "Date": "2026-11-21 18:00",
+      "Performance ID": "848441"
+    },
+    {
+      "_row": 19,
+      "Show": "A Big Band Christmas",
+      "Date": "2026-12-10 18:00",
+      "Performance ID": "927602"
+    },
+    {
+      "_row": 20,
+      "Show": "A Big Band Christmas",
+      "Date": "2026-12-11 18:00",
+      "Performance ID": "927603"
+    },
+    {
+      "_row": 21,
+      "Show": "A Big Band Christmas",
+      "Date": "2026-12-12 14:00",
+      "Performance ID": "927604"
+    },
+    {
+      "_row": 22,
+      "Show": "A Big Band Christmas",
+      "Date": "2026-12-12 18:00",
+      "Performance ID": "927613"
+    },
+    {
+      "_row": 23,
+      "Show": "A Big Band Christmas",
+      "Date": "2026-12-13 14:00",
+      "Performance ID": "927607"
+    }
+  ],
+  "sentAt": "2026-10-07T17:00:00.000Z"
+}
