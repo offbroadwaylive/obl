@@ -1,12 +1,17 @@
 ---
 import site from '../data/site.json';
 import { url } from '../lib/url';
+import SignupForm from './SignupForm.astro';
 import { mapsSearchUrl, fullAddress } from '../lib/site';
 
 const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
+  <div class="container site-footer__signup">
+    <SignupForm source="footer" variant="compact" id="footer-signup" />
+  </div>
+
   <div class="container site-footer__grid">
     <div>
       <p class="site-footer__name">Off Broadway <span class="live-glow">Live</span></p>
@@ -48,6 +53,7 @@ const year = new Date().getFullYear();
     background: linear-gradient(180deg, var(--bg), #060607);
     padding-top: 48px;
   }
+  .site-footer__signup { padding-bottom: 32px; margin-bottom: 40px; border-bottom: 1px solid var(--line); }
   .site-footer__grid {
     display: grid;
     gap: 32px;

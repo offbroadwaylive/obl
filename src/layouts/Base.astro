@@ -6,6 +6,7 @@ import Header from '../components/Header.astro';
 import Marquee from '../components/Marquee.astro';
 import Banner from '../components/Banner.astro';
 import Footer from '../components/Footer.astro';
+import SignupSlideIn from '../components/SignupSlideIn.astro';
 import site from '../data/site.json';
 import { fontFaceCss, preloadFonts } from '../lib/fonts';
 import { isLive } from '../lib/site';
@@ -76,6 +77,7 @@ const shareImage = onLiveDomain(ogImage ?? url('og/default.png'));
     </main>
     <Footer />
     <slot name="after" />
+    <SignupSlideIn />
 
     <script>
       const TZ = 'America/Los_Angeles';

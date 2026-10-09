@@ -1,0 +1,259 @@
+---
+// The mailing-list signup form, used in three places: the one-time slide-in,
+// the footer on every page, and the Contact page. Fields, validation and the
+// submit code exist only here.
+//
+// Submissions go to the Google Apps Script web app in site.json signup.action
+// (google/signup.gs), which appends a row to the private OBL Mailing List
+// Signups sheet. With an empty action the form says "Signup coming soon".
+import site from '../data/site.json';
+
+interface Props {
+  /** Written to the sheet's Source column. */
+  source: 'slide-in' | 'footer' | 'contact';
+  /** full: Contact panel. compact: single row in the footer. card: the slide-in. */
+  variant?: 'full' | 'compact' | 'card';
+  /** Unique per page; prefixes every element id. */
+  id: string;
+}
+
+const { source, variant = 'full', id } = Astro.props;
+const { action, phoneRequired, mode } = site.signup;
+---
+
+<form
+  class:list={['signup', `signup--${variant}`]}
+  method="post"
+  action={action || undefined}
+  novalidate
+  data-signup
+  data-source={source}
+  data-action={action}
+  data-mode={mode}
+  aria-labelledby={`${id}-h`}
+>
+  <div class="signup__head">
+    <h2 class="signup__title" id={`${id}-h`}>Not getting our emails?</h2>
+    <p class="signup__line">Sign me up! I'd like to receive news and updates.</p>
+  </div>
+
+  <p class="signup__nojs">
+    Email <a href={`mailto:${site.email}?subject=Please%20add%20me%20to%20your%20email%20list`}>{site.email}</a> or call
+    <a href={`tel:${site.phone.dial}`}>{site.phone.display}</a> to join our email list.
+  </p>
+
+  <div class="signup__body" data-signup-body>
+    <div class="signup__fields">
+      <div class="field">
+        <label for={`${id}-name`}>Name (First &amp; Last)</label>
+        <input class="input" id={`${id}-name`} name="name" autocomplete="name" required minlength="2" maxlength="100" aria-describedby={`${id}-name-err`} />
+        <p class="field__error" id={`${id}-name-err`} data-error-for="name"></p>
+      </div>
+      <div class="field">
+        <label for={`${id}-email`}>Email</label>
+        <input class="input" id={`${id}-email`} name="email" type="email" autocomplete="email" required maxlength="254" aria-describedby={`${id}-email-err`} />
+        <p class="field__error" id={`${id}-email-err`} data-error-for="email"></p>
+      </div>
+      <div class="field">
+        <label for={`${id}-phone`}>Phone {!phoneRequired && <span class="field__opt">(optional)</span>}</label>
+        <input class="input" id={`${id}-phone`} name="phone" type="tel" autocomplete="tel" maxlength="30" required={phoneRequired} aria-describedby={`${id}-phone-err`} />
+        <p class="field__error" id={`${id}-phone-err`} data-error-for="phone"></p>
+      </div>
+
+      <!-- Honeypot: people never see or reach this; bots that fill it are ignored. -->
+      <div class="signup__hp" aria-hidden="true">
+        <label for={`${id}-website`}>Leave this field empty</label>
+        <input id={`${id}-website`} name="website" type="text" tabindex="-1" autocomplete="off" />
+      </div>
+      <input type="hidden" name="t" value="" data-loaded-at />
+      <input type="hidden" name="source" value={source} />
+
+      <button class="btn signup__btn" type="submit" data-signup-btn>Sign Me Up</button>
+    </div>
+    {/* TODO: confirm wording with Steve */}
+    <p class="signup__fine">We'll only use this to send you Off Broadway Live news. Unsubscribe any time.</p>
+  </div>
+
+  <p class="signup__status" role="status" data-signup-status></p>
+</form>
+
+<script>
+  import { markSignupDismissed } from '../lib/signup-state';
+
+  const MIN_FILL_MS = 3000;
+  const MESSAGES = {
+    sending: 'Sending...',
+    success: "You're on the list. See you at the show!",
+    failure: "That didn't go through. Please try again or call 619-988-LIVE (5483).",
+    soon: 'Signup coming soon. For now, call the box office at 619-988-LIVE (5483).',
+    fix: 'Please fix the highlighted fields.',
+  };
+  const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  function fieldErrors(form: HTMLFormElement): [HTMLInputElement, string][] {
+    const get = (n: string) => form.elements.namedItem(n) as HTMLInputElement;
+    const name = get('name');
+    const email = get('email');
+    const phone = get('phone');
+    const out: [HTMLInputElement, string][] = [];
+    const n = name.value.trim();
+    if (n.length < 2) out.push([name, 'Please enter your first and last name.']);
+    else if (n.length > 100) out.push([name, 'Please keep your name under 100 characters.']);
+    const e = email.value.trim();
+    if (!e) out.push([email, 'Please enter your email address.']);
+    else if (e.length > 254 || !EMAIL.test(e)) out.push([email, 'Please enter an email address like name@example.com.']);
+    const p = phone.value.trim();
+    if (phone.required && !p) out.push([phone, 'Please enter your phone number.']);
+    else if (p.length > 30) out.push([phone, 'Please keep your phone number under 30 characters.']);
+    return out;
+  }
+
+  function showErrors(form: HTMLFormElement, errors: [HTMLInputElement, string][]) {
+    form.querySelectorAll<HTMLElement>('[data-error-for]').forEach((el) => {
+      const input = form.elements.namedItem(el.dataset.errorFor!) as HTMLInputElement;
+      const hit = errors.find(([i]) => i === input);
+      el.textContent = hit ? hit[1] : '';
+      if (hit) input.setAttribute('aria-invalid', 'true');
+      else input.removeAttribute('aria-invalid');
+    });
+  }
+
+  async function send(action: string, mode: string, body: URLSearchParams): Promise<boolean> {
+    if (mode === 'no-cors') {
+      // The browser cannot read the reply here; a resolved request counts as sent.
+      await fetch(action, { method: 'POST', mode: 'no-cors', body });
+      return true;
+    }
+    const res = await fetch(action, { method: 'POST', body });
+    const data = await res.json();
+    return data?.ok === true;
+  }
+
+  document.querySelectorAll<HTMLFormElement>('[data-signup]').forEach((form) => {
+    const loadedAt = form.querySelector<HTMLInputElement>('[data-loaded-at]')!;
+    loadedAt.value = String(Date.now());
+    const status = form.querySelector<HTMLElement>('[data-signup-status]')!;
+    const body = form.querySelector<HTMLElement>('[data-signup-body]')!;
+    const btn = form.querySelector<HTMLButtonElement>('[data-signup-btn]')!;
+    const source = form.dataset.source ?? '';
+
+    const succeed = () => {
+      body.hidden = true;
+      form.classList.add('is-done');
+      status.textContent = MESSAGES.success;
+      markSignupDismissed(source);
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const action = form.dataset.action ?? '';
+      if (!action) {
+        status.textContent = MESSAGES.soon;
+        markSignupDismissed(source);
+        return;
+      }
+
+      const errors = fieldErrors(form);
+      showErrors(form, errors);
+      if (errors.length) {
+        status.textContent = MESSAGES.fix;
+        errors[0][0].focus();
+        return;
+      }
+
+      // Bot checks: a filled honeypot, or a form sent within 3 seconds of
+      // loading, gets the normal success message and nothing is sent.
+      const honeypot = (form.elements.namedItem('website') as HTMLInputElement).value;
+      if (honeypot || Date.now() - Number(loadedAt.value) < MIN_FILL_MS) {
+        succeed();
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = MESSAGES.sending;
+      status.textContent = MESSAGES.sending;
+      let ok = false;
+      try {
+        ok = await send(action, form.dataset.mode ?? 'cors', new URLSearchParams(new FormData(form) as unknown as Record<string, string>));
+      } catch {
+        ok = false;
+      }
+      if (ok) {
+        succeed();
+      } else {
+        btn.disabled = false;
+        btn.textContent = 'Sign Me Up';
+        status.textContent = MESSAGES.failure;
+      }
+    });
+
+    // Clear a field's error as soon as it is corrected.
+    form.addEventListener('input', (e) => {
+      const input = e.target as HTMLInputElement;
+      if (input.getAttribute('aria-invalid') !== 'true') return;
+      if (!fieldErrors(form).some(([i]) => i === input)) {
+        input.removeAttribute('aria-invalid');
+        const err = form.querySelector<HTMLElement>(`[data-error-for="${input.name}"]`);
+        if (err) err.textContent = '';
+      }
+    });
+  });
+</script>
+
+<style>
+  .signup { position: relative; }
+  .signup__title { font-size: var(--fs-h3); margin-bottom: 4px; }
+  .signup__line { color: var(--muted); margin-bottom: 16px; }
+  .signup__fields { display: grid; gap: 14px; }
+  .field__opt { color: var(--muted); font-weight: 400; }
+  .field__error { margin: 0; color: var(--neon-text); font-size: 0.875rem; font-weight: 600; }
+  .field__error:empty { display: none; }
+  :global(.signup .input[aria-invalid='true']) { border-color: var(--neon-text); box-shadow: 0 0 0 1px var(--neon-text); }
+  .signup__btn { width: 100%; }
+  .signup__btn:disabled { cursor: progress; }
+  .signup__fine { margin: 12px 0 0; color: var(--muted); font-size: 0.8rem; }
+  .signup__status { margin: 12px 0 0; color: var(--gold); font-weight: 600; }
+  .signup__status:empty { display: none; }
+  .signup.is-done .signup__status { font-family: var(--font-serif); font-size: 1.25rem; font-weight: 400; color: var(--text); }
+
+  /* Off-screen, not display:none, so simple bots still fill it in. */
+  .signup__hp { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+
+  /* Without JavaScript: contact details instead of fields. */
+  .signup__nojs { color: var(--muted); }
+  :global(.js) .signup__nojs { display: none; }
+  :global(html:not(.js)) .signup__body { display: none; }
+
+  /* full: Contact page panel */
+  .signup--full {
+    padding: clamp(24px, 4vw, 40px);
+    background: radial-gradient(ellipse at 100% 0%, rgba(225, 29, 42, 0.16), transparent 55%), var(--surface);
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--neon);
+    border-radius: var(--radius-lg);
+  }
+  .signup--full .signup__fields { grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); align-items: start; }
+  .signup--full .signup__btn { align-self: start; margin-top: 29px; }
+
+  /* compact: one row in the footer */
+  .signup--compact .signup__title { font-size: 1.35rem; }
+  .signup--compact .signup__line { margin-bottom: 0; font-size: 0.95rem; }
+  .signup--compact .field label { font-size: 0.85rem; }
+  .signup--compact .signup__fine { font-size: 0.75rem; }
+  @media (min-width: 900px) {
+    .signup--compact { display: grid; grid-template-columns: minmax(220px, 1fr) 3fr; gap: 24px; align-items: start; }
+    .signup--compact .signup__fields { grid-template-columns: 1.2fr 1.2fr 1fr auto; align-items: start; }
+    .signup--compact .signup__btn { margin-top: 27px; width: auto; }
+    .signup--compact .signup__status { grid-column: 2; }
+  }
+  @media (max-width: 899px) {
+    .signup--compact .signup__head { margin-bottom: 12px; }
+  }
+
+  /* card: the slide-in */
+  .signup--card .signup__title { font-size: 1.3rem; padding-right: 40px; }
+  .signup--card .signup__line { margin-bottom: 12px; font-size: 0.95rem; }
+  .signup--card .signup__fields { gap: 10px; }
+  .signup--card .field { gap: 4px; }
+  .signup--card .field label { font-size: 0.875rem; }
+</style>
