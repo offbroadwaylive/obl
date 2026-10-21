@@ -20,7 +20,7 @@
   "social": [],
   "socialNote": "TODO(open item 8): no social links appear on the current site, so the social row is omitted. Add { \"name\": \"Facebook\", \"url\": \"...\" } entries to show it.",
   "banner": {
-    "text": "Christmas Dessert Show Tickets On Sale Now!",
+    "text": "",
     "link": "shows/a-big-band-christmas/",
     "start": null,
     "end": "2026-12-13"
