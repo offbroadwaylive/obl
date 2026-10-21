@@ -36,7 +36,7 @@ Open `src/data/shows.json` and find the show. Each date is one line in its `perf
 | --- | --- |
 | `start` | Date and **doors** time in San Diego time, as `YYYY-MM-DDTHH:MM` with a 24-hour clock. 6:00pm is `18:00`, 3:00pm is `15:00`, 2:00pm is `14:00`. |
 | `id` | The Arts People performance number: the digits after `performance=` in the Arts People link. |
-| `format` | `dinner`, `snack-board` or `dessert`. This sets the label and the price on that date. |
+| `format` | `dinner`, `lunch`, `snack-board` or `dessert`. This sets the label and the price on that date. |
 | `status` | `on-sale`, `low` (shows "Few Tickets Remain") or `sold-out`. Once the content sheet is in use, its **Dates** tab sets this instead. |
 
 - **To add a date**, copy an existing line, paste it below, and change the date and id. Keep the dates in order.
@@ -58,7 +58,7 @@ Prices live in `src/data/pricing.json`, in named price sets. Each show uses one 
 { "key": "main", "name": "Main Floor", "seats": 1, "price": 99, "unit": "per seat" },
 ```
 
-Change only the number after `"price":` — no dollar sign. The Sunday Snack Board price is worked out automatically from `"adjustments"` (`"perSeat": -15` means $15 less per person). Change the `feeNote` text to change the line under the price table.
+Change only the number after `"price":` — no dollar sign. A price set with `"layout": "2026"` draws the 2026 seating chart (Bx2 as one table for 4); every other set draws the 2027 chart, where Bx2 is split into Bx2A and Bx2B tables for 2 and the Elevated Booth is Bx4. The Sunday Snack Board price is worked out automatically from `"adjustments"` (`"perSeat": -15` means $15 less per person). Change the `feeNote` text to change the line under the price table.
 
 ### Post a banner
 

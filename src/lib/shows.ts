@@ -8,7 +8,7 @@ import sheetDates from '../data/generated/dates.json';
 
 export const TZ = 'America/Los_Angeles';
 
-export type Format = 'dinner' | 'snack-board' | 'dessert';
+export type Format = 'dinner' | 'lunch' | 'snack-board' | 'dessert';
 export type Status = 'on-sale' | 'low' | 'sold-out';
 
 export interface Performance {
@@ -50,6 +50,8 @@ export interface PriceSet {
   label: string;
   feeNote: string;
   seatMap: boolean;
+  /** Seating chart version. "2026" keeps Bx2 as one table for 4; anything else is the 2027 chart. */
+  layout?: '2026' | '2027';
   tiers: Tier[];
   adjustments: { format: Format; perSeat: number }[];
   notes: string[];
@@ -88,6 +90,7 @@ export const priceSets = pricingData as unknown as Record<string, PriceSet>;
 
 export const FORMAT_LABEL: Record<Format, string> = {
   dinner: 'Dinner Show',
+  lunch: 'Lunch Show',
   'snack-board': 'Snack Board',
   dessert: 'Dessert Show',
 };
@@ -232,7 +235,7 @@ export function priceFrom(show: Show, perf: Performance): number {
 /** Formats a show uses across its upcoming dates, in a stable order. */
 export function formatsOf(show: Show, now: Date = buildNow()): Format[] {
   const used = new Set(upcoming(show, now).map((p) => p.format));
-  return (['dinner', 'snack-board', 'dessert'] as Format[]).filter((f) => used.has(f));
+  return (['dinner', 'lunch', 'snack-board', 'dessert'] as Format[]).filter((f) => used.has(f));
 }
 
 const fmt = (opts: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat('en-US', { timeZone: 'UTC', ...opts });

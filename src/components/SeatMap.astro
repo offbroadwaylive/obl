@@ -11,27 +11,49 @@ interface Props {
 }
 const { set } = Astro.props;
 
-type Table = { id: string; label: string; tier: 'main' | 'bx1' | 'bx' | 'booth'; x: number; y: number };
+type Tier = 'main' | 'bx1' | 'bx' | 'booth';
+type Table = { id: string; label: string; tier: Tier; shape: 'round' | 'two' | 'long' | 'booth'; x: number; y: number };
 
+// Coordinates follow the 2027 seating chart (OBL2027_SeatingChart.png) at 2/5
+// scale. Floor seats sit at 45 degrees around each table, seat 1 top left.
 const cols = ['A', 'B', 'C', 'D', 'E'];
-const colX = [70, 165, 260, 355, 450];
+const floorX = [220, 315, 409, 504, 599];
+const backX = [220, 315, 412, 507, 603];
+const RIGHT = 721;
+
+// Price sets for 2026 shows ("layout": "2026") still sell Bx2 as one table
+// for 4 and the Bx4 position as the Elevated Booth; from Christmas 2026 on,
+// Bx2 is split into two tables for 2, Bx2A and Bx2B.
+const split = set.layout !== '2026';
 const tables: Table[] = [
   // Main floor: three rows of five 4-seat tables, row 1 nearest the stage.
   ...[1, 2, 3].flatMap((row, r) =>
-    cols.map((c, i) => ({ id: `${row}${c}`, label: `Table ${row}${c}`, tier: 'main' as const, x: colX[i], y: 140 + r * 85 })),
+    cols.map((c, i) => ({ id: `${row}${c}`, label: `Table ${row}${c}`, tier: 'main' as const, shape: 'round' as const, x: floorX[i], y: [225, 300, 379][r] })),
   ),
-  // Right side, front to back. There is no Bx4; the booth takes that position.
-  { id: 'Bx1', label: 'Box table Bx1', tier: 'bx1', x: 555, y: 130 },
-  { id: 'Bx2', label: 'Box table Bx2', tier: 'bx', x: 555, y: 215 },
-  { id: 'Bx3', label: 'Box table Bx3', tier: 'bx', x: 555, y: 300 },
-  { id: 'Booth', label: 'Elevated Booth (position 4)', tier: 'booth', x: 555, y: 410 },
-  // Across the back, left to right.
-  ...['Bx9', 'Bx8', 'Bx7', 'Bx6', 'Bx5'].map((id, i) => ({ id, label: `Box table ${id}`, tier: 'bx' as const, x: colX[i], y: 410 })),
+  // Right side behind the railing, front to back.
+  { id: 'Bx1', label: 'Box table Bx1', tier: 'bx1', shape: 'two', x: RIGHT, y: 234 },
+  ...(split
+    ? [
+        { id: 'Bx2A', label: 'Box table Bx2A', tier: 'bx1' as const, shape: 'two' as const, x: RIGHT, y: 291 },
+        { id: 'Bx2B', label: 'Box table Bx2B', tier: 'bx1' as const, shape: 'two' as const, x: RIGHT, y: 346 },
+      ]
+    : [{ id: 'Bx2', label: 'Box table Bx2', tier: 'bx' as const, shape: 'long' as const, x: RIGHT, y: 314 }]),
+  { id: 'Bx3', label: 'Box table Bx3', tier: 'bx', shape: 'long', x: 723, y: 403 },
+  { id: 'Bx4', label: 'Elevated Booth (Bx4)', tier: 'booth', shape: 'booth', x: 714, y: 494 },
+  // Across the back behind the railing, left to right.
+  ...['Bx9', 'Bx8', 'Bx7', 'Bx6', 'Bx5'].map((id, i) => ({ id, label: `Box table ${id}`, tier: 'bx' as const, shape: 'long' as const, x: backX[i], y: 497 })),
 ];
 
 const tiers = set.tiers.map((t) => ({ ...t, count: tables.filter((x) => x.tier === t.key).length }));
 const tierName = Object.fromEntries(set.tiers.map((t) => [t.key, t.name]));
-const SHAPE: Record<string, string> = { main: 'round tables', bx1: 'diamond', bx: 'long tables', booth: 'raised booth' };
+const SHAPE: Record<string, string> = { main: 'round tables', bx1: 'diamond tables for 2', bx: 'long tables', booth: 'raised booth' };
+// Floor chairs at 45 degrees: top left (1), top right (2), bottom left (3), bottom right (4).
+const DIAG = [
+  [-19, -19],
+  [19, -19],
+  [-19, 19],
+  [19, 19],
+];
 ---
 
 <figure class="seatmap" data-seatmap>
@@ -51,11 +73,16 @@ const SHAPE: Record<string, string> = { main: 'round tables', bx1: 'diamond', bx
     }
   </div>
 
-  <svg class="seatmap__svg" viewBox="0 0 620 470" role="img" aria-labelledby="seatmap-title seatmap-desc">
+  <svg class="seatmap__svg" viewBox="0 0 770 545" role="img" aria-labelledby="seatmap-title seatmap-desc">
     <title id="seatmap-title">Seating chart</title>
     <desc id="seatmap-desc">
-      Stage across the top. Main floor: three rows of five round tables, 1A to 3E. Right side from front to back: Bx1 table for 2, Bx2, Bx3, then the
-      Elevated Booth. Across the back from left to right: Bx9, Bx8, Bx7, Bx6, Bx5.
+      {
+        `Stage across the top, lobby to its right. Main floor: three rows of five round tables for 4, 1A to 3E, with seats on the diagonals. ` +
+          (split
+            ? 'Right side behind a railing, front to back: Bx1, Bx2A and Bx2B tables for 2, then Bx3. '
+            : 'Right side behind a railing, front to back: Bx1 table for 2, then Bx2 and Bx3. ') +
+          'Back right corner: the Elevated Booth, Bx4. Across the back behind a railing, left to right: Bx9, Bx8, Bx7, Bx6, Bx5. Food service, bar and bathrooms are on the left.'
+      }
     </desc>
     <defs>
       <linearGradient id="stage-grad" x1="0" y1="0" x2="0" y2="1">
@@ -64,51 +91,74 @@ const SHAPE: Record<string, string> = { main: 'round tables', bx1: 'diamond', bx
       </linearGradient>
     </defs>
 
-    <rect class="seatmap__stage" x="20" y="14" width="480" height="58" rx="6" fill="url(#stage-grad)" />
-    <text class="seatmap__stage-label" x="260" y="51" text-anchor="middle">STAGE</text>
-    <path class="seatmap__lights" d="M40 14 H480" />
+    <rect class="seatmap__stage" x="161" y="4" width="499" height="150" rx="6" fill="url(#stage-grad)" />
+    <text class="seatmap__stage-label" x="410" y="88" text-anchor="middle">STAGE</text>
+    <path class="seatmap__lights" d="M181 4 H640" />
+
+    <g class="seatmap__room" aria-hidden="true">
+      <rect x="669" y="2" width="89" height="152" rx="4" />
+      <text x="713" y="83" text-anchor="middle">LOBBY</text>
+      <rect x="77" y="189" width="78" height="148" rx="4" />
+      <text x="116" y="263" text-anchor="middle" transform="rotate(90 116 263)">FOOD SERVICE</text>
+      <rect x="77" y="342" width="78" height="59" rx="4" />
+      <text x="116" y="371" text-anchor="middle" transform="rotate(90 116 371)">BAR</text>
+      <rect x="7" y="415" width="130" height="117" rx="4" />
+      <text x="72" y="478" text-anchor="middle">RESTROOMS</text>
+    </g>
+    <g class="seatmap__rail" aria-hidden="true">
+      <rect x="162" y="187" width="5" height="219" />
+      <rect x="669" y="228" width="5" height="195" />
+      <rect x="694" y="196" width="68" height="5" />
+      <rect x="193" y="444" width="463" height="5" />
+      <rect x="707" y="449" width="59" height="5" />
+      <rect x="176" y="478" width="5" height="53" />
+      <rect x="656" y="484" width="5" height="47" />
+    </g>
 
     {
       tables.map((t) => (
         <g class={`seat seat--${t.tier}`} data-tier={t.tier} data-table={t.id} tabindex="0" role="button" aria-label={`${t.label}: ${tierName[t.tier]}`}>
-          {t.tier === 'main' && (
+          {t.shape === 'round' && (
             <>
-              <circle class="seat__chair" cx={t.x} cy={t.y - 30} r="6" />
-              <circle class="seat__chair" cx={t.x} cy={t.y + 30} r="6" />
-              <circle class="seat__chair" cx={t.x - 30} cy={t.y} r="6" />
-              <circle class="seat__chair" cx={t.x + 30} cy={t.y} r="6" />
+              {DIAG.map(([dx, dy]) => (
+                <circle class="seat__chair" cx={t.x + dx} cy={t.y + dy} r="7" />
+              ))}
+              <circle class="seat__table" cx={t.x} cy={t.y} r="16" />
+            </>
+          )}
+          {t.shape === 'two' && (
+            <>
+              <circle class="seat__chair" cx={t.x - 28} cy={t.y} r="7" />
+              <circle class="seat__chair" cx={t.x + 28} cy={t.y} r="7" />
+              <rect class="seat__table" x={t.x - 13} y={t.y - 13} width="26" height="26" transform={`rotate(45 ${t.x} ${t.y})`} />
+            </>
+          )}
+          {t.shape === 'long' && (
+            <>
+              <circle class="seat__chair" cx={t.x - 11} cy={t.y - 25} r="7" />
+              <circle class="seat__chair" cx={t.x + 11} cy={t.y - 25} r="7" />
+              <circle class="seat__chair" cx={t.x - 11} cy={t.y + 25} r="7" />
+              <circle class="seat__chair" cx={t.x + 11} cy={t.y + 25} r="7" />
+              <rect class="seat__table" x={t.x - 29} y={t.y - 14} width="58" height="28" rx="3" />
+            </>
+          )}
+          {t.shape === 'booth' && (
+            <>
+              <rect class="seat__riser" x={t.x - 39} y={t.y - 39} width="78" height="78" rx="8" />
+              {[
+                [-24, -24],
+                [24, -24],
+                [-24, 24],
+                [24, 24],
+              ].map(([dx, dy]) => (
+                <circle class="seat__chair" cx={t.x + dx} cy={t.y + dy} r="7" />
+              ))}
               <circle class="seat__table" cx={t.x} cy={t.y} r="21" />
-            </>
-          )}
-          {t.tier === 'bx1' && (
-            <>
-              <circle class="seat__chair" cx={t.x - 28} cy={t.y} r="6" />
-              <circle class="seat__chair" cx={t.x + 28} cy={t.y} r="6" />
-              <rect class="seat__table" x={t.x - 15} y={t.y - 15} width="30" height="30" transform={`rotate(45 ${t.x} ${t.y})`} />
-            </>
-          )}
-          {t.tier === 'bx' && (
-            <>
-              <circle class="seat__chair" cx={t.x - 15} cy={t.y - 26} r="6" />
-              <circle class="seat__chair" cx={t.x + 15} cy={t.y - 26} r="6" />
-              <circle class="seat__chair" cx={t.x - 15} cy={t.y + 26} r="6" />
-              <circle class="seat__chair" cx={t.x + 15} cy={t.y + 26} r="6" />
-              <rect class="seat__table" x={t.x - 34} y={t.y - 16} width="68" height="32" rx="4" />
-            </>
-          )}
-          {t.tier === 'booth' && (
-            <>
-              <rect class="seat__riser" x={t.x - 46} y={t.y - 44} width="92" height="84" rx="8" />
-              <circle class="seat__chair" cx={t.x - 16} cy={t.y - 30} r="6" />
-              <circle class="seat__chair" cx={t.x + 16} cy={t.y - 30} r="6" />
-              <circle class="seat__chair" cx={t.x - 16} cy={t.y + 28} r="6" />
-              <circle class="seat__chair" cx={t.x + 16} cy={t.y + 28} r="6" />
-              <rect class="seat__table" x={t.x - 32} y={t.y - 17} width="64" height="34" rx="4" />
-              <polygon class="seat__mark" points={`${t.x},${t.y - 40} ${t.x + 6},${t.y - 32} ${t.x - 6},${t.y - 32}`} />
+              <polygon class="seat__mark" points={`${t.x},${t.y - 36} ${t.x + 5},${t.y - 29} ${t.x - 5},${t.y - 29}`} />
             </>
           )}
           <text class="seat__label" x={t.x} y={t.y + 4} text-anchor="middle">
-            {t.tier === 'booth' ? 'Booth' : t.id}
+            {t.shape === 'booth' && !split ? 'Booth' : t.id}
           </text>
         </g>
       ))
@@ -202,8 +252,13 @@ const SHAPE: Record<string, string> = { main: 'round tables', bx1: 'diamond', bx
   .seat__chair { fill: var(--line); stroke: var(--muted); stroke-width: 1; transition: fill 0.2s; }
   .seat__riser { fill: rgba(230, 180, 34, 0.06); stroke: var(--line); stroke-width: 1.5; stroke-dasharray: 5 4; }
   .seat__mark { fill: var(--muted); }
-  .seat__label { fill: var(--text); font-family: var(--font-sans); font-size: 12px; font-weight: 600; pointer-events: none; }
-  .seat--bx1 .seat__label { font-size: 10px; }
+  .seat__label { fill: var(--text); font-family: var(--font-sans); font-size: 11px; font-weight: 600; pointer-events: none; }
+  .seat--bx1 .seat__label { font-size: 8px; }
+  .seat--booth .seat__label { font-size: 10px; }
+
+  .seatmap__room rect { fill: var(--surface-2); stroke: var(--line); stroke-width: 1.5; }
+  .seatmap__room text { fill: var(--muted); font-family: var(--font-display); font-size: 13px; letter-spacing: 2px; }
+  .seatmap__rail rect { fill: var(--line); }
 
   .seat:hover .seat__table, .seat:focus-visible .seat__table { stroke: var(--gold); stroke-width: 2.5; }
   .seat:focus-visible .seat__table { stroke-width: 4; }
