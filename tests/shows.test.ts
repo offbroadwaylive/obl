@@ -26,10 +26,22 @@ const bestOf = showBySlug('best-of-2026')!;
 const christmas = showBySlug('a-big-band-christmas')!;
 
 describe('data', () => {
-  it('has all 22 performances with unique Arts People ids', () => {
+  it('has all 86 performances with unique Arts People ids', () => {
     const ids = allShows.flatMap((s) => s.performances.map((p) => p.id));
-    expect(ids).toHaveLength(22);
-    expect(new Set(ids).size).toBe(22);
+    expect(ids).toHaveLength(86);
+    expect(new Set(ids).size).toBe(86);
+  });
+
+  it('every show uses a known price set', () => {
+    for (const show of allShows) expect(() => priceSetFor(show)).not.toThrow();
+  });
+
+  it('2027 dates before 6pm are snack-board shows, 6pm dates are dinner shows', () => {
+    const season = allShows.filter((s) => s.performances[0].start >= '2027');
+    expect(season).toHaveLength(8);
+    for (const p of season.flatMap((s) => s.performances)) {
+      expect(p.format).toBe(p.start.slice(11) === '18:00' ? 'dinner' : 'snack-board');
+    }
   });
 
   it('builds the Arts People ticket URL', () => {
@@ -68,10 +80,11 @@ describe('upcoming', () => {
 
 describe('currentShows', () => {
   it('orders shows by their first upcoming date', () => {
-    expect(currentShows(allShows, on('2026-10-07')).map((s) => s.slug)).toEqual([
+    expect(currentShows(allShows, on('2026-10-07')).map((s) => s.slug).slice(0, 4)).toEqual([
       'lionel-and-the-commodores',
       'best-of-2026',
       'a-big-band-christmas',
+      'burt-bacharach',
     ]);
   });
 
@@ -81,8 +94,21 @@ describe('currentShows', () => {
     expect(pastShows(allShows, now).map((s) => s.slug)).toEqual(['lionel-and-the-commodores']);
   });
 
-  it('is empty after the last Christmas date', () => {
-    expect(currentShows(allShows, on('2026-12-14'))).toEqual([]);
+  it('after the last Christmas date, the 2027 season is next, in order', () => {
+    expect(currentShows(allShows, on('2026-12-14')).map((s) => s.slug)).toEqual([
+      'burt-bacharach',
+      'doobie-brothers-and-three-dog-night',
+      'decades-flashback',
+      'huey-lewis-and-hall-and-oates',
+      'country-on-the-beach',
+      'jackson-john-and-linda',
+      'paul-mccartney-and-wings',
+      'best-of-2027',
+    ]);
+  });
+
+  it('is empty after the last Best Of \'27 date', () => {
+    expect(currentShows(allShows, on('2027-11-21'))).toEqual([]);
   });
 });
 
@@ -105,7 +131,7 @@ describe('nextPerformance', () => {
   });
 
   it('is undefined when nothing is scheduled', () => {
-    expect(nextPerformance(allShows, on('2027-01-01'))).toBeUndefined();
+    expect(nextPerformance(allShows, on('2027-11-21'))).toBeUndefined();
   });
 });
 
@@ -123,6 +149,27 @@ describe('pricing', () => {
     const sunday = lionel.performances.find((p) => p.format === 'snack-board')!;
     const friday = lionel.performances.find((p) => p.format === 'dinner')!;
     expect(priceFrom(lionel, friday) - priceFrom(lionel, sunday)).toBe(15);
+  });
+
+  it('2027 ENCORE tiers match the 2027 price sheet, dinner and snack board', () => {
+    const show = showBySlug('burt-bacharach')!;
+    const set = priceSetFor(show);
+    expect(set.tiers.map((t) => tierPrice(set, t, 'dinner'))).toEqual([109, 234, 468, 476]);
+    expect(set.tiers.map((t) => tierPrice(set, t, 'snack-board'))).toEqual([94, 204, 408, 416]);
+  });
+
+  it("Best Of '27 tiers match the 2027 price sheet, dinner and snack board", () => {
+    const set = priceSetFor(showBySlug('best-of-2027')!);
+    expect(set.tiers.map((t) => tierPrice(set, t, 'dinner'))).toEqual([119, 254, 508, 516]);
+    expect(set.tiers.map((t) => tierPrice(set, t, 'snack-board'))).toEqual([104, 224, 448, 456]);
+  });
+
+  it('Decades: Flashback has one price for every date, matinees included', () => {
+    const decades = showBySlug('decades-flashback')!;
+    const set = priceSetFor(decades);
+    expect(decades.series).not.toBe('encore');
+    expect(set.tiers.map((t) => tierPrice(set, t, 'dinner'))).toEqual([89, 194, 388, 396]);
+    expect(set.tiers.map((t) => tierPrice(set, t, 'snack-board'))).toEqual([89, 194, 388, 396]);
   });
 
   it('price-from is the lowest per-seat price', () => {
@@ -160,7 +207,7 @@ describe('overlayDates (sheet Dates tab)', () => {
 
   it('never adds a performance', () => {
     const added = overlayDates(allShows, [{ show: 'best-of-2026', start: '2026-11-09T18:00', status: 'sold-out' }]);
-    expect(added.flatMap((s) => s.performances)).toHaveLength(22);
+    expect(added.flatMap((s) => s.performances)).toHaveLength(86);
   });
 
   it('marks a show sold out only when every upcoming date is', () => {

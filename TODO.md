@@ -9,7 +9,6 @@ This file is generated: run `npm run check:todo` after editing a TODO.
 | 2 | `src/data/season.json:8` | TODO(open item 2): confirm what the asterisk on the season prices refers to. The footnote above is a placeholder. |
 | 3 | `src/data/faqs.json:41` | TODO(open item 3): the year is stale (2025). Text kept as on the live site until Steve updates it. |
 | 4 | `src/data/faqs.json:15` | TODO(open item 4): DECADES, GRACELAND and Chicken Fried Gospel are not on sale now; kept under an "Other shows" sub-heading until Steve confirms. |
-| 6 | `src/data/pricing.json:32` | TODO(open item 6): Christmas pricing names Bx1, BxA2 and BxB2 tables, which are not on the seating chart. The price table shows without the interactive map until Steve confirms the layout. |
 | 7 | `src/data/site.json:39` | TODO(open item 7): confirm whether each listed time is doors or curtain. Every time is labelled Doors, as the current site does. |
 | 8 | `src/data/site.json:21` | TODO(open item 8): no social links appear on the current site, so the social row is omitted. Add { "name": "Facebook", "url": "..." } entries to show it. |
 | 9 | `scripts/fetch-assets.sh:15` | TODO(open item 9): these are Wix copies; swap in original full-resolution logo and poster files (same names). |

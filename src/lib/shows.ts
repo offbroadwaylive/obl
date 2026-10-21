@@ -50,6 +50,8 @@ export interface PriceSet {
   label: string;
   feeNote: string;
   seatMap: boolean;
+  /** Seating chart version. "2026" keeps Bx2 as one table for 4; anything else is the 2027 chart. */
+  layout?: '2026' | '2027';
   tiers: Tier[];
   adjustments: { format: Format; perSeat: number }[];
   notes: string[];

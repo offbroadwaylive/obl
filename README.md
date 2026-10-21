@@ -58,7 +58,7 @@ Prices live in `src/data/pricing.json`, in named price sets. Each show uses one 
 { "key": "main", "name": "Main Floor", "seats": 1, "price": 99, "unit": "per seat" },
 ```
 
-Change only the number after `"price":` — no dollar sign. The Sunday Snack Board price is worked out automatically from `"adjustments"` (`"perSeat": -15` means $15 less per person). Change the `feeNote` text to change the line under the price table.
+Change only the number after `"price":` — no dollar sign. A price set with `"layout": "2026"` draws the 2026 seating chart (Bx2 as one table for 4); every other set draws the 2027 chart, where Bx2 is split into Bx2A and Bx2B tables for 2 and the Elevated Booth is Bx4. The Sunday Snack Board price is worked out automatically from `"adjustments"` (`"perSeat": -15` means $15 less per person). Change the `feeNote` text to change the line under the price table.
 
 ### Post a banner
 
