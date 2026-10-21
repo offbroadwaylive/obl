@@ -51,7 +51,7 @@
     "id": 848437,
     "show": "best-of-2026",
     "start": "2026-11-13T18:00",
-    "status": "on-sale"
+    "status": "low"
   },
   {
     "id": 848438,
@@ -76,36 +76,6 @@
     "show": "best-of-2026",
     "start": "2026-11-21T18:00",
     "status": "on-sale"
-  },
-  {
-    "id": 849899,
-    "show": "lionel-and-the-commodores",
-    "start": "2026-10-10T18:00",
-    "status": "sold-out"
-  },
-  {
-    "id": 849900,
-    "show": "lionel-and-the-commodores",
-    "start": "2026-10-11T15:00",
-    "status": "low"
-  },
-  {
-    "id": 849901,
-    "show": "lionel-and-the-commodores",
-    "start": "2026-10-16T18:00",
-    "status": "low"
-  },
-  {
-    "id": 849902,
-    "show": "lionel-and-the-commodores",
-    "start": "2026-10-17T18:00",
-    "status": "sold-out"
-  },
-  {
-    "id": 859089,
-    "show": "lionel-and-the-commodores",
-    "start": "2026-10-18T15:00",
-    "status": "low"
   },
   {
     "id": 849903,
