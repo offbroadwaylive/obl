@@ -36,11 +36,12 @@ describe('data', () => {
     for (const show of allShows) expect(() => priceSetFor(show)).not.toThrow();
   });
 
-  it('2027 dates before 6pm are snack-board shows, 6pm dates are dinner shows', () => {
+  it('2027 dates before 6pm are snack-board shows (lunch for Decades), 6pm dates are dinner shows', () => {
     const season = allShows.filter((s) => s.performances[0].start >= '2027');
     expect(season).toHaveLength(8);
-    for (const p of season.flatMap((s) => s.performances)) {
-      expect(p.format).toBe(p.start.slice(11) === '18:00' ? 'dinner' : 'snack-board');
+    for (const s of season) {
+      const matinee = s.slug === 'decades-flashback' ? 'lunch' : 'snack-board';
+      for (const p of s.performances) expect(p.format).toBe(p.start.slice(11) === '18:00' ? 'dinner' : matinee);
     }
   });
 
@@ -164,12 +165,12 @@ describe('pricing', () => {
     expect(set.tiers.map((t) => tierPrice(set, t, 'snack-board'))).toEqual([104, 224, 448, 456]);
   });
 
-  it('Decades: Flashback has one price for every date, matinees included', () => {
+  it('Decades: Flashback has one price for dinner and lunch shows', () => {
     const decades = showBySlug('decades-flashback')!;
     const set = priceSetFor(decades);
     expect(decades.series).not.toBe('encore');
     expect(set.tiers.map((t) => tierPrice(set, t, 'dinner'))).toEqual([89, 194, 388, 396]);
-    expect(set.tiers.map((t) => tierPrice(set, t, 'snack-board'))).toEqual([89, 194, 388, 396]);
+    expect(set.tiers.map((t) => tierPrice(set, t, 'lunch'))).toEqual([89, 194, 388, 396]);
   });
 
   it('price-from is the lowest per-seat price', () => {

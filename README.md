@@ -36,7 +36,7 @@ Open `src/data/shows.json` and find the show. Each date is one line in its `perf
 | --- | --- |
 | `start` | Date and **doors** time in San Diego time, as `YYYY-MM-DDTHH:MM` with a 24-hour clock. 6:00pm is `18:00`, 3:00pm is `15:00`, 2:00pm is `14:00`. |
 | `id` | The Arts People performance number: the digits after `performance=` in the Arts People link. |
-| `format` | `dinner`, `snack-board` or `dessert`. This sets the label and the price on that date. |
+| `format` | `dinner`, `lunch`, `snack-board` or `dessert`. This sets the label and the price on that date. |
 | `status` | `on-sale`, `low` (shows "Few Tickets Remain") or `sold-out`. Once the content sheet is in use, its **Dates** tab sets this instead. |
 
 - **To add a date**, copy an existing line, paste it below, and change the date and id. Keep the dates in order.

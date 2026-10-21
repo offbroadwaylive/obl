@@ -77,6 +77,6 @@
       { "key": "booth", "name": "Elevated Booth (Bx4)",   "seats": 4, "price": 396, "unit": "table for 4" }
     ],
     "adjustments": [],
-    "notes": [ "Every performance, including the 1:00pm matinees, is the same price." ]
+    "notes": [ "Every performance, dinner or lunch, is the same price." ]
   }
 }

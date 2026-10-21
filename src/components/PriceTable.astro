@@ -14,7 +14,7 @@ interface Props {
 const { set, formats = ['dinner'], interactive = false, title = 'Ticket prices' } = Astro.props;
 const base: Format = formats.find((f) => perSeatAdjustment(set, f) === 0) ?? formats[0] ?? 'dinner';
 const adjusted = formats.filter((f) => perSeatAdjustment(set, f) !== 0);
-const COLUMN: Record<Format, string> = { dinner: 'Fri & Sat Dinner Show', 'snack-board': 'Sun Snack Board', dessert: 'Dessert Show' };
+const COLUMN: Record<Format, string> = { dinner: 'Fri & Sat Dinner Show', lunch: 'Lunch Show', 'snack-board': 'Sun Snack Board', dessert: 'Dessert Show' };
 const tierIcon: Record<string, string> = { main: '●', bx1: '◆', bx: '■', booth: '▲' };
 ---
 

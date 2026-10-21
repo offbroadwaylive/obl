@@ -152,13 +152,13 @@
     ],
     "performances": [
       { "start": "2027-04-10T18:00", "id": 934424, "format": "dinner", "status": "on-sale" },
-      { "start": "2027-04-11T13:00", "id": 934433, "format": "snack-board", "status": "on-sale" },
+      { "start": "2027-04-11T13:00", "id": 934433, "format": "lunch", "status": "on-sale" },
       { "start": "2027-04-16T18:00", "id": 934434, "format": "dinner", "status": "on-sale" },
       { "start": "2027-04-17T18:00", "id": 934435, "format": "dinner", "status": "on-sale" },
       { "start": "2027-04-23T18:00", "id": 934436, "format": "dinner", "status": "on-sale" },
       { "start": "2027-04-24T18:00", "id": 934437, "format": "dinner", "status": "on-sale" },
       { "start": "2027-05-01T18:00", "id": 934438, "format": "dinner", "status": "on-sale" },
-      { "start": "2027-05-02T13:00", "id": 934439, "format": "snack-board", "status": "on-sale" }
+      { "start": "2027-05-02T13:00", "id": 934439, "format": "lunch", "status": "on-sale" }
     ]
   },
   {
@@ -218,7 +218,7 @@
     "title": "Jackson, John & Linda",
     "series": "encore",
     "kicker": "Encore Supper Club",
-    "blurb": "Three of the greatest voices of the '70s in one unforgettable night. From Jackson Browne's \"Running on Empty\" to Elton John's \"Tiny Dancer\" and Linda Ronstadt's \"You're No Good,\" get ready for soaring ballads and singer-songwriter classics.",
+    "blurb": "Three of the greatest voices of the '70s in one unforgettable night. From Jackson Browne's \"Running on Empty\" to John Mellencamp's \"Jack & Diane\" and Linda Ronstadt's \"You're No Good,\" get ready for heartland rock, soaring ballads and singer-songwriter classics.",
     "poster": "shows/jackson-john-and-linda-poster.png",
     "posterAlt": "Jackson, John & Linda show poster",
     "hero": "shows/jackson-john-and-linda-wide.png",
