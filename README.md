@@ -2,7 +2,7 @@
 
 The rebuilt offbroadwaylive.com: a static site that rebuilds itself from a few data files. Tickets are still sold through Arts People; every **Get Tickets** button opens the matching Arts People page in a new tab.
 
-**Preview:** https://dogmaticvox.github.io/offbroadwaylive/ (hidden from search engines until launch)
+**Preview:** https://offbroadwaylive.github.io/obl/ (hidden from search engines until launch)
 
 ---
 
@@ -120,7 +120,7 @@ Astro (static output, no UI framework), plain CSS with custom properties, vanill
 
 ```sh
 npm install
-npm run dev          # http://localhost:4321/offbroadwaylive/
+npm run dev          # http://localhost:4321/obl/
 npm test             # unit tests: dates, prices, menus, sheet validator
 npm run apply-sheet -- payload.json   # apply a sheet payload locally (see docs/)
 npm run build        # outputs dist/
@@ -153,7 +153,7 @@ docs/            pages for Steve (sheet editing) and Garry (sheet, token, signup
 
 **Images.** `scripts/fetch-assets.sh` is a one-time import of the logo, show art, venue photos and gallery from Wix. Run it from a machine that can reach `static.wixstatic.com`, then commit `src/assets/images`. Images live in `src/assets` rather than `public/` so Astro's image pipeline can resize them to 800/1600px WebP. Anything missing renders as a labelled placeholder.
 
-**Links.** Every internal link and asset path goes through `url()` in `src/lib/url.ts`, which prefixes Astro's `BASE_URL`, so the same build works at `/offbroadwaylive/` now and at the domain root later.
+**Links.** Every internal link and asset path goes through `url()` in `src/lib/url.ts`, which prefixes Astro's `BASE_URL`, so the same build works at `/obl/` now and at the domain root later.
 
 **Hidden from search.** While `SITE_IS_LIVE` in `src/data/site.json` is `false`, every page has `<meta name="robots" content="noindex">`, there is no sitemap, and structured data, Open Graph and canonical tags are not emitted.
 
