@@ -33,25 +33,25 @@
     "id": 848434,
     "show": "best-of-2026",
     "start": "2026-11-06T18:00",
-    "status": "on-sale"
+    "status": "low"
   },
   {
     "id": 848435,
     "show": "best-of-2026",
     "start": "2026-11-07T18:00",
-    "status": "on-sale"
+    "status": "low"
   },
   {
     "id": 848436,
     "show": "best-of-2026",
     "start": "2026-11-08T15:00",
-    "status": "on-sale"
+    "status": "low"
   },
   {
     "id": 848437,
     "show": "best-of-2026",
     "start": "2026-11-13T18:00",
-    "status": "low"
+    "status": "sold-out"
   },
   {
     "id": 848438,
@@ -63,18 +63,354 @@
     "id": 848439,
     "show": "best-of-2026",
     "start": "2026-11-15T15:00",
-    "status": "on-sale"
+    "status": "low"
   },
   {
     "id": 848440,
     "show": "best-of-2026",
     "start": "2026-11-20T18:00",
-    "status": "on-sale"
+    "status": "low"
   },
   {
     "id": 848441,
     "show": "best-of-2026",
     "start": "2026-11-21T18:00",
+    "status": "low"
+  },
+  {
+    "id": 934487,
+    "show": "best-of-2027",
+    "start": "2027-11-05T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934488,
+    "show": "best-of-2027",
+    "start": "2027-11-06T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934489,
+    "show": "best-of-2027",
+    "start": "2027-11-07T15:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934490,
+    "show": "best-of-2027",
+    "start": "2027-11-12T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934493,
+    "show": "best-of-2027",
+    "start": "2027-11-13T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934496,
+    "show": "best-of-2027",
+    "start": "2027-11-14T15:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934494,
+    "show": "best-of-2027",
+    "start": "2027-11-19T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934495,
+    "show": "best-of-2027",
+    "start": "2027-11-20T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934392,
+    "show": "burt-bacharach",
+    "start": "2027-01-22T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934440,
+    "show": "burt-bacharach",
+    "start": "2027-01-23T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934441,
+    "show": "burt-bacharach",
+    "start": "2027-01-29T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934442,
+    "show": "burt-bacharach",
+    "start": "2027-01-30T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934443,
+    "show": "burt-bacharach",
+    "start": "2027-02-06T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934444,
+    "show": "burt-bacharach",
+    "start": "2027-02-07T15:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934445,
+    "show": "burt-bacharach",
+    "start": "2027-02-12T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934446,
+    "show": "burt-bacharach",
+    "start": "2027-02-13T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934463,
+    "show": "country-on-the-beach",
+    "start": "2027-07-02T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934464,
+    "show": "country-on-the-beach",
+    "start": "2027-07-03T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934465,
+    "show": "country-on-the-beach",
+    "start": "2027-07-10T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934466,
+    "show": "country-on-the-beach",
+    "start": "2027-07-11T15:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934467,
+    "show": "country-on-the-beach",
+    "start": "2027-07-17T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934468,
+    "show": "country-on-the-beach",
+    "start": "2027-07-18T15:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934469,
+    "show": "country-on-the-beach",
+    "start": "2027-07-23T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934470,
+    "show": "country-on-the-beach",
+    "start": "2027-07-24T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934424,
+    "show": "decades-flashback",
+    "start": "2027-04-10T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934433,
+    "show": "decades-flashback",
+    "start": "2027-04-11T13:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934434,
+    "show": "decades-flashback",
+    "start": "2027-04-16T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934435,
+    "show": "decades-flashback",
+    "start": "2027-04-17T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934436,
+    "show": "decades-flashback",
+    "start": "2027-04-23T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934437,
+    "show": "decades-flashback",
+    "start": "2027-04-24T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934438,
+    "show": "decades-flashback",
+    "start": "2027-05-01T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934439,
+    "show": "decades-flashback",
+    "start": "2027-05-02T13:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934447,
+    "show": "doobie-brothers-and-three-dog-night",
+    "start": "2027-02-26T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934448,
+    "show": "doobie-brothers-and-three-dog-night",
+    "start": "2027-02-27T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934449,
+    "show": "doobie-brothers-and-three-dog-night",
+    "start": "2027-03-05T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934450,
+    "show": "doobie-brothers-and-three-dog-night",
+    "start": "2027-03-06T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934451,
+    "show": "doobie-brothers-and-three-dog-night",
+    "start": "2027-03-13T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934452,
+    "show": "doobie-brothers-and-three-dog-night",
+    "start": "2027-03-14T15:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934453,
+    "show": "doobie-brothers-and-three-dog-night",
+    "start": "2027-03-19T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934454,
+    "show": "doobie-brothers-and-three-dog-night",
+    "start": "2027-03-20T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934455,
+    "show": "huey-lewis-and-hall-and-oates",
+    "start": "2027-05-28T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934456,
+    "show": "huey-lewis-and-hall-and-oates",
+    "start": "2027-05-29T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934457,
+    "show": "huey-lewis-and-hall-and-oates",
+    "start": "2027-06-05T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934458,
+    "show": "huey-lewis-and-hall-and-oates",
+    "start": "2027-06-06T15:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934459,
+    "show": "huey-lewis-and-hall-and-oates",
+    "start": "2027-06-11T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934460,
+    "show": "huey-lewis-and-hall-and-oates",
+    "start": "2027-06-12T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934461,
+    "show": "huey-lewis-and-hall-and-oates",
+    "start": "2027-06-18T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934462,
+    "show": "huey-lewis-and-hall-and-oates",
+    "start": "2027-06-19T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934471,
+    "show": "jackson-john-and-linda",
+    "start": "2027-08-06T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934472,
+    "show": "jackson-john-and-linda",
+    "start": "2027-08-07T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934473,
+    "show": "jackson-john-and-linda",
+    "start": "2027-08-14T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934474,
+    "show": "jackson-john-and-linda",
+    "start": "2027-08-15T15:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934475,
+    "show": "jackson-john-and-linda",
+    "start": "2027-08-20T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934476,
+    "show": "jackson-john-and-linda",
+    "start": "2027-08-21T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934477,
+    "show": "jackson-john-and-linda",
+    "start": "2027-08-27T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934478,
+    "show": "jackson-john-and-linda",
+    "start": "2027-08-28T18:00",
     "status": "on-sale"
   },
   {
@@ -88,5 +424,53 @@
     "show": "lionel-and-the-commodores",
     "start": "2026-10-24T18:00",
     "status": "low"
+  },
+  {
+    "id": 934479,
+    "show": "paul-mccartney-and-wings",
+    "start": "2027-10-08T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934480,
+    "show": "paul-mccartney-and-wings",
+    "start": "2027-10-09T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934481,
+    "show": "paul-mccartney-and-wings",
+    "start": "2027-10-15T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934482,
+    "show": "paul-mccartney-and-wings",
+    "start": "2027-10-16T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934483,
+    "show": "paul-mccartney-and-wings",
+    "start": "2027-10-17T15:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934484,
+    "show": "paul-mccartney-and-wings",
+    "start": "2027-10-22T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934485,
+    "show": "paul-mccartney-and-wings",
+    "start": "2027-10-23T18:00",
+    "status": "on-sale"
+  },
+  {
+    "id": 934486,
+    "show": "paul-mccartney-and-wings",
+    "start": "2027-10-24T15:00",
+    "status": "on-sale"
   }
 ]
