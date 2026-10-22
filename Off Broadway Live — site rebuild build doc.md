@@ -190,7 +190,7 @@ Every page shares `Base.astro`: header (logo, nav, Get Tickets button), marquee 
 | Home | `/` | Hero for the next show (wide art, title, next date, countdown, Get Tickets). "Now playing and coming up" poster cards from `currentShows()`. "This weekend" strip of the next three performances. How a night works: three steps (doors and dinner, drinks and dessert, the show). Six-photo gallery teaser. Season tickets call-out. Email signup. |
 | Show | `/shows/[slug]/` | Hero with wide art and `--accent`. Blurb. Date list (section 6). Pricing with seat map. That show's menu. Doors and age rules. Add-to-calendar. Other current shows. |
 | ENCORE Supper Club | `/encore-supper-club/` | What it is. Current Encore shows as cards. Standard pricing with seat map. Friday/Saturday vs Sunday snack-board explanation. Policy line. |
-| Season Tickets | `/season-tickets/` | On-sale headline. Four package cards in a row (Bronze, Silver, Gold, Platinum) using one card component with a metal-toned top edge. Benefits from the FAQ. Call the box office button (`tel:` link). |
+| Season Tickets | `/season-tickets/` | On-sale headline. Four package cards in a row (Bronze, Silver, Gold, Platinum) using one card component with a metal-toned top edge. Benefits copy from `season.json`. Call the box office button (`tel:` link). |
 | Dinner Menus | `/menus/` | Chef credit. One paper card per current show's menu, with anchors so show pages can link in. |
 | Media | `/media/` | Responsive photo grid with lightbox, keyboard and swipe support, lazy loading. |
 | Contact | `/contact/` | Address, phone, email, embedded map, directions link, free-parking note, email signup, About Us copy with venue photo. |

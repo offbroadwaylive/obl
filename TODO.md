@@ -5,8 +5,6 @@ This file is generated: run `npm run check:todo` after editing a TODO.
 
 | Open item | File | Note |
 | --- | --- | --- |
-| 1 | `src/data/season.json:15` | TODO(open item 1): Platinum 2027 from price, and whether it is 8 shows or 8 or 9. Shows "Call for pricing" until Steve confirms. |
-| 2 | `src/data/season.json:8` | TODO(open item 2): confirm what the asterisk on the season prices refers to. The footnote above is a placeholder. |
 | 3 | `src/data/faqs.json:41` | TODO(open item 3): the year is stale (2025). Text kept as on the live site until Steve updates it. |
 | 4 | `src/data/faqs.json:15` | TODO(open item 4): DECADES, GRACELAND and Chicken Fried Gospel are not on sale now; kept under an "Other shows" sub-heading until Steve confirms. |
 | 7 | `src/data/site.json:39` | TODO(open item 7): confirm whether each listed time is doors or curtain. Every time is labelled Doors, as the current site does. |
