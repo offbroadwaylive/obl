@@ -2,7 +2,6 @@
 import Base from '../layouts/Base.astro';
 import PageIntro from '../components/PageIntro.astro';
 import Img from '../components/Img.astro';
-import SignupForm from '../components/SignupForm.astro';
 import site from '../data/site.json';
 import { directionsUrl, mapEmbedUrl, mapsSearchUrl } from '../lib/site';
 import { localBusiness } from '../lib/structured';
@@ -45,10 +44,6 @@ import { localBusiness } from '../lib/structured';
     <div class="about__photo">
       <Img src="venue/end-of-show.jpg" alt="Off Broadway Live venue photo" label="Venue photo coming soon" widths={[600, 1200]} sizes="(min-width: 900px) 480px, 100vw" />
     </div>
-  </section>
-
-  <section class="section container reveal">
-    <SignupForm source="contact" variant="full" id="contact-signup" />
   </section>
 </Base>
 

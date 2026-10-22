@@ -149,7 +149,7 @@ google/          reference copies of the Apps Scripts (never deployed from here)
 docs/            pages for Steve (sheet editing) and Garry (sheet, token, signups)
 ```
 
-**Email signup.** The footer, Contact page and one-time slide-in all use `SignupForm.astro`, which posts to the Apps Script web app in `site.json` `signup.action`. See [Sheet publishing and email signups](docs/sheet-publishing-and-signups.md#email-signups) for the `mode` setting and the one live test still to do.
+**Email signup.** The footer and the one-time slide-in both use `SignupForm.astro`, which posts to the Apps Script web app in `site.json` `signup.action`. See [Sheet publishing and email signups](docs/sheet-publishing-and-signups.md#email-signups) for the `mode` setting and the one live test still to do.
 
 **Images.** `scripts/fetch-assets.sh` is a one-time import of the logo, show art, venue photos and gallery from Wix. Run it from a machine that can reach `static.wixstatic.com`, then commit `src/assets/images`. Images live in `src/assets` rather than `public/` so Astro's image pipeline can resize them to 800/1600px WebP. Anything missing renders as a labelled placeholder.
 

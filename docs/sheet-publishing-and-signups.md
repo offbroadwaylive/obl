@@ -77,7 +77,7 @@ Edit the repo first, then the sheet:
 
 ## Email signups
 
-- Each submission adds a row: Submission Time, Email, Phone, Name (First & Last), Source (`slide-in`, `footer` or `contact`).
+- Each submission adds a row: Submission Time, Email, Phone, Name (First & Last), Source (`slide-in` or `footer`; rows from before October 2026 may also say `contact`).
 - The Apps Script drops honeypot hits, rejects short names and malformed emails, caps lengths, and stores values that start with `=`, `+`, `-` or `@` as text, so they can't run as formulas in Sheets or Excel.
 - It doesn't rate-limit or de-duplicate. The endpoint URL is public in the site's source, so junk rows are possible. If that becomes a problem, add a Cloudflare Turnstile check. Steve de-duplicates when he imports, as before.
 - **Reading the reply (`signup.mode` in `site.json`).** The form posts normally and reads the script's `{ "ok": true }` reply (`"mode": "cors"`). This couldn't be tested against the live script from the build environment, so test it once after deploying: sign up from the footer.
