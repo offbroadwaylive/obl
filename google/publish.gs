@@ -3,14 +3,14 @@
 // REFERENCE COPY ONLY. This file is never deployed from the repo. Garry pastes
 // it into the content spreadsheet's Apps Script editor. It needs a script
 // property named GITHUB_TOKEN (Project Settings, Script properties) holding a
-// fine-grained token for dogmaticvox/offbroadwaylive with Actions: Read and
+// fine-grained token for offbroadwaylive/obl with Actions: Read and
 // write. The token never goes into the repo.
 //
 // It sends the Menus and Dates tabs to .github/workflows/publish-sheet.yml,
 // which validates them (scripts/apply-sheet.mjs), commits the generated files
 // and deploys the site.
 
-const REPO = 'dogmaticvox/offbroadwaylive';
+const REPO = 'offbroadwaylive/obl';
 const WORKFLOW = 'publish-sheet.yml';
 const REF = 'main';
 const STATUSES = ['on sale', 'few tickets remain', 'sold out'];
