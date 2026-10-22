@@ -14,6 +14,5 @@ This file is generated: run `npm run check:todo` after editing a TODO.
 | 11 | `src/components/Header.astro:12` | TODO(open item 11): pages under the Wix "More" menu were not readable and are not built; add links here once confirmed. |
 | – | `src/components/SignupForm.astro:73` | TODO: confirm wording with Steve |
 | – | `src/data/gallery.json:2` | TODO: write real alt text for each photo after viewing it, and add captions (show names) when Steve supplies them. Alt text is a neutral placeholder until then. |
-| – | `src/data/shows.json:64` | TODO: no square Christmas poster yet. Steve to supply one, or crop from shows/christmas-wide.png. A placeholder shows until then. |
 | – | `src/data/site.json:18` | TODO: map coordinates are not on the current site. The map and directions link use the street address until coordinates are confirmed. |
 | – | `src/data/site.json:33` | TODO: the reply mode could not be tested against the live script from the build environment. After deploying, sign up once from the footer and follow the Email signups steps in docs/sheet-publishing-and-signups.md. |
