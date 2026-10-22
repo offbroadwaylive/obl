@@ -3,11 +3,8 @@ import Base from '../layouts/Base.astro';
 import PageIntro from '../components/PageIntro.astro';
 import Ribbon from '../components/Ribbon.astro';
 import season from '../data/season.json';
-import faqs from '../data/faqs.json';
 import site from '../data/site.json';
 import { markdown } from '../lib/markdown';
-
-const benefits = faqs.items.find((f) => f.q.startsWith('Do you offer Season Tickets'));
 ---
 
 <Base title={`${season.year} Season Tickets`} description={`${season.headline}. ${season.subline}`}>
@@ -45,7 +42,7 @@ const benefits = faqs.items.find((f) => f.q.startsWith('Do you offer Season Tick
     <div class="benefits panel">
       <div>
         <h2 id="benefits-h">Why season tickets?</h2>
-        {benefits && <div set:html={markdown(benefits.a)} />}
+        <div set:html={markdown(season.benefits)} />
       </div>
       <div class="benefits__cta">
         <p class="label">Call the box office</p>
