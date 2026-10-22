@@ -1,6 +1,6 @@
 ---
-// The mailing-list signup form, used in three places: the one-time slide-in,
-// the footer on every page, and the Contact page. Fields, validation and the
+// The mailing-list signup form, used in two places: the one-time slide-in
+// and the footer on every page. Fields, validation and the
 // submit code exist only here.
 //
 // Submissions go to the Google Apps Script web app in site.json signup.action
@@ -10,8 +10,8 @@ import site from '../data/site.json';
 
 interface Props {
   /** Written to the sheet's Source column. */
-  source: 'slide-in' | 'footer' | 'contact';
-  /** full: Contact panel. compact: single row in the footer. card: the slide-in. */
+  source: 'slide-in' | 'footer';
+  /** full: wide panel (unused since the Contact page dropped its copy). compact: single row in the footer. card: the slide-in. */
   variant?: 'full' | 'compact' | 'card';
   /** Unique per page; prefixes every element id. */
   id: string;
