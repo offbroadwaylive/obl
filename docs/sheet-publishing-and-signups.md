@@ -52,7 +52,7 @@ The token goes only into the script properties. Never put it in the repo, the si
 - Open **Actions → Publish sheet**, then the red run. The summary lists each problem with its tab and row, for example `Dates row 7: Status "" must be On Sale, Few Tickets Remain or Sold Out.` The same lines are in the **Validate and apply the sheet** step's log.
 - Fix the sheet and click Publish now again.
 
-The checks: every required column is present; every Show matches a show title in `shows.json`; every Date reads `yyyy-mm-dd hh:mm` and matches a performance of that show; Status is one of the three values; a Performance ID is digits only and isn't used twice; and no menu description is filled in without its title. Rows for past dates are ignored. A performance with no row only produces a warning, and the website keeps its status and id.
+The checks: every required column is present; every Show matches a show title in `shows.json` (or its `sheetName`, for a show renamed on the website while the sheet keeps the old name); every Date reads `yyyy-mm-dd hh:mm` and matches a performance of that show; Status is one of the three values; a Performance ID is digits only and isn't used twice; and no menu description is filled in without its title. Rows for past dates are ignored. A performance with no row only produces a warning, and the website keeps its status and id.
 
 To test a payload without the sheet, save it as a file and run `npm run apply-sheet -- path/to/payload.json`. Fixtures are in `tests/fixtures/sheet/`. Revert the generated files afterwards with `git checkout -- src/data/generated`.
 

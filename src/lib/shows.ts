@@ -23,6 +23,8 @@ export interface Performance {
 export interface Show {
   slug: string;
   title: string;
+  /** Show name in the Google Sheet, when it differs from the title visitors see. */
+  sheetName?: string;
   series: 'encore' | 'holiday' | 'theatrical' | 'special';
   kicker: string;
   blurb: string;

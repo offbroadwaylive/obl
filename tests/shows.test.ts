@@ -101,7 +101,7 @@ describe('currentShows', () => {
       'doobie-brothers-and-three-dog-night',
       'decades-flashback',
       'huey-lewis-and-hall-and-oates',
-      'country-on-the-beach',
+      'country-beach-party',
       'jackson-john-and-linda',
       'paul-mccartney-and-wings',
       'best-of-2027',
