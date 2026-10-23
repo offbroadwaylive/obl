@@ -79,6 +79,14 @@ describe('validate: each failure from the sheet doc fails the run and names the 
 describe('validate: details', () => {
   const base = () => JSON.parse(fixture('clean'));
 
+  it('matches a renamed show by the old name it keeps in the sheet', () => {
+    const p = base();
+    p.dates.push({ _row: 99, Show: 'Country on the Beach', Date: '2027-07-02 18:00', Status: 'Sold Out', 'Performance ID': '934463' });
+    const { errors, dates } = validate(p, shows, TODAY);
+    expect(errors).toEqual([]);
+    expect(dates).toContainEqual({ show: 'country-beach-party', start: '2027-07-02T18:00', status: 'sold-out', id: 934463 });
+  });
+
   it('warns, but does not fail, when a performance has no row', () => {
     const p = base();
     p.dates = p.dates.filter((d: { Date: string }) => d.Date !== '2026-11-07 18:00');

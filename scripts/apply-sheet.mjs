@@ -89,7 +89,8 @@ function checkShape(tab, rows, headers, errors) {
 export function validate(payload, shows, today) {
   const errors = [];
   const warnings = [];
-  const byTitle = new Map(shows.map((s) => [s.title, s]));
+  // A show can keep an older name in the sheet (sheetName) after its title changes.
+  const byTitle = new Map(shows.flatMap((s) => [[s.title, s], ...(s.sheetName ? [[s.sheetName, s]] : [])]));
 
   // ---- Menus tab
   const menus = {};
