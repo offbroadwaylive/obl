@@ -33,6 +33,10 @@ const withMenus = currentShows().flatMap((show) => {
         <p class="muted">Menus for upcoming shows will be posted soon.</p>
       )
     }
+
+    <div class="coming-soon">
+      <h2 class="coming-soon__title">2027 Menus Coming Soon</h2>
+    </div>
   </section>
 </Base>
 
@@ -40,4 +44,6 @@ const withMenus = currentShows().flatMap((show) => {
   .menus { display: grid; gap: 40px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); align-items: start; }
   .menus__show { font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; text-align: center; }
   .menus__show a { color: var(--accent); }
+  .coming-soon { margin-top: 56px; padding: 40px 24px; text-align: center; border: 1px dashed var(--gold-dim); border-radius: var(--radius); }
+  .coming-soon__title { margin: 0; color: var(--gold); }
 </style>

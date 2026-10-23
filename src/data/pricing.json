@@ -42,7 +42,7 @@
   },
   "encore-2027": {
     "label": "ENCORE Supper Club 2027",
-    "feeNote": "plus $8 per seat food & beverage tax",
+    "feeNote": "Includes $8 per seat food & beverage tax",
     "seatMap": true,
     "tiers": [
       { "key": "main",  "name": "Main Floor",             "seats": 1, "price": 109, "unit": "per seat" },
@@ -55,7 +55,7 @@
   },
   "encore-best-of-2027": {
     "label": "Best Of '27",
-    "feeNote": "plus $8 per seat food & beverage tax",
+    "feeNote": "Includes $8 per seat food & beverage tax",
     "seatMap": true,
     "tiers": [
       { "key": "main",  "name": "Main Floor",             "seats": 1, "price": 119, "unit": "per seat" },
@@ -68,7 +68,7 @@
   },
   "decades-flashback": {
     "label": "DECADES: Flashback",
-    "feeNote": "plus $8 per seat food & beverage tax",
+    "feeNote": "Includes $8 per seat food & beverage tax",
     "seatMap": true,
     "tiers": [
       { "key": "main",  "name": "Main Floor",             "seats": 1, "price": 89,  "unit": "per seat" },
