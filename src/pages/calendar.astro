@@ -38,7 +38,7 @@ const shortTime = (t: string) => t.replace(':00', '');
 <Base title="Calendar" description="Every upcoming performance at Off Broadway Live in one place, with tickets for each date.">
   <PageIntro kicker="Every date, one place" title="Show Calendar" lede="Pick a show to filter, then tap any date for tickets." />
 
-  <section class="section container" data-cal>
+  <section class="section container" data-cal data-today={today}>
     <div class="filters" role="group" aria-label="Filter by show" data-filters hidden>
       <button type="button" class="filter" aria-pressed="true" data-filter="all">All shows</button>
       {
@@ -131,7 +131,20 @@ const shortTime = (t: string) => t.replace(':00', '');
       const label = buttons.find((b) => b.dataset.filter === slug)?.textContent?.trim();
       status.textContent = `Showing ${shown} ${shown === 1 ? 'date' : 'dates'} for ${label}.`;
     };
-    buttons.forEach((b) => b.addEventListener('click', () => apply(b.dataset.filter!)));
+    // Picking a show jumps to the month of its next date, so nobody has to scroll to find it.
+    const today = root.dataset.today!;
+    const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const jumpTo = (slug: string) => {
+      const chips = [...root.querySelectorAll<HTMLElement>(`.chip[data-show="${slug}"]`)];
+      const next = chips.find((c) => c.dataset.day! >= today) ?? chips[0];
+      next?.closest('[data-month]')?.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    };
+    buttons.forEach((b) =>
+      b.addEventListener('click', () => {
+        apply(b.dataset.filter!);
+        if (b.dataset.filter !== 'all') jumpTo(b.dataset.filter!);
+      }),
+    );
   }
 </script>
 
