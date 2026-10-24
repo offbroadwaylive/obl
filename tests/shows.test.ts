@@ -36,12 +36,15 @@ describe('data', () => {
     for (const show of allShows) expect(() => priceSetFor(show)).not.toThrow();
   });
 
-  it('2027 dates before 6pm are snack-board shows (lunch for Decades), 6pm dates are dinner shows', () => {
+  it('2027 dates before 6pm are snack-board shows (lunch for Decades and Bacharach Feb 13), 6pm dates are dinner shows', () => {
     const season = allShows.filter((s) => s.performances[0].start >= '2027');
     expect(season).toHaveLength(8);
+    const lunchIds = new Set([936277]);
     for (const s of season) {
       const matinee = s.slug === 'decades-flashback' ? 'lunch' : 'snack-board';
-      for (const p of s.performances) expect(p.format).toBe(p.start.slice(11) === '18:00' ? 'dinner' : matinee);
+      for (const p of s.performances) {
+        expect(p.format).toBe(p.start.slice(11) === '18:00' ? 'dinner' : lunchIds.has(p.id) ? 'lunch' : matinee);
+      }
     }
   });
 
@@ -157,6 +160,14 @@ describe('pricing', () => {
     const set = priceSetFor(show);
     expect(set.tiers.map((t) => tierPrice(set, t, 'dinner'))).toEqual([109, 234, 468, 476]);
     expect(set.tiers.map((t) => tierPrice(set, t, 'snack-board'))).toEqual([94, 204, 408, 416]);
+  });
+
+  it('the Bacharach Feb 13 lunch show replaces Feb 12 and is priced like a snack board', () => {
+    const show = showBySlug('burt-bacharach')!;
+    expect(show.performances.find((p) => p.start === '2027-02-12T18:00')).toBeUndefined();
+    expect(show.performances.find((p) => p.start === '2027-02-13T13:00')).toMatchObject({ id: 936277, format: 'lunch' });
+    const set = priceSetFor(show);
+    expect(set.tiers.map((t) => tierPrice(set, t, 'lunch'))).toEqual([94, 204, 408, 416]);
   });
 
   it("Best Of '27 tiers match the 2027 price sheet, dinner and snack board", () => {
