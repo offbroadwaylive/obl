@@ -102,7 +102,7 @@
       { "start": "2027-01-30T18:00", "id": 934442, "format": "dinner", "status": "on-sale" },
       { "start": "2027-02-06T18:00", "id": 934443, "format": "dinner", "status": "on-sale" },
       { "start": "2027-02-07T15:00", "id": 934444, "format": "snack-board", "status": "on-sale" },
-      { "start": "2027-02-12T18:00", "id": 934445, "format": "dinner", "status": "on-sale" },
+      { "start": "2027-02-13T13:00", "id": 936277, "format": "lunch", "status": "on-sale" },
       { "start": "2027-02-13T18:00", "id": 934446, "format": "dinner", "status": "on-sale" }
     ]
   },

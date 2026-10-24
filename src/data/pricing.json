@@ -50,7 +50,7 @@
       { "key": "bx",    "name": "Bx3, Bx5-Bx9 tables",    "seats": 4, "price": 468, "unit": "table for 4" },
       { "key": "booth", "name": "Elevated Booth (Bx4)",   "seats": 4, "price": 476, "unit": "table for 4" }
     ],
-    "adjustments": [ { "format": "snack-board", "perSeat": -15 } ],
+    "adjustments": [ { "format": "snack-board", "perSeat": -15 }, { "format": "lunch", "perSeat": -15 } ],
     "notes": [ "Bx3 and Bx5-Bx9 tables include 4 tickets with double sized tables." ]
   },
   "encore-best-of-2027": {
