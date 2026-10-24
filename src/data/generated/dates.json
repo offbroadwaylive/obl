@@ -39,7 +39,7 @@
     "id": 848435,
     "show": "best-of-2026",
     "start": "2026-11-07T18:00",
-    "status": "low"
+    "status": "sold-out"
   },
   {
     "id": 848436,
@@ -412,12 +412,6 @@
     "show": "jackson-john-and-linda",
     "start": "2027-08-28T18:00",
     "status": "on-sale"
-  },
-  {
-    "id": 849903,
-    "show": "lionel-and-the-commodores",
-    "start": "2026-10-23T18:00",
-    "status": "low"
   },
   {
     "id": 849904,
