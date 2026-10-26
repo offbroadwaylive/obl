@@ -3,31 +3,31 @@
     "id": 927602,
     "show": "a-big-band-christmas",
     "start": "2026-12-10T18:00",
-    "status": "on-sale"
+    "status": "low"
   },
   {
     "id": 927603,
     "show": "a-big-band-christmas",
     "start": "2026-12-11T18:00",
-    "status": "on-sale"
+    "status": "sold-out"
   },
   {
     "id": 927604,
     "show": "a-big-band-christmas",
     "start": "2026-12-12T14:00",
-    "status": "on-sale"
+    "status": "low"
   },
   {
     "id": 927613,
     "show": "a-big-band-christmas",
     "start": "2026-12-12T18:00",
-    "status": "on-sale"
+    "status": "low"
   },
   {
     "id": 927607,
     "show": "a-big-band-christmas",
     "start": "2026-12-13T14:00",
-    "status": "on-sale"
+    "status": "sold-out"
   },
   {
     "id": 848434,
@@ -75,7 +75,7 @@
     "id": 848441,
     "show": "best-of-2026",
     "start": "2026-11-21T18:00",
-    "status": "low"
+    "status": "sold-out"
   },
   {
     "id": 934487,
@@ -412,12 +412,6 @@
     "show": "jackson-john-and-linda",
     "start": "2027-08-28T18:00",
     "status": "on-sale"
-  },
-  {
-    "id": 849904,
-    "show": "lionel-and-the-commodores",
-    "start": "2026-10-24T18:00",
-    "status": "low"
   },
   {
     "id": 934479,
