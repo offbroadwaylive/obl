@@ -76,7 +76,10 @@
 
 /* ---------- Page frame ---------- */
 
-html { background: var(--bg); }
+/* Bootstrap 3 (inside Arts People's public.min.css) sets html to 10px, which
+   would shrink every rem in this theme to 62.5%. Bootstrap 3 sizes in px, so
+   restoring the browser default changes nothing of theirs. */
+html { background: var(--bg); font-size: 100%; }
 body {
   margin: 0;
   background: var(--bg) !important;
@@ -284,7 +287,53 @@ table.page_public > tbody > tr > td {
 .obl-card h3 { font-size: 1.3rem; }
 .obl-card h4 { font-size: 1.15rem; }
 .obl-card p { margin: 0 0 0.9em; }
-.obl-card hr { border: 0; border-top: 1px solid var(--card-line); margin: 20px 0; }
+.obl-card hr { height: 0; background: none; border: 0; border-top: 1px solid var(--card-line); margin: 20px 0; }
+
+/* Arts People's sheet sets .normal and .content to 18px black */
+.obl-card .normal, .obl-card .content { font-size: inherit; color: inherit; }
+
+/* Status banners */
+.obl-card .message, .obl-card .error {
+  font-size: 1.05rem;
+  padding: 10px 14px;
+  border-radius: var(--radius);
+}
+.obl-card .message { background: var(--bg); color: var(--text); border-left: 4px solid var(--gold); }
+.obl-card .error { background: var(--ink-red); color: #fff; }
+
+/* Sidebars Arts People marks with a black rule at left */
+.obl-card #TBL180, .obl-card #TBL2822, .obl-card #TBL5776, .obl-card #TBL3681 { border-left-color: var(--gold); padding-left: 14px; }
+
+/* Checkout step indicator (from 1078OffBroadwayLiive_CART.css) */
+.obl-card .progress_bar { color: var(--paper-muted); }
+.obl-card .curr_shopping_cart,
+.obl-card .inactive_shopping_cart {
+  display: inline-block;
+  padding: 4px 10px;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-radius: var(--radius);
+}
+.obl-card .curr_shopping_cart { color: var(--ink-red); border: 2px solid var(--ink-red); }
+.obl-card .inactive_shopping_cart, .obl-card .active_shopping_cart, .obl-card .label_shopping_cart { color: var(--paper-muted); }
+
+/* Seat map: hands off. Arts People's mobile seat picker pins the map below an
+   88px bar; a sticky site header would sit over it, so let the header scroll. */
+/* Pin the seat map to the font, size, color and line height it has today, so the
+   card's typography cannot shift seat sizes or label fit. */
+.obl-card .seatmap-div,
+.obl-card .seatmap-container,
+.obl-card .seatmap-legend {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  line-height: 1.42857143;
+  color: #000;
+}
+body:has(.ap-mobile-page) .obl-header,
+body:has(.seatmap-container) .obl-header { position: static; }
 
 /* Arts People's prompts ("Please select a performance") */
 .obl-card .emph {
@@ -310,31 +359,52 @@ table.page_public > tbody > tr > td {
   margin: 0 8px 16px 0;
 }
 
-/* Data tables (cart / order summary) */
-.obl-card .table { background: transparent; margin-bottom: 16px; }
-.obl-card .table > thead > tr > th {
+/* Data tables (cart / order summary). Use table.table only: 1078-fbl-2019-mk.css
+   gives every .table a black, white, 10px, centered look meant for the dining-table
+   labels on the seat map, and those labels must keep it. */
+.obl-card table.table {
+  background: transparent;
+  color: var(--paper-ink);
+  font-size: 0.95rem;
+  text-align: left;
+  margin-bottom: 16px;
+}
+.obl-card table.table > tbody > tr > td,
+.obl-card table.table > thead > tr > th,
+.obl-card table.table-bordered,
+.obl-card table.table-bordered > tbody > tr > td,
+.obl-card table.table-bordered > thead > tr > th { border-color: var(--card-line); }
+.obl-card table.table-striped > tbody > tr:nth-of-type(odd) { background: rgba(26, 21, 18, 0.04); }
+
+/* Header cells. Arts People's sheet makes these black with white text (and white
+   required-field asterisks), so keep them dark and give them the marquee look. */
+.obl-card table.table > thead > tr > th,
+.obl-card .table-bordered th,
+.obl-card .htable th,
+.obl-card #membership_level_table th,
+.obl-card #membership_table th {
+  background: var(--bg);
+  color: var(--text);
   font-family: var(--font-display);
   font-weight: 400;
   font-size: 0.85rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--paper-muted);
+  border-color: var(--bg);
   border-bottom: 2px solid var(--gold);
 }
-.obl-card .table > tbody > tr > td,
-.obl-card .table > thead > tr > th,
-.obl-card .table-bordered,
-.obl-card .table-bordered > tbody > tr > td,
-.obl-card .table-bordered > thead > tr > th { border-color: var(--card-line); }
-.obl-card .table-striped > tbody > tr:nth-of-type(odd) { background: rgba(26, 21, 18, 0.04); }
+.obl-card .table-bordered .required_asterisk { color: var(--gold); }
+.obl-card .headtext { color: var(--text); font-family: var(--font-display); font-weight: 400; letter-spacing: 0.06em; }
 .obl-card .pp-order-summary { width: 100% !important; max-width: 560px; }
 .obl-card #sum_total_row strong { font-family: var(--font-serif); font-weight: 700; font-size: 1.2rem; }
 
 /* Buttons Arts People renders */
 .obl-card .btn,
 .obl-card input[type='submit'],
-.obl-card input[type='button'],
-.obl-card button {
+.obl-card #Abuy_tickets,
+.obl-card #Aitem_select,
+.obl-card #mem_select a,
+.obl-card #Apass_select {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -362,7 +432,8 @@ table.page_public > tbody > tr > td {
 }
 .obl-card .btn:hover, .obl-card .btn:focus-visible,
 .obl-card input[type='submit']:hover, .obl-card input[type='submit']:focus-visible,
-.obl-card input[type='button']:hover, .obl-card button:hover {
+.obl-card #Abuy_tickets:hover, .obl-card #Aitem_select:hover,
+.obl-card #mem_select a:hover, .obl-card #Apass_select:hover {
   color: #fff;
   background: var(--neon-fill);
   border-color: var(--neon-fill);
@@ -399,13 +470,13 @@ table.page_public > tbody > tr > td {
 
 /* Form fields */
 .obl-card .form-control,
-.obl-card input[type='text'],
-.obl-card input[type='email'],
-.obl-card input[type='password'],
-.obl-card input[type='tel'],
-.obl-card input[type='number'],
-.obl-card select,
-.obl-card textarea {
+.obl-card input[type='text']:not(.seatmap-div *, .seatmap *),
+.obl-card input[type='email']:not(.seatmap-div *, .seatmap *),
+.obl-card input[type='password']:not(.seatmap-div *, .seatmap *),
+.obl-card input[type='tel']:not(.seatmap-div *, .seatmap *),
+.obl-card input[type='number']:not(.seatmap-div *, .seatmap *),
+.obl-card select:not(.seatmap-div *, .seatmap *),
+.obl-card textarea:not(.seatmap-div *, .seatmap *) {
   max-width: 100%;
   min-height: var(--tap);
   padding: 8px 12px;
@@ -418,9 +489,9 @@ table.page_public > tbody > tr > td {
   box-shadow: none;
 }
 .obl-card .form-control:focus,
-.obl-card input:focus,
-.obl-card select:focus,
-.obl-card textarea:focus {
+.obl-card input:not([type='submit'], [type='checkbox'], [type='radio']):not(.seatmap-div *, .seatmap *):focus,
+.obl-card select:not(.seatmap-div *, .seatmap *):focus,
+.obl-card textarea:not(.seatmap-div *, .seatmap *):focus {
   outline: 3px solid var(--gold);
   outline-offset: 1px;
   border-color: var(--paper-ink);
@@ -436,6 +507,13 @@ table.page_public > tbody > tr > td {
 .obl-card #TBL2885 > tbody > tr > td:first-child { padding-left: 0; }
 .obl-card #TBL2885 > tbody > tr > td:last-child { padding-right: 0; }
 
+/* Wider description column (Arts People sets 33%) and a roomier cart column */
+@media (min-width: 801px) {
+  .obl-card #TBL2885 > tbody > tr > td:first-child { width: 40% !important; }
+  .obl-card #TBLleft_side { min-width: 380px; }
+  .obl-card .well h1 { font-size: clamp(1.6rem, 1.2rem + 1vw, 2rem); }
+}
+
 /* ---------- Phones and small tablets: stack every layout table ---------- */
 
 @media (max-width: 800px) {
@@ -444,7 +522,8 @@ table.page_public > tbody > tr > td {
   .obl-card table.table_basic > tbody > tr,
   .obl-card table.table_basic > tbody > tr > td,
   .obl-card #TBL236, .obl-card #TBL236 > tbody, .obl-card #TBL236 > tbody > tr, .obl-card #TBL236 > tbody > tr > td,
-  .obl-card #TBL300, .obl-card #TBL300 > tbody, .obl-card #TBL300 > tbody > tr, .obl-card #TBL300 > tbody > tr > td {
+  .obl-card #TBL300, .obl-card #TBL300 > tbody, .obl-card #TBL300 > tbody > tr, .obl-card #TBL300 > tbody > tr > td,
+  .obl-card #TBL180, .obl-card #TBL3681, .obl-card #TBL5776 {
     display: block;
     width: auto !important;
   }

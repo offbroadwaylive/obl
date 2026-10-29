@@ -60,7 +60,15 @@ Descriptions typed in the visual editor carry inline fonts, colors and point siz
 
 ## Testing locally
 
-Arts People's own CSS cannot be fetched from the build environment, so local tests use Bootstrap 3.4.1 as a stand-in for `public.min.css`. That is close, but always do the live walk-through in step 5.
+Tests use saved copies of Arts People's real stylesheets (`public.min.css` = Bootstrap 3.4.1 plus Arts People rules, `1078-fbl-2019-mk.css`, `1078OffBroadwayLiive_CART.css`) loaded in the live order. Re-save them if Arts People changes its base CSS.
+
+Things in those sheets the theme has to work around:
+
+- Bootstrap sets `html { font-size: 10px }`. The theme resets it to 100% so `rem` sizes are correct; Bootstrap 3 itself sizes in px.
+- `1078-fbl-2019-mk.css` styles every `.table` black/white/10px for the seat-map table labels. The theme only touches `table.table` (cart and data tables).
+- The seat map contains plain `button`/`input`/`select` elements. The theme never styles bare form elements, and pins `.seatmap-div` to Arial 18px black. A seat-map guard test confirms zero computed-style changes on stand-in seat-map markup.
+- Buy buttons on listing pages are styled by ID (`#Abuy_tickets`, `#Aitem_select`, `#mem_select a`, `#Apass_select`); the theme overrides those IDs to the red ticket button.
+- Arts People's mobile seat picker pins the map 88px from the top; the site header stops being sticky on any page containing the seat map.
 
 ## Not covered yet
 
