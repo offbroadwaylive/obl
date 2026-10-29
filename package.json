@@ -5,11 +5,12 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "node scripts/build-ap-theme.mjs && astro build",
     "preview": "astro preview",
     "test": "vitest run",
     "check:todo": "node scripts/list-todos.mjs",
-    "apply-sheet": "node scripts/apply-sheet.mjs"
+    "apply-sheet": "node scripts/apply-sheet.mjs",
+    "build:ap": "node scripts/build-ap-theme.mjs"
   },
   "dependencies": {
     "astro": "^5.18.2"
