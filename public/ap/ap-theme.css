@@ -332,6 +332,28 @@ table.page_public > tbody > tr > td {
   line-height: 1.42857143;
   color: #000;
 }
+/* The seat map is a fixed grid (about 700px wide). On narrow screens it scrolls
+   sideways inside its own box instead of pushing the whole page wider. */
+/* Links around taken seats carry no text; keep Arts People's color anyway */
+.obl-card .seatmap-div a { color: #b5aaaa; }
+.obl-card .public-seat-map { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.obl-card .selected-seat-list { height: auto; min-height: 40px; display: flow-root; padding-bottom: 6px; background: var(--card-2); border-bottom-color: var(--card-line); border-radius: var(--radius) var(--radius) 0 0; }
+.obl-card .selected-seat-list .seat-controls .btn { margin-top: 0; margin-bottom: 0; }
+.obl-card .seat-count-h { line-height: var(--tap); font-family: var(--font-display); font-size: 1rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--paper-ink); }
+.obl-card .seat-count { color: var(--ink-red); }
+@media (max-width: 800px) {
+  .obl-card .selected-seat-list { min-width: 0; }
+  .obl-card .public-seat-map::before {
+    content: 'Swipe sideways to see the whole room \2192';
+    display: block;
+    margin-bottom: 6px;
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--paper-muted);
+  }
+}
 body:has(.ap-mobile-page) .obl-header,
 body:has(.seatmap-container) .obl-header { position: static; }
 
@@ -523,7 +545,10 @@ body:has(.seatmap-container) .obl-header { position: static; }
   .obl-card table.table_basic > tbody > tr > td,
   .obl-card #TBL236, .obl-card #TBL236 > tbody, .obl-card #TBL236 > tbody > tr, .obl-card #TBL236 > tbody > tr > td,
   .obl-card #TBL300, .obl-card #TBL300 > tbody, .obl-card #TBL300 > tbody > tr, .obl-card #TBL300 > tbody > tr > td,
-  .obl-card #TBL180, .obl-card #TBL3681, .obl-card #TBL5776 {
+  .obl-card #TBL180, .obl-card #TBL3681, .obl-card #TBL5776,
+  .obl-card table.content, .obl-card table.content > tbody, .obl-card table.content > tbody > tr, .obl-card table.content > tbody > tr > td,
+  .obl-card #TBL152, .obl-card #TBL152 > tbody, .obl-card #TBL152 > tbody > tr, .obl-card #TBL152 > tbody > tr > td,
+  .obl-card #TBL244, .obl-card #TBL244 > tbody, .obl-card #TBL244 > tbody > tr, .obl-card #TBL244 > tbody > tr > td {
     display: block;
     width: auto !important;
   }

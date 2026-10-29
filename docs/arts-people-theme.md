@@ -70,6 +70,12 @@ Things in those sheets the theme has to work around:
 - Buy buttons on listing pages are styled by ID (`#Abuy_tickets`, `#Aitem_select`, `#mem_select a`, `#Apass_select`); the theme overrides those IDs to the red ticket button.
 - Arts People's mobile seat picker pins the map 88px from the top; the site header stops being sticky on any page containing the seat map.
 
+## Seat map
+
+Tested on the real seat-selection page (page 148). A guard test compares every element inside the seat map and legend (595 elements) with the theme on and off: computed styles plus rendered size are identical at desktop width. On phones the only change is the row containers' width, because the map now scrolls sideways inside `.public-seat-map` (with a "Swipe sideways" hint) instead of widening the page. The "Seats Selected" bar grows to fit the taller button.
+
+Check on the live page: the "STAGE" label rendered as a single 20px cell locally, most likely because Arts People's script (which probably turns the map's `colspan` attributes into widths) doesn't run in the test copy. The theme does not touch it.
+
 ## Not covered yet
 
-Pages not yet captured and tested: a show with performances on sale (the performance list), the seat map, the payment step, and season-ticket (subscription) pages. Arts People's calendar and subscription style-sheet slots are unused; the theme covers those pages through the head link once their markup is checked.
+Pages not yet captured and tested: the performance (date) list where the Buy Tickets buttons appear, the payment step, and season-ticket (subscription) pages.
