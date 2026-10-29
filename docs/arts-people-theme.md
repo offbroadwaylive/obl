@@ -21,7 +21,7 @@ The site address in the snippets comes from `astro.config.mjs` (`site` + `base`)
 
 - **CSS changes:** nothing to re-paste. Deploy the site; GitHub Pages caches for about 10 minutes.
 - **Header/footer/head changes:** run `npm run build:ap` and paste the changed `ap-out/` file.
-- **Domain cutover:** after `astro.config.mjs` changes, run `npm run build:ap` and re-paste all three snippets (every link and the stylesheet URL change).
+- **Domain cutover:** after `astro.config.mjs` changes, run `npm run build:ap` and re-paste all three snippets (every link and the stylesheet URL change). To skip that, do the cutover first and paste snippets built for the domain: `AP_SITE=https://offbroadwaylive.com AP_OUT=ap-out-domain npm run build:ap`.
 
 ## The top section / footer pairing
 

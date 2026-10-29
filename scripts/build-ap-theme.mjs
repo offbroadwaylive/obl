@@ -11,6 +11,7 @@
 // head/top/footer once at that point; CSS changes never need a re-paste.
 //
 // Run: npm run build:ap   (also runs automatically before every build)
+// Custom domain snippets now: AP_SITE=https://offbroadwaylive.com AP_OUT=ap-out-domain npm run build:ap
 
 import { readFileSync, writeFileSync, mkdirSync, copyFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -24,7 +25,10 @@ const config = read('astro.config.mjs');
 const site = config.match(/site:\s*'([^']+)'/)?.[1];
 const base = config.match(/base:\s*'([^']*)'/)?.[1] ?? '';
 if (!site) throw new Error('Could not read site from astro.config.mjs');
-const SITE = (site + base).replace(/\/$/, '');
+// AP_SITE overrides the address (e.g. to build snippets for the custom domain
+// before astro.config.mjs changes); AP_OUT sends the snippets to another folder.
+const SITE = (process.env.AP_SITE || site + base).replace(/\/$/, '');
+const OUT = process.env.AP_OUT || join(root, 'ap-out');
 
 // Fonts: same faces the site self-hosts (src/lib/fonts.ts). The CSS sits in
 // /ap/, so ../fonts/ resolves to the site's font folder on any domain.
@@ -58,10 +62,10 @@ const nav = [
 
 const fill = (s) => s.replaceAll('{{NAV}}', nav).replaceAll('{{SITE}}', SITE);
 
-mkdirSync(join(root, 'ap-out'), { recursive: true });
+mkdirSync(OUT, { recursive: true });
 for (const name of ['head', 'top', 'footer']) {
-  writeFileSync(join(root, `ap-out/${name}.html`), fill(read(`src/ap/${name}.html`)));
+  writeFileSync(join(OUT, `${name}.html`), fill(read(`src/ap/${name}.html`)));
 }
-copyFileSync(join(root, 'src/ap/obl-logo.png'), join(root, 'ap-out/obl-logo.png'));
+copyFileSync(join(root, 'src/ap/obl-logo.png'), join(OUT, 'obl-logo.png'));
 
-console.log(`Arts People theme built for ${SITE}: public/ap/ap-theme.css, ap-out/{head,top,footer}.html`);
+console.log(`Arts People theme built for ${SITE}: public/ap/ap-theme.css, ${OUT}/{head,top,footer}.html`);
