@@ -206,9 +206,9 @@ table.page_public > tbody > tr > td {
   .obl-menu { display: block; order: 3; }
   .obl-header__call { order: 2; }
 }
+@media (max-width: 440px) { .obl-menu__label { display: none; } }
 @media (max-width: 400px) {
   .obl-logo img { width: 124px; }
-  .obl-menu__label { display: none; }
   .obl-header__bar { gap: 10px; }
 }
 
@@ -239,7 +239,9 @@ table.page_public > tbody > tr > td {
   box-shadow: 0 0 18px rgba(230, 180, 34, 0.45);
   text-decoration: none;
 }
-@media (max-width: 400px) { .obl-btn__long { display: none; } }
+/* "Box Office" wording only where the header has room for logo + button + Menu */
+@media (max-width: 559px) { .obl-btn__long { display: none; } }
+@media (max-width: 360px) { .obl-header__call { padding: 8px 10px; font-size: 0.85rem; } }
 
 /* ---------- Main area and the ticket card ---------- */
 
@@ -332,11 +334,27 @@ table.page_public > tbody > tr > td {
   line-height: 1.42857143;
   color: #000;
 }
-/* The seat map is a fixed grid (about 700px wide). On narrow screens it scrolls
-   sideways inside its own box instead of pushing the whole page wider. */
+/* The seat map is a fixed grid about 660px wide. On phones it is scaled down to
+   fit the card so patrons see the whole room and pinch-zoom for detail, as they
+   do today. Each breakpoint uses the narrowest screen in its range:
+   zoom = (screen - 2 gutters - 2 card paddings) / 670px. CSS zoom (not
+   transform) so the layout shrinks too and taps land on the right seat.
+   Sideways scrolling remains only as a fallback for a wider future map. */
 /* Links around taken seats carry no text; keep Arts People's color anyway */
 .obl-card .seatmap-div a { color: #b5aaaa; }
 .obl-card .public-seat-map { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.obl-card .seatmap-container { zoom: var(--map-zoom, 1); }
+@media (max-width: 800px) { .obl-card { --map-zoom: 0.98; } }
+@media (max-width: 759px) { .obl-card { --map-zoom: 0.92; } }
+@media (max-width: 719px) { .obl-card { --map-zoom: 0.86; } }
+@media (max-width: 659px) { .obl-card { --map-zoom: 0.78; } }
+@media (max-width: 599px) { .obl-card { --map-zoom: 0.70; } }
+@media (max-width: 539px) { .obl-card { --map-zoom: 0.61; } }
+@media (max-width: 479px) { .obl-card { --map-zoom: 0.54; } }
+@media (max-width: 429px) { .obl-card { --map-zoom: 0.52; } }
+@media (max-width: 413px) { .obl-card { --map-zoom: 0.48; } }
+@media (max-width: 389px) { .obl-card { --map-zoom: 0.44; } }
+@media (max-width: 359px) { .obl-card { --map-zoom: 0.38; } }
 .obl-card .selected-seat-list { height: auto; min-height: 40px; display: flow-root; padding-bottom: 6px; background: var(--card-2); border-bottom-color: var(--card-line); border-radius: var(--radius) var(--radius) 0 0; }
 .obl-card .selected-seat-list .seat-controls .btn { margin-top: 0; margin-bottom: 0; }
 .obl-card .seat-count-h { line-height: var(--tap); font-family: var(--font-display); font-size: 1rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--paper-ink); }
@@ -344,7 +362,7 @@ table.page_public > tbody > tr > td {
 @media (max-width: 800px) {
   .obl-card .selected-seat-list { min-width: 0; }
   .obl-card .public-seat-map::before {
-    content: 'Swipe sideways to see the whole room \2192';
+    content: 'Pinch to zoom in on the seats';
     display: block;
     margin-bottom: 6px;
     font-family: var(--font-display);
@@ -532,8 +550,18 @@ body:has(.seatmap-container) .obl-header { position: static; }
 /* Wider description column (Arts People sets 33%) and a roomier cart column */
 @media (min-width: 801px) {
   .obl-card #TBL2885 > tbody > tr > td:first-child { width: 40% !important; }
-  .obl-card #TBLleft_side { min-width: 380px; }
   .obl-card .well h1 { font-size: clamp(1.6rem, 1.2rem + 1vw, 2rem); }
+}
+
+/* Cart and login sit side by side only when there is room for both */
+@media (min-width: 1000px) { .obl-card #TBLleft_side { min-width: 380px; } }
+@media (max-width: 999px) {
+  .obl-card #TBL75600004, .obl-card #TBL75600004 > tbody, .obl-card #TBL75600004 > tbody > tr, .obl-card #TBL75600004 > tbody > tr > td {
+    display: block;
+    width: auto !important;
+  }
+  .obl-card #TBL75600004 > tbody > tr > td:empty { display: none; }
+  .obl-card #TBL75600004 .well { margin-right: 0; }
 }
 
 /* ---------- Phones and small tablets: stack every layout table ---------- */

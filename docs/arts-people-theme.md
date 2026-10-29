@@ -72,11 +72,17 @@ Things in those sheets the theme has to work around:
 
 ## Seat map
 
-Tested on the real seat-selection page (page 148). A guard test compares every element inside the seat map and legend (595 elements) with the theme on and off: computed styles plus rendered size are identical at desktop width. On phones the only change is the row containers' width, because the map now scrolls sideways inside `.public-seat-map` (with a "Swipe sideways" hint) instead of widening the page. The "Seats Selected" bar grows to fit the taller button.
+Tested on the real seat-selection page (page 148). A guard test compares every element inside the seat map and legend (595 elements) with the theme on and off: computed styles and rendered sizes are identical at desktop width.
+
+On phones and small tablets (800px and narrower) the map is scaled with CSS `zoom` so the whole room fits the card, with a "Pinch to zoom in on the seats" hint; patrons pinch-zoom for detail, as they do today. Breakpoints in `ap.css` set `--map-zoom` from the narrowest screen in each range: (screen − 2 gutters − 2 card paddings) / 670px, where 657px is the widest seat-map row. Seats come out about 9–10px on a typical phone, larger than today's zoomed-out desktop page (about 6–7px). If a future map is wider, it scrolls sideways inside its box rather than widening the page. `zoom` (not `transform`) is used so the layout shrinks with it and taps land on the right seat.
+
+A sweep of every width from 320 to 1400px in 2px steps on the show, seat and checkout pages finds no sideways page scroll, and the seat map fits its box at every width.
 
 The "STAGE" label renders as a single 20px cell in the local test copy only; on the live page Arts People's script sizes it correctly (confirmed on a phone, Oct 29 2026).
 
-Today the live pages have no viewport tag, so phones show the desktop layout zoomed out to fit (Arts People has no separate mobile layout on this path). The head snippet's viewport tag switches phones to the real mobile layout: seats are shown at full size (about 3x larger than today on a phone) and the map scrolls sideways. Pinch-zoom still works.
+Today the live pages have no viewport tag, so phones show the desktop layout zoomed out to fit (Arts People has no separate mobile layout on this path). The head snippet's viewport tag switches phones to the real mobile layout. Pinch-zoom stays enabled.
+
+**Check live on a phone:** tap a seat on the scaled map and confirm the right seat highlights, and that any seat pop-up (ticket-type dropdown, hover tooltip) is usable. Arts People's script positions those, and the test copy can't run it.
 
 ## Not covered yet
 
