@@ -74,7 +74,9 @@ Things in those sheets the theme has to work around:
 
 Tested on the real seat-selection page (page 148). A guard test compares every element inside the seat map and legend (595 elements) with the theme on and off: computed styles plus rendered size are identical at desktop width. On phones the only change is the row containers' width, because the map now scrolls sideways inside `.public-seat-map` (with a "Swipe sideways" hint) instead of widening the page. The "Seats Selected" bar grows to fit the taller button.
 
-Check on the live page: the "STAGE" label rendered as a single 20px cell locally, most likely because Arts People's script (which probably turns the map's `colspan` attributes into widths) doesn't run in the test copy. The theme does not touch it.
+The "STAGE" label renders as a single 20px cell in the local test copy only; on the live page Arts People's script sizes it correctly (confirmed on a phone, Oct 29 2026).
+
+Today the live pages have no viewport tag, so phones show the desktop layout zoomed out to fit (Arts People has no separate mobile layout on this path). The head snippet's viewport tag switches phones to the real mobile layout: seats are shown at full size (about 3x larger than today on a phone) and the map scrolls sideways. Pinch-zoom still works.
 
 ## Not covered yet
 
