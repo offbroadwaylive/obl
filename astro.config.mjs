@@ -1,11 +1,10 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 
-// The POC is served from https://offbroadwaylive.github.io/obl/.
-// At cutover to the real domain, set site to https://offbroadwaylive.com and base to '/'.
+// Served from the custom domain at its root (GitHub Pages, public/CNAME).
 export default defineConfig({
-  site: 'https://offbroadwaylive.github.io',
-  base: '/obl',
+  site: 'https://offbroadwaylive.com',
+  base: '/',
   trailingSlash: 'always',
   output: 'static',
   build: { format: 'directory' },
