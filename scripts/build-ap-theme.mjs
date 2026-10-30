@@ -6,12 +6,11 @@
 //   ap-out/top.html          paste into Arts People: Top section
 //   ap-out/footer.html       paste into Arts People: Footer
 //
-// The site address comes from astro.config.mjs (site + base), so after the
-// domain cutover a rebuild produces snippets with the new address. Re-paste
-// head/top/footer once at that point; CSS changes never need a re-paste.
+// The site address comes from astro.config.mjs (site + base). If it changes,
+// rebuild and re-paste head/top/footer; CSS changes never need a re-paste.
 //
 // Run: npm run build:ap   (also runs automatically before every build)
-// Custom domain snippets now: AP_SITE=https://offbroadwaylive.com AP_OUT=ap-out-domain npm run build:ap
+// Snippets for another address: AP_SITE=<address> AP_OUT=<folder> npm run build:ap
 
 import { readFileSync, writeFileSync, mkdirSync, copyFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -25,7 +24,7 @@ const config = read('astro.config.mjs');
 const site = config.match(/site:\s*'([^']+)'/)?.[1];
 const base = config.match(/base:\s*'([^']*)'/)?.[1] ?? '';
 if (!site) throw new Error('Could not read site from astro.config.mjs');
-// AP_SITE overrides the address (e.g. to build snippets for the custom domain
+// AP_SITE overrides the address (e.g. to build snippets for a new domain
 // before astro.config.mjs changes); AP_OUT sends the snippets to another folder.
 const SITE = (process.env.AP_SITE || site + base).replace(/\/$/, '');
 const OUT = process.env.AP_OUT || join(root, 'ap-out');

@@ -15,13 +15,13 @@ Makes the Arts People ticketing pages (app.arts-people.com, theatre 1078 / bspro
 
 `npm run build:ap` rebuilds the CSS and the `ap-out/` snippets. It also runs at the start of every `npm run build`, so a deploy always ships CSS that matches `tokens.css`.
 
-The site address in the snippets comes from `astro.config.mjs` (`site` + `base`). Today that is `https://offbroadwaylive.github.io/obl`.
+The site address in the snippets comes from `astro.config.mjs` (`site` + `base`). Today that is `https://offbroadwaylive.com`.
 
 ## What needs re-pasting, and when
 
 - **CSS changes:** nothing to re-paste. Deploy the site; GitHub Pages caches for about 10 minutes.
 - **Header/footer/head changes:** run `npm run build:ap` and paste the changed `ap-out/` file.
-- **Domain cutover:** after `astro.config.mjs` changes, run `npm run build:ap` and re-paste all three snippets (every link and the stylesheet URL change). To skip that, do the cutover first and paste snippets built for the domain: `AP_SITE=https://offbroadwaylive.com AP_OUT=ap-out-domain npm run build:ap`.
+- **Domain change:** after `site` or `base` in `astro.config.mjs` changes, run `npm run build:ap` and re-paste all three snippets (every link and the stylesheet URL change). `AP_SITE=<address> AP_OUT=<folder> npm run build:ap` builds snippets for another address without touching `ap-out/`.
 
 ## The top section / footer pairing
 
@@ -31,7 +31,7 @@ The whole page is inside Arts People's `<form>`. Never put a `<button>` or `<inp
 
 ## Install (first time)
 
-1. Deploy the site with `public/ap/` in it. Check `https://offbroadwaylive.github.io/obl/ap/ap-theme.css` opens.
+1. Deploy the site with `public/ap/` in it. Check `https://offbroadwaylive.com/ap/ap-theme.css` opens.
 2. Upload `ap-out/obl-logo.png` in Arts People. Open `https://app.arts-people.com/uploads/1078/obl-logo.png` to check the path.
 3. Copy the current HTML headers, Top section and Footer boxes into a text file as the rollback copy.
 4. At a quiet time (no shows that evening), paste `ap-out/head.html`, `ap-out/top.html` and `ap-out/footer.html` into those three boxes and Save. These are live on every Arts People page as soon as you save.

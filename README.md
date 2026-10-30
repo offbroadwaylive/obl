@@ -2,7 +2,7 @@
 
 The rebuilt offbroadwaylive.com: a static site that rebuilds itself from a few data files. Tickets are still sold through Arts People; every **Get Tickets** button opens the matching Arts People page in a new tab.
 
-**Preview:** https://offbroadwaylive.github.io/obl/ (hidden from search engines until launch)
+**Live:** https://offbroadwaylive.com/
 
 ---
 
@@ -120,7 +120,7 @@ Astro (static output, no UI framework), plain CSS with custom properties, vanill
 
 ```sh
 npm install
-npm run dev          # http://localhost:4321/obl/
+npm run dev          # http://localhost:4321/
 npm test             # unit tests: dates, prices, menus, sheet validator
 npm run apply-sheet -- payload.json   # apply a sheet payload locally (see docs/)
 npm run build        # outputs dist/
@@ -153,9 +153,9 @@ docs/            pages for Steve (sheet editing) and Garry (sheet, token, signup
 
 **Images.** `scripts/fetch-assets.sh` is a one-time import of the logo, show art, venue photos and gallery from Wix. Run it from a machine that can reach `static.wixstatic.com`, then commit `src/assets/images`. Images live in `src/assets` rather than `public/` so Astro's image pipeline can resize them to 800/1600px WebP. Anything missing renders as a labelled placeholder.
 
-**Links.** Every internal link and asset path goes through `url()` in `src/lib/url.ts`, which prefixes Astro's `BASE_URL`, so the same build works at `/obl/` now and at the domain root later.
+**Links.** Every internal link and asset path goes through `url()` in `src/lib/url.ts`, which prefixes Astro's `BASE_URL` (`/`, the domain root). Never hardcode a leading path, so a base change in `astro.config.mjs` is the only edit needed.
 
-**Hidden from search.** While `SITE_IS_LIVE` in `src/data/site.json` is `false`, every page has `<meta name="robots" content="noindex">`, there is no sitemap, and structured data, Open Graph and canonical tags are not emitted.
+**Search visibility.** `SITE_IS_LIVE` in `src/data/site.json` is `true`, so every page emits canonical, Open Graph and structured-data tags on `offbroadwaylive.com`. Setting it to `false` hides the site again: every page gets `<meta name="robots" content="noindex">` and those tags are dropped. There is no sitemap yet.
 
 ### First deploy
 
@@ -165,9 +165,11 @@ GitHub pauses scheduled workflows in repositories with no activity for about 60 
 
 If `main` gets branch protection, allow `github-actions[bot]` to push, or sheet publishes will fail at the commit step.
 
-### Cutover to offbroadwaylive.com
+### Custom domain (offbroadwaylive.com)
 
-1. In `astro.config.mjs`, set `site: 'https://offbroadwaylive.com'` and `base: '/'`.
-2. In `src/data/site.json`, set `"SITE_IS_LIVE": true`.
-3. Add `public/CNAME` containing `offbroadwaylive.com`, and point the domain's DNS at GitHub Pages.
+The site moved from `https://offbroadwaylive.github.io/obl/` to the domain root on 30 Oct 2026.
+
+1. `astro.config.mjs` has `site: 'https://offbroadwaylive.com'` and `base: '/'`.
+2. `src/data/site.json` has `"SITE_IS_LIVE": true`.
+3. `public/CNAME` contains `offbroadwaylive.com`. With **Source: GitHub Actions** the file is informational; the domain itself is set in **Settings → Pages → Custom domain**, with **Enforce HTTPS** on.
 4. The stub pages at the old Wix paths (`/encoresupperclub`, `/esc-lionel`, `/esc-bestof26`, `/bigbandchristmas`, `/dinner-menus`, `/escshows`) forward visitors to the new pages.

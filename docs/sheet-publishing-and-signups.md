@@ -31,7 +31,7 @@ Do A and B in any order. Do C after `publish-sheet.yml` is on `main`. The full c
 
 **C. Publish now button.**
 
-1. On GitHub as `dogmaticvox`, create a **fine-grained** personal access token. Repository access: only `offbroadwaylive`. Repository permissions: **Actions: Read and write**, nothing else. That is the permission GitHub requires to start a workflow with the `workflow_dispatch` API, and it's enough here: the workflow itself commits and deploys with its own built-in token, not yours.
+1. On GitHub as `dogmaticvox`, create a **fine-grained** personal access token. Repository access: only `offbroadwaylive/obl`. Repository permissions: **Actions: Read and write**, nothing else. That is the permission GitHub requires to start a workflow with the `workflow_dispatch` API, and it's enough here: the workflow itself commits and deploys with its own built-in token, not yours.
 2. Set an expiry, and put a reminder in your calendar a week before it.
 3. Paste [`google/publish.gs`](../google/publish.gs) into the content sheet's Apps Script editor. In **Project Settings → Script properties**, add `GITHUB_TOKEN` with the token as its value.
 4. Reload the sheet. Click **Website → Publish now** yourself first and approve Google's permission prompt (Advanced → continue → Allow). Walk Steve through the same prompt once.
