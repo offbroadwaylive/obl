@@ -83,7 +83,10 @@ html { background: var(--bg); font-size: 100%; }
 body {
   margin: 0;
   background: var(--bg) !important;
-  color: var(--text);
+  /* Dark ink by default: Arts People adds pop-ups (seat list, warnings) at the end
+     of the page, outside the card, on white boxes. The header, crumb and footer
+     set their own light colors. */
+  color: var(--paper-ink);
   font-family: var(--font-sans);
   font-size: 16px;
   line-height: 1.5;
@@ -117,6 +120,7 @@ table.page_public > tbody > tr > td {
 /* ---------- Header ---------- */
 
 .obl-header {
+  color: var(--text);
   position: sticky;
   top: 0;
   z-index: 50;
@@ -334,27 +338,28 @@ table.page_public > tbody > tr > td {
   line-height: 1.42857143;
   color: #000;
 }
-/* The seat map is a fixed grid about 660px wide. On phones it is scaled down to
-   fit the card so patrons see the whole room and pinch-zoom for detail, as they
-   do today. Each breakpoint uses the narrowest screen in its range:
-   zoom = (screen - 2 gutters - 2 card paddings) / 670px. CSS zoom (not
-   transform) so the layout shrinks too and taps land on the right seat.
-   Sideways scrolling remains only as a fallback for a wider future map. */
+/* Seat map: the whole room is always visible, never in a scrolling box. On the
+   live page Arts People's script widens the stage and table labels after load,
+   making the map about 743px wide. Below 900px it is scaled to fit the card with
+   CSS zoom (not transform, so taps land on the right seat); patrons pinch-zoom
+   for detail. Each breakpoint uses the narrowest screen in its range:
+   zoom = (screen - 2 gutters - 2 card paddings) / 760px. */
 /* Links around taken seats carry no text; keep Arts People's color anyway */
 .obl-card .seatmap-div a { color: #b5aaaa; }
-.obl-card .public-seat-map { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.obl-card .public-seat-map { max-width: 100%; overflow: visible; }
 .obl-card .seatmap-container { zoom: var(--map-zoom, 1); }
-@media (max-width: 800px) { .obl-card { --map-zoom: 0.98; } }
-@media (max-width: 759px) { .obl-card { --map-zoom: 0.92; } }
-@media (max-width: 719px) { .obl-card { --map-zoom: 0.86; } }
-@media (max-width: 659px) { .obl-card { --map-zoom: 0.78; } }
-@media (max-width: 599px) { .obl-card { --map-zoom: 0.70; } }
-@media (max-width: 539px) { .obl-card { --map-zoom: 0.61; } }
-@media (max-width: 479px) { .obl-card { --map-zoom: 0.54; } }
-@media (max-width: 429px) { .obl-card { --map-zoom: 0.52; } }
-@media (max-width: 413px) { .obl-card { --map-zoom: 0.48; } }
-@media (max-width: 389px) { .obl-card { --map-zoom: 0.44; } }
-@media (max-width: 359px) { .obl-card { --map-zoom: 0.38; } }
+@media (max-width: 899px) { .obl-card { --map-zoom: 0.96; } }
+@media (max-width: 839px) { .obl-card { --map-zoom: 0.89; } }
+@media (max-width: 779px) { .obl-card { --map-zoom: 0.81; } }
+@media (max-width: 719px) { .obl-card { --map-zoom: 0.76; } }
+@media (max-width: 659px) { .obl-card { --map-zoom: 0.69; } }
+@media (max-width: 599px) { .obl-card { --map-zoom: 0.61; } }
+@media (max-width: 539px) { .obl-card { --map-zoom: 0.54; } }
+@media (max-width: 479px) { .obl-card { --map-zoom: 0.48; } }
+@media (max-width: 429px) { .obl-card { --map-zoom: 0.46; } }
+@media (max-width: 413px) { .obl-card { --map-zoom: 0.42; } }
+@media (max-width: 389px) { .obl-card { --map-zoom: 0.38; } }
+@media (max-width: 359px) { .obl-card { --map-zoom: 0.33; } }
 .obl-card .selected-seat-list { height: auto; min-height: 40px; display: flow-root; padding-bottom: 6px; background: var(--card-2); border-bottom-color: var(--card-line); border-radius: var(--radius) var(--radius) 0 0; }
 .obl-card .selected-seat-list .seat-controls .btn { margin-top: 0; margin-bottom: 0; }
 .obl-card .seat-count-h { line-height: var(--tap); font-family: var(--font-display); font-size: 1rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--paper-ink); }
@@ -746,3 +751,43 @@ body:has(.seatmap-container) .obl-header { position: static; }
   color: var(--muted);
 }
 .obl-footer__base p { margin: 0; }
+
+
+/* ---------- Pop-ups (Bootstrap modals, popovers, dropdowns) ---------- */
+/* Arts People appends these to the end of the page, outside .obl-card. */
+
+.modal-content {
+  background: var(--card-2);
+  color: var(--paper-ink);
+  border: 1px solid var(--card-line);
+  border-top: 4px solid var(--gold);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  font-family: var(--font-sans);
+}
+.modal-header, .modal-footer { border-color: var(--card-line); }
+.modal-title, .modal-content h3, .modal-content h4 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  color: var(--paper-ink);
+}
+.modal-content .close { color: var(--paper-ink); opacity: 0.6; text-shadow: none; }
+.modal-content .close:hover { opacity: 1; }
+.modal-content .btn {
+  min-height: var(--tap);
+  padding: 10px 20px;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--paper-ink);
+  background: transparent;
+  border: 2px solid var(--paper-ink);
+  border-radius: var(--radius);
+  box-shadow: none;
+}
+.modal-content .btn:hover, .modal-content .btn:focus-visible { color: var(--paper); background: var(--paper-ink); }
+.modal-content .btn-primary { color: #fff; background: var(--neon-fill); border-color: var(--neon-fill); }
+.modal-backdrop.in { opacity: 0.6; }
+.popover, .dropdown-menu { color: var(--paper-ink); }
