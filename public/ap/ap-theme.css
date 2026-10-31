@@ -350,6 +350,15 @@ table.page_public > tbody > tr > td {
    button id, so Back on other pages and the cart's Cancel Order are untouched. */
 .tt-page-148 #BTNbtn_cancel { display: none !important; }
 
+/* Arts People's "Back to Mobile Site" link (phones only): it leads to an unthemed
+   mobile site. Its markup isn't in the desktop pages, so match it two ways:
+   by an address mentioning "mobile", and by being a link placed after Arts
+   People's page table (the end of the page, outside header, card and footer). */
+a[href*="mobile" i]:not(.obl-header a):not(.obl-card a):not(.obl-footer a),
+table.page_public ~ a,
+table.page_public ~ * a[href*="mobile" i],
+body > a { display: none !important; }
+
 /* Links around taken seats carry no text; keep Arts People's color anyway */
 .obl-card .seatmap-div a { color: #b5aaaa; }
 .obl-card .public-seat-map { max-width: 100%; overflow: visible; }
