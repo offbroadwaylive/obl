@@ -336,7 +336,7 @@ body > a { display: none !important; }
   }
 }
 body:has(.ap-mobile-page) .obl-header,
-body:has(.seatmap-container) .obl-header { position: static; }
+body:has(.seatmap-container) .obl-header { position: relative; } /* relative, not static: the phone menu drops down from the header */
 
 /* Arts People's prompts ("Please select a performance") */
 .obl-card .emph {
