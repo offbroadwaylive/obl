@@ -344,6 +344,12 @@ table.page_public > tbody > tr > td {
    CSS zoom (not transform, so taps land on the right seat); patrons pinch-zoom
    for detail. Each breakpoint uses the narrowest screen in its range:
    zoom = (screen - 2 gutters - 2 card paddings) / 760px. */
+/* Seat page (page 148): hide Arts People's Back button. Patrons arrive here from a
+   date link on the main site, so Back only detours to Arts People's own show page;
+   the header and the browser's back button cover leaving. Scoped by page and
+   button id, so Back on other pages and the cart's Cancel Order are untouched. */
+.tt-page-148 #BTNbtn_cancel { display: none !important; }
+
 /* Links around taken seats carry no text; keep Arts People's color anyway */
 .obl-card .seatmap-div a { color: #b5aaaa; }
 .obl-card .public-seat-map { max-width: 100%; overflow: visible; }
