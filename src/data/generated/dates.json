@@ -87,7 +87,7 @@
     "id": 934488,
     "show": "best-of-2027",
     "start": "2027-11-06T18:00",
-    "status": "on-sale"
+    "status": "low"
   },
   {
     "id": 934489,
@@ -105,7 +105,7 @@
     "id": 934493,
     "show": "best-of-2027",
     "start": "2027-11-13T18:00",
-    "status": "on-sale"
+    "status": "low"
   },
   {
     "id": 934496,
@@ -135,7 +135,7 @@
     "id": 934440,
     "show": "burt-bacharach",
     "start": "2027-01-23T18:00",
-    "status": "on-sale"
+    "status": "low"
   },
   {
     "id": 934441,
@@ -147,7 +147,7 @@
     "id": 934442,
     "show": "burt-bacharach",
     "start": "2027-01-30T18:00",
-    "status": "on-sale"
+    "status": "low"
   },
   {
     "id": 934443,
@@ -159,7 +159,7 @@
     "id": 934444,
     "show": "burt-bacharach",
     "start": "2027-02-07T15:00",
-    "status": "on-sale"
+    "status": "low"
   },
   {
     "id": 936277,
@@ -189,13 +189,13 @@
     "id": 934465,
     "show": "country-beach-party",
     "start": "2027-07-10T18:00",
-    "status": "on-sale"
+    "status": "low"
   },
   {
     "id": 934466,
     "show": "country-beach-party",
     "start": "2027-07-11T15:00",
-    "status": "on-sale"
+    "status": "low"
   },
   {
     "id": 934467,
@@ -243,7 +243,7 @@
     "id": 934435,
     "show": "decades-flashback",
     "start": "2027-04-17T18:00",
-    "status": "on-sale"
+    "status": "low"
   },
   {
     "id": 934436,
@@ -267,7 +267,7 @@
     "id": 934439,
     "show": "decades-flashback",
     "start": "2027-05-02T13:00",
-    "status": "on-sale"
+    "status": "low"
   },
   {
     "id": 934447,
@@ -279,7 +279,7 @@
     "id": 934448,
     "show": "doobie-brothers-and-three-dog-night",
     "start": "2027-02-27T18:00",
-    "status": "on-sale"
+    "status": "low"
   },
   {
     "id": 934449,
@@ -351,7 +351,7 @@
     "id": 934460,
     "show": "huey-lewis-and-hall-and-oates",
     "start": "2027-06-12T18:00",
-    "status": "on-sale"
+    "status": "low"
   },
   {
     "id": 934461,
@@ -369,13 +369,13 @@
     "id": 934471,
     "show": "jackson-john-and-linda",
     "start": "2027-08-06T18:00",
-    "status": "on-sale"
+    "status": "low"
   },
   {
     "id": 934472,
     "show": "jackson-john-and-linda",
     "start": "2027-08-07T18:00",
-    "status": "on-sale"
+    "status": "low"
   },
   {
     "id": 934473,
@@ -387,7 +387,7 @@
     "id": 934474,
     "show": "jackson-john-and-linda",
     "start": "2027-08-15T15:00",
-    "status": "on-sale"
+    "status": "low"
   },
   {
     "id": 934475,
@@ -399,7 +399,7 @@
     "id": 934476,
     "show": "jackson-john-and-linda",
     "start": "2027-08-21T18:00",
-    "status": "on-sale"
+    "status": "low"
   },
   {
     "id": 934477,
@@ -423,7 +423,7 @@
     "id": 934480,
     "show": "paul-mccartney-and-wings",
     "start": "2027-10-09T18:00",
-    "status": "on-sale"
+    "status": "low"
   },
   {
     "id": 934481,
@@ -435,13 +435,13 @@
     "id": 934482,
     "show": "paul-mccartney-and-wings",
     "start": "2027-10-16T18:00",
-    "status": "on-sale"
+    "status": "low"
   },
   {
     "id": 934483,
     "show": "paul-mccartney-and-wings",
     "start": "2027-10-17T15:00",
-    "status": "on-sale"
+    "status": "low"
   },
   {
     "id": 934484,
