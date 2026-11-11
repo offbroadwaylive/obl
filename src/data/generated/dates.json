@@ -30,24 +30,6 @@
     "status": "sold-out"
   },
   {
-    "id": 848434,
-    "show": "best-of-2026",
-    "start": "2026-11-06T18:00",
-    "status": "sold-out"
-  },
-  {
-    "id": 848435,
-    "show": "best-of-2026",
-    "start": "2026-11-07T18:00",
-    "status": "sold-out"
-  },
-  {
-    "id": 848436,
-    "show": "best-of-2026",
-    "start": "2026-11-08T15:00",
-    "status": "low"
-  },
-  {
     "id": 848437,
     "show": "best-of-2026",
     "start": "2026-11-13T18:00",
@@ -69,7 +51,7 @@
     "id": 848440,
     "show": "best-of-2026",
     "start": "2026-11-20T18:00",
-    "status": "sold-out"
+    "status": "low"
   },
   {
     "id": 848441,
