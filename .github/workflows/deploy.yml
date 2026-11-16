@@ -4,11 +4,15 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
-  # Nightly rebuild at 08:00 UTC (midnight or 1am in San Diego), so past
-  # performances drop off and shows with no dates leave the nav on their own.
-  # It reads only committed data; nothing polls the content sheet.
+  # Nightly rebuild at 1:07 AM San Diego time, so past performances drop off
+  # and shows with no dates leave the nav on their own. It reads only committed
+  # data; nothing polls the content sheet.
+  # The timezone key keeps it at 1 AM local time through daylight saving
+  # changes. Minute 7 instead of 0: GitHub queues scheduled runs, and the top
+  # of the hour is its busiest moment, so on-the-hour runs are delayed most.
   schedule:
-    - cron: '0 8 * * *'
+    - cron: '7 1 * * *'
+      timezone: 'America/Los_Angeles'
 
 permissions:
   contents: read
