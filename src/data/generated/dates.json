@@ -15,42 +15,18 @@
     "id": 927604,
     "show": "a-big-band-christmas",
     "start": "2026-12-12T14:00",
-    "status": "low"
+    "status": "sold-out"
   },
   {
     "id": 927613,
     "show": "a-big-band-christmas",
     "start": "2026-12-12T18:00",
-    "status": "low"
+    "status": "sold-out"
   },
   {
     "id": 927607,
     "show": "a-big-band-christmas",
     "start": "2026-12-13T14:00",
-    "status": "sold-out"
-  },
-  {
-    "id": 848437,
-    "show": "best-of-2026",
-    "start": "2026-11-13T18:00",
-    "status": "sold-out"
-  },
-  {
-    "id": 848438,
-    "show": "best-of-2026",
-    "start": "2026-11-14T18:00",
-    "status": "sold-out"
-  },
-  {
-    "id": 848439,
-    "show": "best-of-2026",
-    "start": "2026-11-15T15:00",
-    "status": "low"
-  },
-  {
-    "id": 848440,
-    "show": "best-of-2026",
-    "start": "2026-11-20T18:00",
     "status": "sold-out"
   },
   {
